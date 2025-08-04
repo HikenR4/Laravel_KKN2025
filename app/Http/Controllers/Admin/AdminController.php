@@ -12,6 +12,11 @@ class AdminController extends Controller
 {
     public function showLoginForm()
     {
+        // Jika sudah login, redirect ke dashboard
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+
         return view('admin.login');
     }
 
@@ -70,5 +75,15 @@ class AdminController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('admin.login');
+    }
+
+    public function dashboard()
+    {
+        // Cek jika belum login
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login');
+        }
+
+        return view('admin.dashboard');
     }
 }
