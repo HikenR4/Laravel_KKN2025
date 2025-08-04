@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Admin extends Authenticatable
 {
@@ -27,23 +28,9 @@ class Admin extends Authenticatable
         'login_attempts' => 'integer',
     ];
 
-    const STATUSES = ['aktif', 'nonaktif'];
-
     public function setPasswordAttribute($password)
     {
-        if ($password && !Hash::needsRehash($password)) {
-            $this->attributes['password'] = $password;
-        } else {
-            $this->attributes['password'] = Hash::make($password);
-        }
-    }
-
-    public function setStatusAttribute($value)
-    {
-        if (!in_array($value, self::STATUSES)) {
-            throw new \InvalidArgumentException("Status tidak valid: {$value}");
-        }
-        $this->attributes['status'] = $value;
+        $this->attributes['password'] = Hash::make($password);
     }
 
     public function getFotoAttribute($value)
@@ -61,6 +48,7 @@ class Admin extends Authenticatable
         return $this->locked_until && $this->locked_until->isFuture();
     }
 
+    // Method yang hilang
     public function resetLoginAttempts()
     {
         $this->update([
@@ -69,6 +57,7 @@ class Admin extends Authenticatable
         ]);
     }
 
+    // Relationships
     public function berita()
     {
         return $this->hasMany(Berita::class, 'admin_id');
