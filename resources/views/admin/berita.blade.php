@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen Berita - Nagari Mungo</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -216,6 +217,47 @@
                 transform: translateY(0);
             }
         }
+
+        /* Style untuk modal detail */
+        .detail-image {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        .detail-content {
+            max-height: 300px;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-published {
+            background: #10b981;
+            color: white;
+        }
+
+        .status-draft {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .featured-badge {
+            background: #ef4444;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -247,13 +289,26 @@
                     </div>
                 @endif
 
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show berita-fade-in" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <strong>Ada kesalahan pada form:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
                 <!-- Main Card -->
                 <div class="content-card berita-fade-in" style="animation-delay: 0.2s;">
                     <!-- Card Header -->
                     <div class="card-header-custom">
                         <h2 class="card-title-custom">Berita Nagari</h2>
-                        <button class="btn-tambah-kategori" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
-                            <i class="fas fa-plus me-2"></i>Tambah Kategori
+                        <button class="btn-tambah-kategori" data-bs-toggle="modal" data-bs-target="#tambahBeritaModal">
+                            <i class="fas fa-plus me-2"></i>Tambah Berita
                         </button>
                     </div>
 
@@ -306,11 +361,19 @@
                                         <div class="judul-berita">
                                             {{ $item->judul ?? 'Lorem Ipsum Dolor Sit Amet' }}
                                         </div>
+                                        @if($item->excerpt)
+                                            <small class="text-muted d-block mt-1">{{ Str::limit($item->excerpt, 80) }}</small>
+                                        @endif
                                     </td>
                                     <td>
                                         <div class="tanggal-berita">
-                                            {{ isset($item->tanggal) ? $item->tanggal->format('d/m/Y') : 'Berfungsi Jumlah' }}
+                                            {{ isset($item->tanggal) ? $item->tanggal->format('d/m/Y') : date('d/m/Y') }}
                                         </div>
+                                        @if(isset($item->status))
+                                            <small class="badge bg-{{ $item->status === 'published' ? 'success' : 'warning' }}">
+                                                {{ ucfirst($item->status) }}
+                                            </small>
+                                        @endif
                                     </td>
                                     <td>
                                         @if(isset($item->gambar) && $item->gambar)
@@ -323,15 +386,15 @@
                                     </td>
                                     <td>
                                         <div class="action-buttons">
-                                            <button class="action-btn btn-delete" onclick="deleteItem({{ $item->id ?? ($index + 1) }})" 
+                                            <button class="action-btn btn-delete" onclick="deleteItem({{ $item->id ?? ($index + 1) }})"
                                                     title="Hapus" data-bs-toggle="tooltip">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                            <button class="action-btn btn-edit" onclick="editItem({{ $item->id ?? ($index + 1) }})" 
+                                            <button class="action-btn btn-edit" onclick="editItem({{ $item->id ?? ($index + 1) }})"
                                                     title="Edit" data-bs-toggle="tooltip">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <button class="action-btn btn-view" onclick="viewItem({{ $item->id ?? ($index + 1) }})" 
+                                            <button class="action-btn btn-view" onclick="viewItem({{ $item->id ?? ($index + 1) }})"
                                                     title="Lihat" data-bs-toggle="tooltip">
                                                 <i class="fas fa-eye"></i>
                                             </button>
@@ -339,44 +402,15 @@
                                     </td>
                                 </tr>
                                 @empty
-                                @for($i = 1; $i <= 6; $i++)
-                                <tr class="berita-fade-in" style="animation-delay: {{ 0.3 + ($i * 0.1) }}s;">
-                                    <td>
-                                        <span class="kategori-badge">Lorem Ipsum</span>
-                                    </td>
-                                    <td>
-                                        <div class="judul-berita">
-                                            Lorem Ipsum Dolor Sit Amet Consectetur
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="tanggal-berita">
-                                            Berfungsi Jumlah
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="no-image">
-                                            <i class="fas fa-image"></i>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="action-btn btn-delete" onclick="deleteItem({{ $i }})" 
-                                                    title="Hapus" data-bs-toggle="tooltip">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                            <button class="action-btn btn-edit" onclick="editItem({{ $i }})" 
-                                                    title="Edit" data-bs-toggle="tooltip">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="action-btn btn-view" onclick="viewItem({{ $i }})" 
-                                                    title="Lihat" data-bs-toggle="tooltip">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Belum ada berita yang ditambahkan</p>
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahBeritaModal">
+                                            <i class="fas fa-plus me-1"></i>Tambah Berita Pertama
+                                        </button>
                                     </td>
                                 </tr>
-                                @endfor
                                 @endforelse
                             </tbody>
                         </table>
@@ -388,7 +422,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="pagination-info">
                                 <small class="text-muted">
-                                    Menampilkan {{ $berita->firstItem() }} - {{ $berita->lastItem() }} 
+                                    Menampilkan {{ $berita->firstItem() }} - {{ $berita->lastItem() }}
                                     dari {{ $berita->total() }} berita
                                 </small>
                             </div>
@@ -401,39 +435,103 @@
                 </div>
             </div>
 
-            <!-- Modal Tambah Kategori -->
-            <div class="modal fade" id="tambahKategoriModal" tabindex="-1" aria-labelledby="tambahKategoriModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+            <!-- Modal Tambah Berita -->
+            <div class="modal fade" id="tambahBeritaModal" tabindex="-1" aria-labelledby="tambahBeritaModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="tambahKategoriModalLabel">
-                                <i class="fas fa-plus-circle me-2"></i>Tambah Kategori Berita
+                            <h5 class="modal-title" id="tambahBeritaModalLabel">
+                                <i class="fas fa-plus-circle me-2"></i>Tambah Berita Baru
                             </h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form id="formTambahKategori">
+                        <form id="formTambahBerita" action="{{ route('admin.berita.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="namaKategori" class="form-label">Nama Kategori</label>
-                                        <input type="text" class="form-control" id="namaKategori" required 
-                                               placeholder="Masukkan nama kategori">
+                                    <div class="col-md-8 mb-3">
+                                        <label for="judul" class="form-label">Judul Berita <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="judul" name="judul" required
+                                               placeholder="Masukkan judul berita" value="{{ old('judul') }}">
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="warnaBadge" class="form-label">Warna Badge</label>
-                                        <select class="form-select" id="warnaBadge">
-                                            <option value="#3498db">Biru</option>
-                                            <option value="#e74c3c">Merah</option>
-                                            <option value="#27ae60">Hijau</option>
-                                            <option value="#f39c12">Orange</option>
-                                            <option value="#9b59b6">Ungu</option>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="kategori" class="form-label">Kategori <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="kategori" name="kategori" required>
+                                            <option value="">Pilih Kategori</option>
+                                            <option value="umum" {{ old('kategori') == 'umum' ? 'selected' : '' }}>Umum</option>
+                                            <option value="pemerintahan" {{ old('kategori') == 'pemerintahan' ? 'selected' : '' }}>Pemerintahan</option>
+                                            <option value="ekonomi" {{ old('kategori') == 'ekonomi' ? 'selected' : '' }}>Ekonomi</option>
+                                            <option value="sosial" {{ old('kategori') == 'sosial' ? 'selected' : '' }}>Sosial</option>
+                                            <option value="budaya" {{ old('kategori') == 'budaya' ? 'selected' : '' }}>Budaya</option>
+                                            <option value="kesehatan" {{ old('kategori') == 'kesehatan' ? 'selected' : '' }}>Kesehatan</option>
+                                            <option value="pendidikan" {{ old('kategori') == 'pendidikan' ? 'selected' : '' }}>Pendidikan</option>
+                                            <option value="olahraga" {{ old('kategori') == 'olahraga' ? 'selected' : '' }}>Olahraga</option>
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="tanggal" class="form-label">Tanggal <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="tanggal" name="tanggal" required
+                                               value="{{ old('tanggal', date('Y-m-d')) }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="status" name="status" required>
+                                            <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
+                                            <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
-                                    <label for="deskripsiKategori" class="form-label">Deskripsi</label>
-                                    <textarea class="form-control" id="deskripsiKategori" rows="4" 
-                                              placeholder="Masukkan deskripsi kategori (opsional)"></textarea>
+                                    <label for="excerpt" class="form-label">Ringkasan</label>
+                                    <textarea class="form-control" id="excerpt" name="excerpt" rows="2"
+                                              placeholder="Ringkasan singkat berita (opsional)">{{ old('excerpt') }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="konten" class="form-label">Konten Berita <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" id="konten" name="konten" rows="8" required
+                                              placeholder="Tulis konten berita lengkap...">{{ old('konten') }}</textarea>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-8 mb-3">
+                                        <label for="gambar" class="form-label">Gambar Berita</label>
+                                        <input type="file" class="form-control" id="gambar" name="gambar" accept="image/*">
+                                        <small class="text-muted">Format: JPG, PNG, GIF. Maksimal 2MB</small>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check mt-4">
+                                            <input class="form-check-input" type="checkbox" id="featured" name="featured" value="1"
+                                                   {{ old('featured') ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="featured">
+                                                Berita Unggulan
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="alt_gambar" class="form-label">Alt Text Gambar</label>
+                                        <input type="text" class="form-control" id="alt_gambar" name="alt_gambar"
+                                               placeholder="Deskripsi gambar untuk aksesibilitas" value="{{ old('alt_gambar') }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="tags" class="form-label">Tags</label>
+                                        <input type="text" class="form-control" id="tags" name="tags"
+                                               placeholder="tag1, tag2, tag3" value="{{ old('tags') }}">
+                                        <small class="text-muted">Pisahkan dengan koma</small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="meta_description" class="form-label">Meta Description</label>
+                                    <textarea class="form-control" id="meta_description" name="meta_description" rows="2"
+                                              placeholder="Deskripsi untuk SEO (maksimal 160 karakter)">{{ old('meta_description') }}</textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -441,7 +539,39 @@
                                     <i class="fas fa-times me-1"></i>Batal
                                 </button>
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-1"></i>Simpan Kategori
+                                    <i class="fas fa-save me-1"></i>Simpan Berita
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Edit Berita -->
+            <div class="modal fade" id="editBeritaModal" tabindex="-1" aria-labelledby="editBeritaModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning">
+                            <h5 class="modal-title text-dark" id="editBeritaModalLabel">
+                                <i class="fas fa-edit me-2"></i>Edit Berita
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="formEditBerita" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-body" id="editBeritaContent">
+                                <div class="text-center">
+                                    <div class="loading"></div>
+                                    <p class="mt-2">Memuat form edit...</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-1"></i>Batal
+                                </button>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-save me-1"></i>Update Berita
                                 </button>
                             </div>
                         </form>
@@ -537,33 +667,10 @@
             });
         });
 
-        // Action functions
+        // Action functions - Improved dengan AJAX dan Modal
         function deleteItem(id) {
-            $('#deleteForm').attr('action', '/admin/berita/delete/' + id);
+            $('#deleteForm').attr('action', '{{ url("admin/berita/delete") }}/' + id);
             $('#deleteModal').modal('show');
-        }
-
-        function editItem(id) {
-            const btn = event.target.closest('button');
-            const originalContent = btn.innerHTML;
-            btn.innerHTML = '<div class="loading"></div>';
-            btn.disabled = true;
-
-            $.get('/admin/berita/edit/' + id)
-                .done(function(response) {
-                    if (response.success) {
-                        alert('Edit berita: ' + response.data.judul);
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
-                })
-                .fail(function() {
-                    alert('Terjadi kesalahan saat mengambil data berita');
-                })
-                .always(function() {
-                    btn.innerHTML = originalContent;
-                    btn.disabled = false;
-                });
         }
 
         function viewItem(id) {
@@ -572,55 +679,132 @@
             btn.innerHTML = '<div class="loading"></div>';
             btn.disabled = true;
 
-            $.get('/admin/berita/show/' + id)
-                .done(function(response) {
-                    if (response.success) {
-                        alert('Lihat berita: ' + response.data.judul);
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
-                })
-                .fail(function() {
-                    alert('Terjadi kesalahan saat mengambil data berita');
-                })
-                .always(function() {
-                    btn.innerHTML = originalContent;
-                    btn.disabled = false;
-                });
+            // Redirect to detail page
+            setTimeout(() => {
+                window.location.href = '{{ url("admin/berita/show") }}/' + id;
+            }, 500);
         }
 
-        // Form submission for adding category
-        $('#formTambahKategori').on('submit', function(e) {
-            e.preventDefault();
+        function editItem(id) {
+            const btn = event.target.closest('button');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<div class="loading"></div>';
+            btn.disabled = true;
+
+            // Load edit form via AJAX
+            $.ajax({
+                url: '{{ url("admin/berita/edit") }}/' + id,
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        const data = response.data;
+                        const content = `
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label for="edit_judul" class="form-label">Judul Berita <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="edit_judul" name="judul" required value="${data.judul}">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="edit_kategori" class="form-label">Kategori <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="edit_kategori" name="kategori" required>
+                                        <option value="umum" ${data.kategori === 'umum' ? 'selected' : ''}>Umum</option>
+                                        <option value="pemerintahan" ${data.kategori === 'pemerintahan' ? 'selected' : ''}>Pemerintahan</option>
+                                        <option value="ekonomi" ${data.kategori === 'ekonomi' ? 'selected' : ''}>Ekonomi</option>
+                                        <option value="sosial" ${data.kategori === 'sosial' ? 'selected' : ''}>Sosial</option>
+                                        <option value="budaya" ${data.kategori === 'budaya' ? 'selected' : ''}>Budaya</option>
+                                        <option value="kesehatan" ${data.kategori === 'kesehatan' ? 'selected' : ''}>Kesehatan</option>
+                                        <option value="pendidikan" ${data.kategori === 'pendidikan' ? 'selected' : ''}>Pendidikan</option>
+                                        <option value="olahraga" ${data.kategori === 'olahraga' ? 'selected' : ''}>Olahraga</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit_tanggal" class="form-label">Tanggal <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="edit_tanggal" name="tanggal" required value="${data.tanggal}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit_status" class="form-label">Status <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="edit_status" name="status" required>
+                                        <option value="published" ${data.status === 'published' ? 'selected' : ''}>Published</option>
+                                        <option value="draft" ${data.status === 'draft' ? 'selected' : ''}>Draft</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_excerpt" class="form-label">Ringkasan</label>
+                                <textarea class="form-control" id="edit_excerpt" name="excerpt" rows="2">${data.excerpt || ''}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_konten" class="form-label">Konten Berita <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="edit_konten" name="konten" rows="8" required>${data.konten}</textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label for="edit_gambar" class="form-label">Gambar Berita</label>
+                                    <input type="file" class="form-control" id="edit_gambar" name="gambar" accept="image/*">
+                                    <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar</small>
+                                    ${data.gambar ? `<div class="mt-2"><img src="${data.gambar}" alt="Current" style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 0.25rem;"></div>` : ''}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="edit_featured" name="featured" value="1" ${data.featured ? 'checked' : ''}>
+                                        <label class="form-check-label" for="edit_featured">Berita Unggulan</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit_alt_gambar" class="form-label">Alt Text Gambar</label>
+                                    <input type="text" class="form-control" id="edit_alt_gambar" name="alt_gambar" value="${data.alt_gambar || ''}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit_tags" class="form-label">Tags</label>
+                                    <input type="text" class="form-control" id="edit_tags" name="tags" value="${data.tags || ''}">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_meta_description" class="form-label">Meta Description</label>
+                                <textarea class="form-control" id="edit_meta_description" name="meta_description" rows="2">${data.meta_description || ''}</textarea>
+                            </div>
+                        `;
+                        $('#editBeritaContent').html(content);
+                        $('#formEditBerita').attr('action', '{{ url("admin/berita/update") }}/' + id);
+                        $('#editBeritaModal').modal('show');
+                    }
+                },
+                error: function() {
+                    alert('Terjadi kesalahan saat memuat form edit.');
+                },
+                complete: function() {
+                    btn.innerHTML = originalContent;
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        // Form submission handlers
+        $('#formTambahBerita').on('submit', function(e) {
             const submitBtn = $(this).find('button[type="submit"]');
-            const originalText = submitBtn.html();
             submitBtn.html('<div class="loading"></div> Menyimpan...').prop('disabled', true);
-
-            setTimeout(function() {
-                alert('Kategori "' + $('#namaKategori').val() + '" berhasil ditambahkan!');
-                $('#tambahKategoriModal').modal('hide');
-                $('#formTambahKategori')[0].reset();
-                submitBtn.html(originalText).prop('disabled', false);
-            }, 1500);
         });
 
-        // Reset form when modal is hidden
-        $('#tambahKategoriModal').on('hidden.bs.modal', function() {
-            $('#formTambahKategori')[0].reset();
-        });
-
-        // Delete form submission with loading
-        $('#deleteForm').on('submit', function(e) {
-            e.preventDefault();
+        $('#formEditBerita').on('submit', function(e) {
             const submitBtn = $(this).find('button[type="submit"]');
-            const originalText = submitBtn.html();
-            submitBtn.html('<div class="loading"></div> Menghapus...').prop('disabled', true);
+            submitBtn.html('<div class="loading"></div> Mengupdate...').prop('disabled', true);
+        });
 
-            setTimeout(function() {
-                alert('Data berhasil dihapus!');
-                $('#deleteModal').modal('hide');
-                submitBtn.html(originalText).prop('disabled', false);
-            }, 1000);
+        // Reset forms when modals are hidden
+        $('#tambahBeritaModal').on('hidden.bs.modal', function() {
+            $('#formTambahBerita')[0].reset();
+            $('#formTambahBerita button[type="submit"]').html('<i class="fas fa-save me-1"></i>Simpan Berita').prop('disabled', false);
+        });
+
+        $('#editBeritaModal').on('hidden.bs.modal', function() {
+            $('#formEditBerita button[type="submit"]').html('<i class="fas fa-save me-1"></i>Update Berita').prop('disabled', false);
         });
 
         // Handle sidebar toggle and adjust layout

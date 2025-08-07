@@ -3,15 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes; // Import yang hilang
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Admin extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes; // SoftDeletes sudah diimport
 
     protected $table = 'admin';
 
@@ -48,7 +48,6 @@ class Admin extends Authenticatable
         return $this->locked_until && $this->locked_until->isFuture();
     }
 
-    // Method yang hilang
     public function resetLoginAttempts()
     {
         $this->update([

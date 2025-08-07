@@ -1,9 +1,5 @@
-{{-- resources/views/layouts/sidebar.blade.php --}}
-
-{{-- CSS KHUSUS SIDEBAR SAJA --}}
 <style>
-    /* ===== CSS KHUSUS SIDEBAR - TIDAK MEMPENGARUHI DASHBOARD ===== */
-    
+
     /* Gradient background khusus sidebar */
     .sidebar-gradient-bg {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -120,7 +116,7 @@
             position: fixed;
             z-index: 9999;
         }
-        
+
         .sidebar-collapsed {
             width: 0;
             overflow: hidden;
@@ -245,7 +241,7 @@
     // Handle responsive behavior
     function handleSidebarResize() {
         const sidebar = document.getElementById('sidebar');
-        
+
         if (window.innerWidth < 1024) {
             // Mobile: sidebar bisa di-toggle
             if (sidebar) {
@@ -271,7 +267,7 @@
 
         navItems.forEach(item => {
             const href = item.getAttribute('href');
-            
+
             if (href && href !== '#' && currentPath.includes(href)) {
                 item.classList.add('active');
             }
