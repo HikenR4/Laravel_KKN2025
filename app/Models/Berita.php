@@ -30,9 +30,29 @@ class Berita extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
+    // PERBAIKAN: Accessor untuk gambar di public/uploads
     public function getGambarAttribute($value)
     {
-        return $value ? asset('storage/berita/gambar/' . $value) : asset('images/default-news.jpg');
+        if (!$value) {
+            return asset('images/default-news.jpg'); // Gambar default
+        }
+
+        // Jika sudah berupa URL lengkap, return as is
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
+            return $value;
+        }
+
+        // Path untuk gambar yang diupload ke public/uploads
+        return asset('uploads/' . $value);
+    }
+
+    // Method untuk mendapatkan path gambar asli (untuk keperluan delete file)
+    public function getGambarPathAttribute()
+    {
+        if (!$this->attributes['gambar']) {
+            return null;
+        }
+        return public_path('uploads/' . $this->attributes['gambar']);
     }
 
     public function getExcerptAttribute($value)
