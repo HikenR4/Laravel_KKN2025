@@ -201,7 +201,7 @@
                 <span class="sidebar-menu-text ml-4 font-medium">Data Penduduk</span>
             </a>
 
-            <a href="#" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl text-blue-100 transition-all duration-300 hover:bg-white/10 hover:text-white">
+            <a href="{{ route('admin.layanan') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.layanan*')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
                 <i class="fas fa-cogs text-lg min-w-[20px]"></i>
                 <span class="sidebar-menu-text ml-4 font-medium">Layanan</span>
             </a>

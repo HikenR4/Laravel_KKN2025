@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\PengumumanController;
 use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\LayananController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,6 +78,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('pengumuman/kategori/{kategori}', [PengumumanController::class, 'getByKategori'])->name('pengumuman.by-kategori');
         Route::get('pengumuman/penting', [PengumumanController::class, 'getPenting'])->name('pengumuman.penting');
         Route::delete('pengumuman/bulk-delete', [PengumumanController::class, 'bulkDelete'])->name('pengumuman.bulk-delete');
+
+        // Layanan routes - BARU
+        Route::get('layanan', [LayananController::class, 'index'])->name('layanan');
+        Route::post('layanan/store', [LayananController::class, 'store'])->name('layanan.store');
+        Route::get('layanan/show/{id}', [LayananController::class, 'show'])->name('layanan.show');
+        Route::get('layanan/edit/{id}', [LayananController::class, 'edit'])->name('layanan.edit');
+        Route::put('layanan/update/{id}', [LayananController::class, 'update'])->name('layanan.update');
+        Route::delete('layanan/delete/{id}', [LayananController::class, 'destroy'])->name('layanan.delete');
+        Route::patch('layanan/{id}/status', [LayananController::class, 'updateStatus'])->name('layanan.update-status');
+        
+        // Additional layanan routes
+        Route::delete('layanan/bulk-delete', [LayananController::class, 'bulkDelete'])->name('layanan.bulk-delete');
+        Route::post('layanan/reorder', [LayananController::class, 'reorder'])->name('layanan.reorder');
 
         // Logout
         Route::post('logout', [AdminController::class, 'logout'])->name('logout');
