@@ -186,12 +186,12 @@
                 <span class="sidebar-menu-text ml-4 font-medium">Berita</span>
             </a>
 
-            <a href="#" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl text-blue-100 transition-all duration-300 hover:bg-white/10 hover:text-white">
-                <i class="fas fa-calendar-alt text-lg min-w-[20px]"></i>
+            <a href="{{ route('admin.agenda') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.agenda*')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
+                <i class="fas fa-calendar text-lg min-w-[20px]"></i>
                 <span class="sidebar-menu-text ml-4 font-medium">Agenda</span>
             </a>
 
-            <a href="#" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl text-blue-100 transition-all duration-300 hover:bg-white/10 hover:text-white">
+            <a href="{{ route('admin.pengumuman') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.pengumuman*')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
                 <i class="fas fa-bullhorn text-lg min-w-[20px]"></i>
                 <span class="sidebar-menu-text ml-4 font-medium">Pengumuman</span>
             </a>

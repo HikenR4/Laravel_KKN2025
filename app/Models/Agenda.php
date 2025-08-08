@@ -87,4 +87,8 @@ class Agenda extends Model
     {
         return $this->belongsTo(Admin::class, 'admin_id');
     }
+    public function agenda()
+    {
+    return $this->hasMany(Agenda::class, 'admin_id');
+    }
 }
