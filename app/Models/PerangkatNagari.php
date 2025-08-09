@@ -24,9 +24,25 @@ class PerangkatNagari extends Model
         'urutan' => 'integer',
     ];
 
-    public function getFotoAttribute($value)
+    // Accessor untuk foto - hanya untuk tampilan di blade
+    public function getFotoUrlAttribute()
     {
-        return $value ? asset('storage/perangkat/foto/' . $value) : asset('images/default-avatar.png');
+        if (!$this->attributes['foto']) {
+            return asset('images/default-avatar.png');
+        }
+
+        $filePath = public_path('uploads/perangkat/' . $this->attributes['foto']);
+        if (file_exists($filePath)) {
+            return asset('uploads/perangkat/' . $this->attributes['foto']);
+        }
+
+        return asset('images/default-avatar.png');
+    }
+
+    // Method untuk mendapatkan raw filename (untuk keperluan hapus file)
+    public function getFotoFilenameAttribute()
+    {
+        return $this->attributes['foto'] ?? null;
     }
 
     public function scopeActive($query)
@@ -36,7 +52,7 @@ class PerangkatNagari extends Model
 
     public function scopeOrdered($query)
     {
-        return $query->orderBy('urutan');
+        return $query->orderBy('urutan', 'asc')->orderBy('id', 'asc');
     }
 
     public function getIsActiveAttribute()
@@ -50,5 +66,12 @@ class PerangkatNagari extends Model
         $mulai = $this->masa_jabatan_mulai ? $this->masa_jabatan_mulai->format('Y') : '-';
         $selesai = $this->masa_jabatan_selesai ? $this->masa_jabatan_selesai->format('Y') : 'Sekarang';
         return $mulai . ' - ' . $selesai;
+    }
+
+    // Method untuk mendapatkan urutan berikutnya
+    public static function getNextUrutan()
+    {
+        $lastUrutan = self::max('urutan');
+        return $lastUrutan ? $lastUrutan + 1 : 1;
     }
 }

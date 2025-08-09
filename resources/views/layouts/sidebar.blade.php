@@ -261,11 +261,11 @@
                         <span class="sidebar-menu-text ml-3 font-medium text-sm">Profil Nagari</span>
                     </a>
 
-                    <!-- Submenu Perangkat Nagari -->
-                    <a href="#" class="submenu-item sidebar-nav-item flex items-center py-2 px-4 @if(request()->routeIs('admin.perangkat-nagari*')) active @else text-red-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300 ml-4">
-                        <i class="fas fa-users text-sm min-w-[16px]"></i>
-                        <span class="sidebar-menu-text ml-3 font-medium text-sm">Perangkat Nagari</span>
-                    </a>
+                <!-- Submenu Perangkat Nagari -->
+                <a href="{{ route('admin.perangkat') }}" class="submenu-item sidebar-nav-item flex items-center py-2 px-4 @if(request()->routeIs('admin.perangkat*')) active @else text-red-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300 ml-4">
+                    <i class="fas fa-users text-sm min-w-[16px]"></i>
+                    <span class="sidebar-menu-text ml-3 font-medium text-sm">Perangkat Nagari</span>
+                </a>
                 </div>
             </div>
 
