@@ -193,25 +193,25 @@
                 <span class="sidebar-menu-text ml-4 font-medium">Dashboard</span>
             </a>
 
-<!-- Menu Pengelolaan Nagari -->
-<a href="javascript:void(0)" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl text-blue-100 transition-all duration-300 hover:bg-white/10 hover:text-white" id="toggleNagariMenu">
-    <i class="fas fa-building text-lg min-w-[20px]"></i>
-    <span class="sidebar-menu-text ml-4 font-medium">Pengelolaan Nagari</span>
-</a>
+        <!-- Menu Pengelolaan Nagari -->
+        <a href="javascript:void(0)" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl text-blue-100 transition-all duration-300 hover:bg-white/10 hover:text-white" id="toggleNagariMenu">
+            <i class="fas fa-building text-lg min-w-[20px]"></i>
+            <span class="sidebar-menu-text ml-4 font-medium">Pengelolaan Nagari</span>
+        </a>
 
-<!-- Submenu Profil Nagari -->
-<div id="submenuNagari" class="hidden">
-    <a href="{{ route('admin.profil.index') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.profil-nagari')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
-        <i class="fas fa-home text-lg min-w-[20px]"></i>
-        <span class="sidebar-menu-text ml-4 font-medium">Profil Nagari</span>
-    </a>
+        <!-- Submenu Profil Nagari -->
+        <div id="submenuNagari" class="hidden">
+            <a href="{{ route('admin.profil.index') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.profil-nagari')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
+                <i class="fas fa-home text-lg min-w-[20px]"></i>
+                <span class="sidebar-menu-text ml-4 font-medium">Profil Nagari</span>
+            </a>
 
-    <!-- Submenu Perangkat Nagari -->
-    <a href="#" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.perangkat-nagari')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
-        <i class="fas fa-users text-lg min-w-[20px]"></i>
-        <span class="sidebar-menu-text ml-4 font-medium">Perangkat Nagari</span>
-    </a>
-</div>
+        <!-- Submenu Perangkat Nagari -->
+        <a href="#" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.perangkat-nagari')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
+            <i class="fas fa-users text-lg min-w-[20px]"></i>
+            <span class="sidebar-menu-text ml-4 font-medium">Perangkat Nagari</span>
+        </a>
+    </div>
 
 
 
@@ -230,7 +230,7 @@
                 <span class="sidebar-menu-text ml-4 font-medium">Pengumuman</span>
             </a>
 
-            <a href="#" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl text-blue-100 transition-all duration-300 hover:bg-white/10 hover:text-white">
+            <a href="{{ route('admin.datapenduduk') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.datapenduduk*')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
                 <i class="fas fa-users text-lg min-w-[20px]"></i>
                 <span class="sidebar-menu-text ml-4 font-medium">Data Penduduk</span>
             </a>
