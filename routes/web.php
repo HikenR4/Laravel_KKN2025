@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PengumumanController;
 use App\Http\Controllers\Admin\AgendaController;
 use App\Http\Controllers\Admin\LayananController;
 use App\Http\Controllers\Admin\PerangkatController;
+use App\Http\Controllers\Admin\DataPendudukController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -111,6 +112,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Additional layanan routes
         Route::delete('layanan/bulk-delete', [LayananController::class, 'bulkDelete'])->name('layanan.bulk-delete');
         Route::post('layanan/reorder', [LayananController::class, 'reorder'])->name('layanan.reorder');
+
+        // Data Penduduk routes - BARU
+        Route::get('datapenduduk', [DataPendudukController::class, 'index'])->name('datapenduduk');
+        Route::post('datapenduduk/store', [DataPendudukController::class, 'store'])->name('datapenduduk.store');
+        Route::get('datapenduduk/show/{id}', [DataPendudukController::class, 'show'])->name('datapenduduk.show');
+        Route::get('datapenduduk/edit/{id}', [DataPendudukController::class, 'edit'])->name('datapenduduk.edit');
+        Route::put('datapenduduk/update/{id}', [DataPendudukController::class, 'update'])->name('datapenduduk.update');
+        Route::delete('datapenduduk/delete/{id}', [DataPendudukController::class, 'destroy'])->name('datapenduduk.delete');
+        Route::patch('datapenduduk/{id}/status', [DataPendudukController::class, 'updateStatus'])->name('datapenduduk.update-status');
+        
+        // Additional data penduduk routes
+        Route::get('datapenduduk/search', [DataPendudukController::class, 'search'])->name('datapenduduk.search');
+        Route::get('datapenduduk/filter', [DataPendudukController::class, 'filter'])->name('datapenduduk.filter');
+        Route::get('datapenduduk/by-rt/{rt}', [DataPendudukController::class, 'getByRT'])->name('datapenduduk.by-rt');
+        Route::get('datapenduduk/by-rw/{rw}', [DataPendudukController::class, 'getByRW'])->name('datapenduduk.by-rw');
+        Route::delete('datapenduduk/bulk-delete', [DataPendudukController::class, 'bulkDelete'])->name('datapenduduk.bulk-delete');
+        Route::get('datapenduduk/export', [DataPendudukController::class, 'export'])->name('datapenduduk.export');
+        Route::get('datapenduduk/statistics', [DataPendudukController::class, 'statistics'])->name('datapenduduk.statistics');
 
         // Logout
         Route::post('logout', [AdminController::class, 'logout'])->name('logout');
