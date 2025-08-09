@@ -1,6 +1,18 @@
 <style>
 
-    /* Gradient background khusus sidebar */
+    /* Efek transisi submenu */
+#submenuNagari {
+    transition: all 0.3s ease;
+    display: block;
+    padding-left: 1.5rem;
+}
+
+/* Menyembunyikan submenu secara default */
+#submenuNagari.hidden {
+    display: none;
+}
+
+/* Gradient background khusus sidebar */
     .sidebar-gradient-bg {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
@@ -181,6 +193,28 @@
                 <span class="sidebar-menu-text ml-4 font-medium">Dashboard</span>
             </a>
 
+<!-- Menu Pengelolaan Nagari -->
+<a href="javascript:void(0)" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl text-blue-100 transition-all duration-300 hover:bg-white/10 hover:text-white" id="toggleNagariMenu">
+    <i class="fas fa-building text-lg min-w-[20px]"></i>
+    <span class="sidebar-menu-text ml-4 font-medium">Pengelolaan Nagari</span>
+</a>
+
+<!-- Submenu Profil Nagari -->
+<div id="submenuNagari" class="hidden">
+    <a href="{{ route('admin.profil.index') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.profil-nagari')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
+        <i class="fas fa-home text-lg min-w-[20px]"></i>
+        <span class="sidebar-menu-text ml-4 font-medium">Profil Nagari</span>
+    </a>
+
+    <!-- Submenu Perangkat Nagari -->
+    <a href="#" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.perangkat-nagari')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
+        <i class="fas fa-users text-lg min-w-[20px]"></i>
+        <span class="sidebar-menu-text ml-4 font-medium">Perangkat Nagari</span>
+    </a>
+</div>
+
+
+
             <a href="{{ route('admin.berita') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.berita*')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
                 <i class="fas fa-newspaper text-lg min-w-[20px]"></i>
                 <span class="sidebar-menu-text ml-4 font-medium">Berita</span>
@@ -241,6 +275,18 @@
     // Handle responsive behavior
     function handleSidebarResize() {
         const sidebar = document.getElementById('sidebar');
+
+        // JavaScript untuk toggle submenu Pengelolaan Nagari
+const toggleNagariMenu = document.getElementById('toggleNagariMenu');
+const submenuNagari = document.getElementById('submenuNagari');
+
+if (toggleNagariMenu && submenuNagari) {
+    toggleNagariMenu.addEventListener('click', () => {
+        // Toggle visibility of submenu
+        submenuNagari.classList.toggle('hidden');
+    });
+}
+
 
         if (window.innerWidth < 1024) {
             // Mobile: sidebar bisa di-toggle
