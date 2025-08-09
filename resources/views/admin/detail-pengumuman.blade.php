@@ -378,7 +378,7 @@
                                     @endif
                                     {{ $pengumuman->judul ?? 'Judul Pengumuman' }}
                                 </div>
-                                
+
                                 <div class="detail-meta">
                                     <span>
                                         <i class="fas fa-user me-1"></i>
@@ -416,8 +416,8 @@
                             <!-- Image -->
                             @if($pengumuman->gambar && $pengumuman->getRawOriginal('gambar'))
                                 <div class="detail-image">
-                                    <img src="{{ $pengumuman->gambar }}" 
-                                         alt="{{ $pengumuman->judul ?? 'Gambar Pengumuman' }}" 
+                                    <img src="{{ $pengumuman->gambar }}"
+                                         alt="{{ $pengumuman->judul ?? 'Gambar Pengumuman' }}"
                                          class="img-fluid">
                                 </div>
                             @endif
@@ -429,13 +429,9 @@
 
                             <!-- Action Buttons -->
                             <div class="action-buttons">
-                                <a href="{{ route('admin.pengumuman.edit', $pengumuman->id ?? 1) }}" class="btn-action btn-warning">
-                                    <i class="fas fa-edit"></i>
-                                    Edit Pengumuman
-                                </a>
-                                
+
                                 @if(($pengumuman->status ?? 'aktif') === 'aktif' && ($pengumuman->is_active ?? true))
-                                    <a href="{{ route('admin.pengumuman', $pengumuman->slug ?? 'sample-slug') }}" 
+                                    <a href="{{ route('admin.pengumuman', $pengumuman->slug ?? 'sample-slug') }}"
                                        target="_blank" class="btn-action btn-success">
                                         <i class="fas fa-external-link-alt"></i>
                                         Lihat di Website
@@ -690,7 +686,7 @@
             const submitBtn = $(this).find('button[type="submit"]');
             const originalText = submitBtn.html();
             submitBtn.html('<div class="loading me-1"></div>Menghapus...').prop('disabled', true);
-            
+
             // Allow form to submit naturally
             setTimeout(() => {
                 submitBtn.html(originalText).prop('disabled', false);

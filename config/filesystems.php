@@ -1,35 +1,8 @@
 <?php
-
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Filesystem Disk
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the default filesystem disk that should be used
-    | by the framework. The "local" disk, as well as a variety of cloud
-    | based disks are available to your application for file storage.
-    |
-    */
-
     'default' => env('FILESYSTEM_DISK', 'local'),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Filesystem Disks
-    |--------------------------------------------------------------------------
-    |
-    | Below you may configure as many filesystem disks as necessary, and you
-    | may even configure multiple disks for the same driver. Examples for
-    | most supported storage drivers are configured here for reference.
-    |
-    | Supported drivers: "local", "ftp", "sftp", "s3"
-    |
-    */
-
     'disks' => [
-
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
@@ -47,6 +20,24 @@ return [
             'report' => false,
         ],
 
+        // TAMBAHAN: Disk khusus untuk video
+        'videos' => [
+            'driver' => 'local',
+            'root' => public_path('uploads/videos'),    // public/uploads/videos
+            'url' => env('APP_URL').'/uploads/videos',  // http://localhost/uploads/videos
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        // TAMBAHAN: Disk untuk semua media nagari
+        'nagari_media' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),           // public/uploads
+            'url' => env('APP_URL').'/uploads',         // http://localhost/uploads
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -59,22 +50,11 @@ return [
             'throw' => false,
             'report' => false,
         ],
-
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Symbolic Links
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the symbolic links that will be created when the
-    | `storage:link` Artisan command is executed. The array keys should be
-    | the locations of the links and the values should be their targets.
-    |
-    */
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        // TAMBAHAN: Link untuk media uploads
+        public_path('uploads') => storage_path('app/nagari_media'),
     ],
-
 ];

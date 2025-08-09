@@ -411,7 +411,7 @@
                                     <i class="fas fa-concierge-bell text-success me-2"></i>
                                     {{ $layanan->nama_layanan ?? 'Nama Layanan' }}
                                 </div>
-                                
+
                                 <div class="detail-meta">
                                     <span class="kode-layanan">
                                         <i class="fas fa-hashtag"></i>
@@ -479,11 +479,7 @@
 
                             <!-- Action Buttons -->
                             <div class="action-buttons">
-                                <a href="{{ route('admin.layanan.edit', $layanan->id ?? 1) }}" class="btn-action btn-warning">
-                                    <i class="fas fa-edit"></i>
-                                    Edit Layanan
-                                </a>
-                                
+
                                 @if($layanan->formulir_url)
                                     <a href="{{ $layanan->formulir_url }}" target="_blank" class="btn-action btn-success">
                                         <i class="fas fa-external-link-alt"></i>
@@ -712,7 +708,7 @@
             const submitBtn = $(this).find('button[type="submit"]');
             const originalText = submitBtn.html();
             submitBtn.html('<div class="loading me-1"></div>Menghapus...').prop('disabled', true);
-            
+
             // Allow form to submit naturally
             setTimeout(() => {
                 submitBtn.html(originalText).prop('disabled', false);

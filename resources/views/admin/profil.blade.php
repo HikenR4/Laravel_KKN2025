@@ -9,7 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* CSS Khusus untuk Halaman Profil Nagari */
+        /* CSS Khusus untuk Halaman Profil Nagari dengan Video */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
         body {
@@ -81,6 +81,7 @@
         .icon-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
         .icon-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
         .icon-secondary { background: linear-gradient(135deg, #6b7280, #4b5563); }
+        .icon-video { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
 
         .form-control, .form-select {
             border-radius: 0.75rem;
@@ -125,7 +126,7 @@
             transform: translateY(-2px);
         }
 
-        .upload-area.has-image {
+        .upload-area.has-image, .upload-area.has-video {
             padding: 0;
             border-style: solid;
             border-color: #10b981;
@@ -139,21 +140,61 @@
             box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
         }
 
-        .preview-image {
+        .preview-image, .preview-video {
             width: 100%;
-            max-height: 200px;
-            object-fit: cover;
+            height: auto;
+            object-fit: contain;
+            max-height: 400px;
             border-radius: 0.75rem;
             transition: all 0.3s ease;
         }
 
-        .preview-image:hover {
+        .preview-video {
+            max-height: 500px;
+        }
+
+        .preview-image:hover, .preview-video:hover {
             transform: scale(1.02);
         }
 
         .upload-content {
             position: relative;
             width: 100%;
+        }
+
+        /* Video specific styling */
+        .video-upload-area {
+            min-height: 180px;
+        }
+
+        .video-info {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .video-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .video-type-toggle {
+            background: #f3f4f6;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-type-toggle input[type="radio"] {
+            margin-right: 0.5rem;
         }
 
         /* Button Styling */
@@ -285,7 +326,7 @@
             transform: scale(1.1);
         }
 
-        /* Animation untuk preview image */
+        /* Animation untuk preview */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -297,8 +338,23 @@
             }
         }
 
-        .preview-image {
+        .preview-image, .preview-video {
             animation: fadeInUp 0.5s ease;
+        }
+
+        /* Progress bar styling untuk upload video */
+        .upload-progress {
+            background: #e5e7eb;
+            border-radius: 0.5rem;
+            height: 8px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .upload-progress-bar {
+            background: linear-gradient(135deg, #10b981, #059669);
+            height: 100%;
+            transition: width 0.3s ease;
         }
 
         /* Responsive Design */
@@ -319,12 +375,16 @@
                 min-height: 100px;
             }
 
-            .upload-area.has-image {
+            .upload-area.has-image, .upload-area.has-video {
                 min-height: auto;
             }
 
             .preview-image {
                 max-height: 150px;
+            }
+
+            .preview-video {
+                max-height: 200px;
             }
 
             .page-main-wrapper {
@@ -341,7 +401,7 @@
             <!-- Page Header -->
             <div class="page-header mb-6 profil-fade-in">
                 <h1 class="page-title text-2xl lg:text-3xl font-bold text-gray-800">Profil Nagari</h1>
-                <p class="text-gray-600 mt-2">Kelola informasi lengkap tentang nagari</p>
+                <p class="text-gray-600 mt-2">Kelola informasi lengkap tentang nagari termasuk logo, banner, dan video profil</p>
             </div>
 
             <!-- Flash Messages -->
@@ -624,15 +684,15 @@
                 <div class="content-card profil-fade-in" style="animation-delay: 0.8s;">
                     <div class="card-header-custom">
                         <div class="card-title-custom">
-                            <div class="section-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
-                                <i class="fas fa-images"></i>
+                            <div class="section-icon icon-video">
+                                <i class="fas fa-photo-video"></i>
                             </div>
-                            Logo & Banner
+                            Media: Logo, Banner & Video Profil
                         </div>
                     </div>
                     <div class="row">
                         <!-- Logo Nagari -->
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
                             <label class="form-label">Logo Nagari</label>
                             <div class="upload-area {{ ($profil && $profil->hasLogoFile()) ? 'has-image' : '' }}"
                                  id="logo-upload-area" onclick="document.getElementById('logo').click()">
@@ -650,7 +710,7 @@
                                         <div id="logo-placeholder">
                                             <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
                                             <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload logo</p>
-                                            <p class="text-gray-400 text-sm">Format: JPG, PNG, GIF, SVG. Maksimal: 2MB</p>
+                                            <p class="text-gray-400 text-sm">Format: JPG, PNG, GIF, SVG<br>Maksimal: 2MB</p>
                                         </div>
                                     @endif
                                 </div>
@@ -662,7 +722,7 @@
                         </div>
 
                         <!-- Banner Nagari -->
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
                             <label class="form-label">Banner Nagari</label>
                             <div class="upload-area {{ ($profil && $profil->hasBannerFile()) ? 'has-image' : '' }}"
                                  id="banner-upload-area" onclick="document.getElementById('banner').click()">
@@ -680,7 +740,7 @@
                                         <div id="banner-placeholder">
                                             <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
                                             <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload banner</p>
-                                            <p class="text-gray-400 text-sm">Format: JPG, PNG, GIF, SVG. Maksimal: 5MB</p>
+                                            <p class="text-gray-400 text-sm">Format: JPG, PNG, GIF, SVG<br>Maksimal: 5MB</p>
                                         </div>
                                     @endif
                                 </div>
@@ -689,6 +749,93 @@
                             @error('banner')
                                 <div class="text-danger small mt-2">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        <!-- Video Profil Nagari -->
+                        <div class="col-md-4 mb-4">
+                            <label class="form-label">Video Profil</label>
+
+                            <!-- Video Type Toggle -->
+                            <div class="video-type-toggle">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="video_type" id="video_url" value="url"
+                                           {{ ($profil && $profil->hasExternalVideo()) ? 'checked' : '' }} onchange="toggleVideoType()">
+                                    <label class="form-check-label" for="video_url">Link YouTube/Video</label>
+                                </div>
+                            </div>
+
+                            <!-- Video Upload Area -->
+                            <div id="video-upload-section" style="{{ ($profil && $profil->hasExternalVideo()) ? 'display: none;' : '' }}">
+                                <div class="upload-area video-upload-area {{ ($profil && $profil->hasVideoFile()) ? 'has-video' : '' }}"
+                                     id="video-upload-area" onclick="document.getElementById('video_profil').click()">
+                                    <div class="upload-content" id="video-content">
+                                        @if($profil && $profil->hasVideoFile())
+                                            <div class="position-relative">
+                                                <video class="preview-video" id="video-preview" controls>
+                                                    <source src="{{ $profil->getVideoUrl() }}" type="video/mp4">
+                                                    Browser Anda tidak mendukung tag video.
+                                                </video>
+                                                <div class="video-controls">
+                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                            onclick="event.stopPropagation(); removeVideo()" title="Hapus video">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                @if($profil->video_durasi || $profil->video_size)
+                                                    <div class="video-info">
+                                                        @if($profil->video_durasi)
+                                                            <span><i class="fas fa-clock"></i> {{ $profil->video_durasi_formatted }}</span>
+                                                        @endif
+                                                        @if($profil->video_size)
+                                                            <span class="ms-3"><i class="fas fa-hdd"></i> {{ $profil->video_size_formatted }}</span>
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div id="video-placeholder">
+                                                <i class="fas fa-video text-4xl text-gray-400 mb-3"></i>
+                                                <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload video profil</p>
+                                                <p class="text-gray-400 text-sm">Format: MP4, AVI, MOV, WMV, FLV, WebM<br>Maksimal: 50MB</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <input type="file" class="d-none" id="video_profil" name="video_profil"
+                                       accept="video/mp4,video/avi,video/mov,video/wmv,video/flv,video/webm"
+                                       onchange="previewVideo(this)">
+                                @error('video_profil')
+                                    <div class="text-danger small mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Video URL Section -->
+                            <div id="video-url-section" style="{{ ($profil && $profil->hasExternalVideo()) ? '' : 'display: none;' }}">
+                                <input type="url" class="form-control @error('video_url') is-invalid @enderror"
+                                       name="video_url" value="{{ old('video_url', $profil->video_url ?? '') }}"
+                                       placeholder="https://www.youtube.com/watch?v=..." id="video_url_input">
+                                @error('video_url')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+
+                                @if($profil && $profil->hasExternalVideo())
+                                    <div class="mt-3">
+                                        <iframe width="100%" height="200" src="{{ $profil->video_embed_url }}"
+                                                frameborder="0" allowfullscreen class="rounded"></iframe>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Video Description -->
+                            <div class="mt-3">
+                                <label class="form-label">Deskripsi Video</label>
+                                <textarea class="form-control @error('video_deskripsi') is-invalid @enderror"
+                                          name="video_deskripsi" rows="3"
+                                          placeholder="Deskripsi singkat tentang video profil">{{ old('video_deskripsi', $profil->video_deskripsi ?? '') }}</textarea>
+                                @error('video_deskripsi')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -747,6 +894,26 @@
             }
         });
 
+        // Toggle video type (upload vs URL)
+        function toggleVideoType() {
+            const uploadSection = document.getElementById('video-upload-section');
+            const urlSection = document.getElementById('video-url-section');
+            const videoUploadRadio = document.getElementById('video_upload');
+
+            if (videoUploadRadio.checked) {
+                uploadSection.style.display = 'block';
+                urlSection.style.display = 'none';
+                // Clear URL input
+                document.getElementById('video_url_input').value = '';
+            } else {
+                uploadSection.style.display = 'none';
+                urlSection.style.display = 'block';
+                // Clear file input
+                document.getElementById('video_profil').value = '';
+                resetUploadArea('video');
+            }
+        }
+
         // Fungsi reset form lengkap - FITUR UTAMA
         function resetCompleteForm() {
             if (confirm('Apakah Anda yakin ingin mereset semua data? Semua perubahan akan hilang dan kembali ke data asli.')) {
@@ -757,14 +924,19 @@
                 $('#profilForm textarea').val('').trigger('input');
 
                 // Reset file inputs
-                $('#logo, #banner').val('');
+                $('#logo, #banner, #video_profil').val('');
 
-                // Reset preview images ke placeholder
+                // Reset preview images dan video
                 resetUploadArea('logo');
                 resetUploadArea('banner');
+                resetUploadArea('video');
 
                 // Reset koordinat
                 $('#latitude, #longitude').val('');
+
+                // Reset video type ke upload
+                document.getElementById('video_upload').checked = true;
+                toggleVideoType();
 
                 // Hapus semua error states
                 $('#profilForm .is-invalid').removeClass('is-invalid');
@@ -784,17 +956,29 @@
             const content = document.getElementById(`${type}-content`);
 
             if (content) {
-                content.innerHTML = `
-                    <div id="${type}-placeholder">
-                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
-                        <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload ${type === 'logo' ? 'logo' : 'banner'}</p>
-                        <p class="text-gray-400 text-sm">Format: JPG, PNG, GIF, SVG. Maksimal: ${type === 'logo' ? '2MB' : '5MB'}</p>
-                    </div>
-                `;
+                let placeholder = '';
+                if (type === 'video') {
+                    placeholder = `
+                        <div id="video-placeholder">
+                            <i class="fas fa-video text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload video profil</p>
+                            <p class="text-gray-400 text-sm">Format: MP4, AVI, MOV, WMV, FLV, WebM<br>Maksimal: 50MB</p>
+                        </div>
+                    `;
+                } else {
+                    placeholder = `
+                        <div id="${type}-placeholder">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload ${type === 'logo' ? 'logo' : 'banner'}</p>
+                            <p class="text-gray-400 text-sm">Format: JPG, PNG, GIF, SVG<br>Maksimal: ${type === 'logo' ? '2MB' : '5MB'}</p>
+                        </div>
+                    `;
+                }
+                content.innerHTML = placeholder;
             }
 
             if (uploadArea) {
-                uploadArea.classList.remove('has-image');
+                uploadArea.classList.remove('has-image', 'has-video');
             }
         }
 
@@ -865,6 +1049,88 @@
             }
         }
 
+        // Preview video function - BARU
+        function previewVideo(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const uploadArea = document.getElementById('video-upload-area');
+                const content = document.getElementById('video-content');
+
+                // Show loading state with progress
+                content.innerHTML = `
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Memproses video...</p>
+                        <div class="upload-progress mt-3">
+                            <div class="upload-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                `;
+
+                // Validate file size (50MB)
+                const maxSize = 50 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    showNotification('File video terlalu besar. Maksimal 50MB', 'error');
+                    resetUploadArea('video');
+                    input.value = '';
+                    return;
+                }
+
+                // Validate file type
+                const allowedTypes = ['video/mp4', 'video/avi', 'video/mov', 'video/wmv', 'video/flv', 'video/webm'];
+                if (!allowedTypes.includes(file.type)) {
+                    showNotification('Format video tidak didukung. Gunakan MP4, AVI, MOV, WMV, FLV, atau WebM', 'error');
+                    resetUploadArea('video');
+                    input.value = '';
+                    return;
+                }
+
+                // Simulate loading progress
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(progressInterval);
+                    }
+                    const progressBar = document.querySelector('.upload-progress-bar');
+                    if (progressBar) {
+                        progressBar.style.width = progress + '%';
+                    }
+                }, 200);
+
+                // Create video preview
+                const videoUrl = URL.createObjectURL(file);
+                const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+
+                setTimeout(() => {
+                    content.innerHTML = `
+                        <div class="position-relative">
+                            <video class="preview-video" id="video-preview" controls>
+                                <source src="${videoUrl}" type="${file.type}">
+                                Browser Anda tidak mendukung tag video.
+                            </video>
+                            <div class="video-controls">
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="event.stopPropagation(); removeVideo()" title="Hapus video">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="video-info">
+                                <span><i class="fas fa-file-video"></i> ${file.name}</span>
+                                <span class="ms-3"><i class="fas fa-hdd"></i> ${sizeInMB} MB</span>
+                            </div>
+                        </div>
+                    `;
+
+                    uploadArea.classList.add('has-video');
+                    showNotification('Video berhasil dipilih', 'success');
+                }, 1500);
+            }
+        }
+
         // Remove image function
         function removeImage(type) {
             if (confirm(`Apakah Anda yakin ingin menghapus ${type === 'logo' ? 'logo' : 'banner'} ini?`)) {
@@ -879,14 +1145,30 @@
             }
         }
 
+        // Remove video function - BARU
+        function removeVideo() {
+            if (confirm('Apakah Anda yakin ingin menghapus video ini?')) {
+                const input = document.getElementById('video_profil');
+
+                if (input) {
+                    input.value = '';
+                }
+
+                resetUploadArea('video');
+                showNotification('Video dihapus', 'success');
+            }
+        }
+
         // Drag and drop functionality
         function initializeDragAndDrop() {
-            const uploadAreas = ['logo-upload-area', 'banner-upload-area'];
+            const uploadAreas = ['logo-upload-area', 'banner-upload-area', 'video-upload-area'];
 
             uploadAreas.forEach(areaId => {
                 const area = document.getElementById(areaId);
-                const type = areaId.includes('logo') ? 'logo' : 'banner';
-                const input = document.getElementById(type);
+                if (!area) return;
+
+                const type = areaId.includes('logo') ? 'logo' : (areaId.includes('banner') ? 'banner' : 'video');
+                const input = document.getElementById(type === 'video' ? 'video_profil' : type);
 
                 if (area && input) {
                     // Prevent default drag behaviors
@@ -914,7 +1196,12 @@
                             const dataTransfer = new DataTransfer();
                             dataTransfer.items.add(files[0]);
                             input.files = dataTransfer.files;
-                            previewImage(input, type);
+
+                            if (type === 'video') {
+                                previewVideo(input);
+                            } else {
+                                previewImage(input, type);
+                            }
                         }
                     }, false);
                 }
@@ -1009,7 +1296,7 @@
                 if (document.getElementById('submitBtn') && document.getElementById('submitBtn').disabled) {
                     submitBtn.html(originalText).prop('disabled', false);
                 }
-            }, 10000);
+            }, 30000); // Increase timeout for video upload
         });
 
         // Handle sidebar toggle and adjust layout
