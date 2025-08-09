@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ProfilNagariController;
 use App\Http\Controllers\Admin\PengumumanController;
 use App\Http\Controllers\Admin\AgendaController;
 use App\Http\Controllers\Admin\LayananController;
+use App\Http\Controllers\Admin\PerangkatController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,7 +59,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('profil/store', [ProfilNagariController::class, 'store'])->name('profil.store');
         Route::get('profil/coordinates', [ProfilNagariController::class, 'getCoordinates'])->name('profil.coordinates');
         Route::delete('profil/video/delete', [ProfilNagariController::class, 'deleteVideo'])->name('profil.video.delete');
-        Route::get('profil/debug', [ProfilNagariController::class, 'debugFiles'])->name('profil.debug'); 
+
+        // Perangkat Nagari routes
+        Route::get('perangkat', [PerangkatController::class, 'index'])->name('perangkat');
+        Route::get('perangkat/detail/{id}', [PerangkatController::class, 'detail'])->name('perangkat.detail');
+        Route::post('perangkat/store', [PerangkatController::class, 'store'])->name('perangkat.store');
+        Route::get('perangkat/show/{id}', [PerangkatController::class, 'show'])->name('perangkat.show');
+        Route::get('perangkat/edit/{id}', [PerangkatController::class, 'edit'])->name('perangkat.edit');
+        Route::put('perangkat/update/{id}', [PerangkatController::class, 'update'])->name('perangkat.update');
+        Route::delete('perangkat/delete/{id}', [PerangkatController::class, 'destroy'])->name('perangkat.delete');
+        Route::patch('perangkat/{id}/status', [PerangkatController::class, 'updateStatus'])->name('perangkat.update-status');
+        Route::post('perangkat/bulk-delete', [PerangkatController::class, 'bulkDelete'])->name('perangkat.bulk-delete');
+        Route::post('perangkat/reorder', [PerangkatController::class, 'reorder'])->name('perangkat.reorder');
 
         // Agenda routes
         Route::get('agenda', [AgendaController::class, 'index'])->name('agenda');

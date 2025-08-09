@@ -104,7 +104,7 @@
                 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
                     <div class="mb-4 lg:mb-0">
                         <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
-                            Selamat Datang, {{ auth()->user()->nama_lengkap }}
+                            Selamat Datang
                         </h1>
                         <p class="text-gray-600">
                             Dashboard untuk mengelola website Nagari Mungo

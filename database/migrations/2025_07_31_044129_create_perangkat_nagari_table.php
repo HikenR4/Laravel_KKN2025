@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama', 100);
             $table->string('jabatan', 100);
-            $table->string('nip', 50)->nullable();
+            $table->string('nip', 50)->nullable()->unique();
             $table->string('foto')->nullable();
             $table->string('telepon', 20)->nullable();
             $table->string('email', 100)->nullable();
@@ -20,9 +20,14 @@ return new class extends Migration
             $table->string('pendidikan', 50)->nullable();
             $table->date('masa_jabatan_mulai')->nullable();
             $table->date('masa_jabatan_selesai')->nullable();
-            $table->string('status', 20)->default('aktif');
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->integer('urutan')->default(0);
             $table->timestamps();
+
+            // Indexes
+            $table->index('status');
+            $table->index('urutan');
+            $table->index(['status', 'urutan']);
         });
     }
 

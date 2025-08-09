@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes; // Import yang hilang
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -11,7 +11,7 @@ use Carbon\Carbon;
 
 class Admin extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes; // SoftDeletes sudah diimport
+    use HasFactory, Notifiable, SoftDeletes;
 
     protected $table = 'admin';
 
@@ -28,14 +28,43 @@ class Admin extends Authenticatable
         'login_attempts' => 'integer',
     ];
 
+    /**
+     * PERBAIKAN: Jangan hash password jika sudah di-hash
+     */
     public function setPasswordAttribute($password)
     {
-        $this->attributes['password'] = Hash::make($password);
+        // Jika password sudah di-hash (panjang 60 karakter), jangan hash lagi
+        if (strlen($password) === 60 && preg_match('/^\$2[ayb]\$.{56}$/', $password)) {
+            $this->attributes['password'] = $password;
+        } else {
+            $this->attributes['password'] = Hash::make($password);
+        }
     }
 
+    /**
+     * PERBAIKAN: Tambahkan fallback untuk foto
+     */
     public function getFotoAttribute($value)
     {
-        return $value ? asset('storage/admin/foto/' . $value) : asset('images/default-avatar.png');
+        if (!$value) {
+            return asset('images/default-avatar.png');
+        }
+
+        // Cek apakah file ada
+        $fotoPath = public_path('storage/admin/foto/' . $value);
+        if (file_exists($fotoPath)) {
+            return asset('storage/admin/foto/' . $value);
+        }
+
+        return asset('images/default-avatar.png');
+    }
+
+    /**
+     * PERBAIKAN: Tambahkan accessor untuk nama file foto asli
+     */
+    public function getFotoFileAttribute()
+    {
+        return $this->attributes['foto'] ?? null;
     }
 
     public function scopeActive($query)
@@ -43,9 +72,16 @@ class Admin extends Authenticatable
         return $query->where('status', 'aktif');
     }
 
+    /**
+     * PERBAIKAN: Gunakan Carbon yang lebih aman
+     */
     public function isLocked()
     {
-        return $this->locked_until && $this->locked_until->isFuture();
+        if (!$this->locked_until) {
+            return false;
+        }
+
+        return Carbon::now()->lt($this->locked_until);
     }
 
     public function resetLoginAttempts()
@@ -56,29 +92,67 @@ class Admin extends Authenticatable
         ]);
     }
 
-    // Relationships
+    /**
+     * PERBAIKAN: Tambahkan method untuk lock account
+     */
+    public function lockAccount($minutes = 15)
+    {
+        $this->update([
+            'locked_until' => Carbon::now()->addMinutes((int) $minutes)
+        ]);
+    }
+
+    /**
+     * PERBAIKAN: Tambahkan method untuk unlock account
+     */
+    public function unlockAccount()
+    {
+        $this->resetLoginAttempts();
+    }
+
+    // Relationships - PERBAIKAN: Tambahkan try-catch untuk model yang mungkin belum ada
     public function berita()
     {
-        return $this->hasMany(Berita::class, 'admin_id');
+        try {
+            return $this->hasMany(\App\Models\Berita::class, 'admin_id');
+        } catch (\Exception $e) {
+            return $this->hasMany(self::class, 'admin_id')->where('id', 0); // Empty relation
+        }
     }
 
     public function agenda()
     {
-        return $this->hasMany(Agenda::class, 'admin_id');
+        try {
+            return $this->hasMany(\App\Models\Agenda::class, 'admin_id');
+        } catch (\Exception $e) {
+            return $this->hasMany(self::class, 'admin_id')->where('id', 0);
+        }
     }
 
     public function pengumuman()
     {
-        return $this->hasMany(Pengumuman::class, 'admin_id');
+        try {
+            return $this->hasMany(\App\Models\Pengumuman::class, 'admin_id');
+        } catch (\Exception $e) {
+            return $this->hasMany(self::class, 'admin_id')->where('id', 0);
+        }
     }
 
     public function permohonanSurat()
     {
-        return $this->hasMany(PermohonanSurat::class, 'admin_processor');
+        try {
+            return $this->hasMany(\App\Models\PermohonanSurat::class, 'admin_processor');
+        } catch (\Exception $e) {
+            return $this->hasMany(self::class, 'admin_processor')->where('id', 0);
+        }
     }
 
     public function logAktivitas()
     {
-        return $this->hasMany(LogAktivitas::class, 'admin_id');
+        try {
+            return $this->hasMany(\App\Models\LogAktivitas::class, 'admin_id');
+        } catch (\Exception $e) {
+            return $this->hasMany(self::class, 'admin_id')->where('id', 0);
+        }
     }
 }
