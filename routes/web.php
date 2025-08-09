@@ -58,7 +58,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('profil', [ProfilNagariController::class, 'index'])->name('profil.index');
         Route::post('profil/store', [ProfilNagariController::class, 'store'])->name('profil.store');
         Route::get('profil/coordinates', [ProfilNagariController::class, 'getCoordinates'])->name('profil.coordinates');
-      
+        Route::delete('profil/video/delete', [ProfilNagariController::class, 'deleteVideo'])->name('profil.video.delete');
+        Route::get('profil/debug', [ProfilNagariController::class, 'debugFiles'])->name('profil.debug'); 
+
         // Agenda routes
         Route::get('agenda', [AgendaController::class, 'index'])->name('agenda');
         Route::post('agenda/store', [AgendaController::class, 'store'])->name('agenda.store');
@@ -66,7 +68,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('agenda/edit/{id}', [AgendaController::class, 'edit'])->name('agenda.edit');
         Route::put('agenda/update/{id}', [AgendaController::class, 'update'])->name('agenda.update');
         Route::delete('agenda/delete/{id}', [AgendaController::class, 'destroy'])->name('agenda.delete');
-        
+
         // Additional agenda routes
         Route::get('agenda/kategori/{kategori}', [AgendaController::class, 'getByKategori'])->name('agenda.by-kategori');
         Route::get('agenda/upcoming', [AgendaController::class, 'getUpcoming'])->name('agenda.upcoming');
@@ -80,7 +82,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('pengumuman/update/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
         Route::delete('pengumuman/delete/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.delete');
         Route::patch('pengumuman/{id}/status', [PengumumanController::class, 'updateStatus'])->name('pengumuman.update-status');
-    
+
         // Additional pengumuman routes
         Route::get('pengumuman/kategori/{kategori}', [PengumumanController::class, 'getByKategori'])->name('pengumuman.by-kategori');
         Route::get('pengumuman/penting', [PengumumanController::class, 'getPenting'])->name('pengumuman.penting');
@@ -94,7 +96,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('layanan/update/{id}', [LayananController::class, 'update'])->name('layanan.update');
         Route::delete('layanan/delete/{id}', [LayananController::class, 'destroy'])->name('layanan.delete');
         Route::patch('layanan/{id}/status', [LayananController::class, 'updateStatus'])->name('layanan.update-status');
-        
+
         // Additional layanan routes
         Route::delete('layanan/bulk-delete', [LayananController::class, 'bulkDelete'])->name('layanan.bulk-delete');
         Route::post('layanan/reorder', [LayananController::class, 'reorder'])->name('layanan.reorder');
