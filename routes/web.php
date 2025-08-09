@@ -3,6 +3,9 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\ProfilNagariController;
+use App\Http\Controllers\Admin\PengumumanController;
+use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\LayananController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +57,46 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('profil', [ProfilNagariController::class, 'index'])->name('profil.index');
         Route::post('profil/store', [ProfilNagariController::class, 'store'])->name('profil.store');
         Route::get('profil/coordinates', [ProfilNagariController::class, 'getCoordinates'])->name('profil.coordinates');
+      
+        // Agenda routes
+        Route::get('agenda', [AgendaController::class, 'index'])->name('agenda');
+        Route::post('agenda/store', [AgendaController::class, 'store'])->name('agenda.store');
+        Route::get('agenda/show/{id}', [AgendaController::class, 'show'])->name('agenda.show');
+        Route::get('agenda/edit/{id}', [AgendaController::class, 'edit'])->name('agenda.edit');
+        Route::put('agenda/update/{id}', [AgendaController::class, 'update'])->name('agenda.update');
+        Route::delete('agenda/delete/{id}', [AgendaController::class, 'destroy'])->name('agenda.delete');
+        
+        // Additional agenda routes
+        Route::get('agenda/kategori/{kategori}', [AgendaController::class, 'getByKategori'])->name('agenda.by-kategori');
+        Route::get('agenda/upcoming', [AgendaController::class, 'getUpcoming'])->name('agenda.upcoming');
+        Route::delete('agenda/bulk-delete', [AgendaController::class, 'bulkDelete'])->name('agenda.bulk-delete');
+
+        // Pengumuman routes - KEMBALI KE BENTUK ASLI
+        Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman');
+        Route::post('pengumuman/store', [PengumumanController::class, 'store'])->name('pengumuman.store');
+        Route::get('pengumuman/show/{id}', [PengumumanController::class, 'show'])->name('pengumuman.show');
+        Route::get('pengumuman/edit/{id}', [PengumumanController::class, 'edit'])->name('pengumuman.edit');
+        Route::put('pengumuman/update/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
+        Route::delete('pengumuman/delete/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.delete');
+        Route::patch('pengumuman/{id}/status', [PengumumanController::class, 'updateStatus'])->name('pengumuman.update-status');
+    
+        // Additional pengumuman routes
+        Route::get('pengumuman/kategori/{kategori}', [PengumumanController::class, 'getByKategori'])->name('pengumuman.by-kategori');
+        Route::get('pengumuman/penting', [PengumumanController::class, 'getPenting'])->name('pengumuman.penting');
+        Route::delete('pengumuman/bulk-delete', [PengumumanController::class, 'bulkDelete'])->name('pengumuman.bulk-delete');
+
+        // Layanan routes - BARU
+        Route::get('layanan', [LayananController::class, 'index'])->name('layanan');
+        Route::post('layanan/store', [LayananController::class, 'store'])->name('layanan.store');
+        Route::get('layanan/show/{id}', [LayananController::class, 'show'])->name('layanan.show');
+        Route::get('layanan/edit/{id}', [LayananController::class, 'edit'])->name('layanan.edit');
+        Route::put('layanan/update/{id}', [LayananController::class, 'update'])->name('layanan.update');
+        Route::delete('layanan/delete/{id}', [LayananController::class, 'destroy'])->name('layanan.delete');
+        Route::patch('layanan/{id}/status', [LayananController::class, 'updateStatus'])->name('layanan.update-status');
+        
+        // Additional layanan routes
+        Route::delete('layanan/bulk-delete', [LayananController::class, 'bulkDelete'])->name('layanan.bulk-delete');
+        Route::post('layanan/reorder', [LayananController::class, 'reorder'])->name('layanan.reorder');
 
         // Logout
         Route::post('logout', [AdminController::class, 'logout'])->name('logout');
