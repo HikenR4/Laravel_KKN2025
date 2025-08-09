@@ -1,17 +1,16 @@
-<IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
+# ===============================================
+# LARAVEL STANDARD CONFIGURATION (SUDAH ADA)
+# ===============================================
+<IfModule mod_negotiation.c>
+    Options -MultiViews -Indexes
+</IfModule>
 
+<IfModule mod_rewrite.c>
     RewriteEngine On
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    # Handle X-XSRF-Token Header
-    RewriteCond %{HTTP:x-xsrf-token} .
-    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -23,3 +22,58 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# ===============================================
+# VIDEO UPLOAD CONFIGURATION (TAMBAH INI!)
+# ===============================================
+
+<IfModule mod_php.c>
+    # Increase upload limits untuk video files
+    php_value upload_max_filesize 64M
+    php_value post_max_size 64M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+    php_value memory_limit 256M
+
+    # Optimize untuk file besar
+    php_value max_file_uploads 20
+    php_value default_socket_timeout 300
+</IfModule>
+
+# Security headers untuk video files
+<IfModule mod_headers.c>
+    <FilesMatch "\.(mp4|avi|mov|wmv|flv|webm)$">
+        Header set X-Content-Type-Options nosniff
+        Header set X-Frame-Options SAMEORIGIN
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+
+    <FilesMatch "\.(jpg|jpeg|png|gif|svg)$">
+        Header set Cache-Control "public, max-age=604800"
+    </FilesMatch>
+</IfModule>
+
+# Compress untuk performa
+<IfModule mod_deflate.c>
+    <FilesMatch "\.(webm)$">
+        SetOutputFilter DEFLATE
+    </FilesMatch>
+</IfModule>
+
+# MIME types untuk video
+<IfModule mod_mime.c>
+    AddType video/mp4 .mp4
+    AddType video/avi .avi
+    AddType video/quicktime .mov
+    AddType video/x-ms-wmv .wmv
+    AddType video/x-flv .flv
+    AddType video/webm .webm
+</IfModule>
+
+# Protect upload directories
+<DirectoryMatch "^.*/uploads/">
+    <FilesMatch "\.php$">
+        Order Deny,Allow
+        Deny from all
+    </FilesMatch>
+</DirectoryMatch>

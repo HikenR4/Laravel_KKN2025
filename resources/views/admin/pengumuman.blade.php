@@ -60,7 +60,7 @@
         }
 
         .btn-tambah-pengumuman {
-            background: #8b5cf6;
+            background: #3b82f6;
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
@@ -69,7 +69,7 @@
         }
 
         .btn-tambah-pengumuman:hover {
-            background: #7c3aed;
+            background: #2563eb;
             transform: translateY(-2px);
             color: white;
         }
@@ -524,8 +524,8 @@
                                     </td>
                                     <td>
                                         <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input status-toggle" 
-                                                   id="status{{ $item->id ?? ($index + 1) }}" 
+                                            <input type="checkbox" class="custom-control-input status-toggle"
+                                                   id="status{{ $item->id ?? ($index + 1) }}"
                                                    data-id="{{ $item->id ?? ($index + 1) }}"
                                                    {{ ($item->status ?? 'aktif') == 'aktif' ? 'checked' : '' }}>
                                             <label class="custom-control-label" for="status{{ $item->id ?? ($index + 1) }}"></label>
@@ -557,7 +557,7 @@
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                             @if(($item->status ?? 'aktif') == 'aktif' && ($item->is_active ?? true))
-                                                <a href="{{ route('admin.pengumuman', $item->slug ?? 'sample-slug') }}" 
+                                                <a href="{{ route('admin.pengumuman', $item->slug ?? 'sample-slug') }}"
                                                    target="_blank" class="action-btn" title="Lihat di Website" data-bs-toggle="tooltip">
                                                     <i class="fas fa-external-link-alt"></i>
                                                 </a>
@@ -905,7 +905,7 @@
         $('.status-toggle').change(function() {
             let id = $(this).data('id');
             let status = $(this).is(':checked') ? 'aktif' : 'tidak_aktif';
-            
+
             $.ajax({
                 url: `/admin/pengumuman/${id}/status`,
                 type: 'PATCH',
@@ -916,7 +916,7 @@
                         const statusBadge = $(`.status-badge:contains('${status === 'aktif' ? 'Tidak Aktif' : 'Aktif'}')`);
                         statusBadge.removeClass('status-aktif status-tidak_aktif').addClass('status-' + status);
                         statusBadge.text(status === 'aktif' ? 'Aktif' : 'Tidak Aktif');
-                        
+
                         // Show success message
                         showAlert('success', response.message);
                     }
@@ -963,14 +963,14 @@
                 success: function(response) {
                     if (response.success) {
                         const data = response.data;
-                        
+
                         // Build edit form content
                         const content = buildEditForm(data);
-                        
+
                         $('#editPengumumanContent').html(content);
                         $('#formEditPengumuman').attr('action', '/admin/pengumuman/update/' + id);
                         $('#editPengumumanModal').modal('show');
-                        
+
                         // Initialize CKEditor 5 for edit form
                         ClassicEditor
                             .create(document.querySelector('#edit_konten'), {
@@ -1020,7 +1020,7 @@
                 error: function(xhr, status, error) {
                     console.error('AJAX Error:', xhr.responseText);
                     let errorMessage = 'Terjadi kesalahan saat memuat form edit.';
-                    
+
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage = xhr.responseJSON.message;
                     } else if (xhr.status === 404) {
@@ -1028,7 +1028,7 @@
                     } else if (xhr.status === 500) {
                         errorMessage = 'Terjadi kesalahan server. Silakan coba lagi.';
                     }
-                    
+
                     showAlert('error', errorMessage);
                 },
                 complete: function() {
@@ -1070,7 +1070,7 @@
             // Build current image preview
             let currentImageHtml = '';
             if (data.gambar) {
-                currentImageHtml = 
+                currentImageHtml =
                     `<div class="mt-2">
                         <label class="form-label">Gambar Saat Ini:</label><br>
                         <img src="${data.gambar}" alt="Current" style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 0.25rem;">
@@ -1150,7 +1150,7 @@
         function showAlert(type, message) {
             const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
             const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-            
+
             const alert = $(`
                 <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
                     <i class="fas ${iconClass} me-2"></i>
@@ -1158,9 +1158,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             `);
-            
+
             $('.page-content').prepend(alert);
-            
+
             setTimeout(function() {
                 alert.fadeOut('slow', function() {
                     $(this).remove();

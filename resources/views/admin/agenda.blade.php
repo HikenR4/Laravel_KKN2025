@@ -20,7 +20,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, 
+            background: linear-gradient(135deg,
                 @if(isset($agenda_detail)) #f0fdf4 0%, #dcfce7 100% @else #f3f4f6 0%, #e5e7eb 100% @endif
             );
         }
@@ -88,7 +88,7 @@
         }
 
         .btn-tambah-agenda {
-            background: #10b981;
+            background: #3b82f6;
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
@@ -96,7 +96,7 @@
         }
 
         .btn-tambah-agenda:hover {
-            background: #059669;
+            background: #2563eb;
             transform: translateY(-2px);
         }
 
@@ -666,7 +666,7 @@
         @include('layouts.sidebar')
 
         <div class="page-main-wrapper flex-1 p-4 lg:p-8 transition-all duration-300" id="pageMainContent">
-            
+
             @if(isset($agenda_detail))
                 {{-- HALAMAN DETAIL AGENDA --}}
                 <!-- Breadcrumb -->
@@ -709,7 +709,7 @@
                             <div class="hero-section">
                                 <div class="hero-content">
                                     <h1 class="hero-title">{{ $agenda_detail->judul }}</h1>
-                                    
+
                                     <div class="hero-meta">
                                         <div class="meta-item">
                                             <i class="fas fa-calendar-alt"></i>
@@ -835,8 +835,8 @@
                                 <!-- Image -->
                                 @if($agenda_detail->gambar)
                                     <div class="text-center mb-4">
-                                        <img src="{{ $agenda_detail->gambar }}" 
-                                             alt="{{ $agenda_detail->alt_gambar ?? $agenda_detail->judul }}" 
+                                        <img src="{{ $agenda_detail->gambar }}"
+                                             alt="{{ $agenda_detail->alt_gambar ?? $agenda_detail->judul }}"
                                              class="agenda-image">
                                         @if($agenda_detail->alt_gambar)
                                             <p class="text-muted mt-2" style="font-style: italic;">{{ $agenda_detail->alt_gambar }}</p>
@@ -893,10 +893,6 @@
                                 Quick Actions
                             </h5>
                             <div class="action-buttons">
-                                <button class="btn-custom btn-warning-custom" onclick="editItem({{ $agenda_detail->id }})">
-                                    <i class="fas fa-edit"></i>
-                                    Edit Agenda
-                                </button>
                                 <a href="{{ route('admin.agenda') }}" class="btn-custom btn-secondary-custom">
                                     <i class="fas fa-arrow-left"></i>
                                     Kembali
@@ -1429,21 +1425,21 @@
             // Countdown timer (only for detail page)
             @if(isset($agenda_detail) && $agenda_detail->tanggal_mulai->isFuture() && $agenda_detail->status !== 'cancelled')
             const targetDate = new Date('{{ $agenda_detail->tanggal_mulai->format('Y-m-d') }}T{{ $agenda_detail->waktu_mulai ?? '00:00' }}').getTime();
-            
+
             const countdown = setInterval(function() {
                 const now = new Date().getTime();
                 const distance = targetDate - now;
-                
+
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                
+
                 $('#days').text(days >= 0 ? days : 0);
                 $('#hours').text(hours >= 0 ? hours : 0);
                 $('#minutes').text(minutes >= 0 ? minutes : 0);
                 $('#seconds').text(seconds >= 0 ? seconds : 0);
-                
+
                 if (distance < 0) {
                     clearInterval(countdown);
                     $('.countdown-section').html('<h3 class="text-center">Agenda sudah dimulai!</h3>');
@@ -1536,7 +1532,7 @@
                 success: function(response) {
                     if (response.success) {
                         const data = response.data;
-                        
+
                         // Escape function
                         function escapeHtml(text) {
                             if (!text) return '';
@@ -1557,7 +1553,7 @@
                             kategoriOptions += '<option value="' + kat + '" ' + selected + '>' + label + '</option>';
                         });
 
-                        const statusOptions = 
+                        const statusOptions =
                             '<option value="planned" ' + (data.status === 'planned' ? 'selected' : '') + '>Planned</option>' +
                             '<option value="ongoing" ' + (data.status === 'ongoing' ? 'selected' : '') + '>Ongoing</option>' +
                             '<option value="completed" ' + (data.status === 'completed' ? 'selected' : '') + '>Completed</option>' +
@@ -1565,14 +1561,14 @@
 
                         let currentImageHtml = '';
                         if (data.gambar) {
-                            currentImageHtml = 
+                            currentImageHtml =
                                 '<div class="mt-2">' +
                                     '<label class="form-label">Gambar Saat Ini:</label><br>' +
                                     '<img src="' + data.gambar + '" alt="Current" style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 0.25rem;">' +
                                 '</div>';
                         }
 
-                        const content = 
+                        const content =
                             '<div class="row">' +
                                 '<div class="col-md-8 mb-3">' +
                                     '<label for="edit_judul" class="form-label">Judul Agenda <span class="text-danger">*</span></label>' +
@@ -1651,7 +1647,7 @@
                                 '<label for="edit_alt_gambar" class="form-label">Alt Text Gambar</label>' +
                                 '<input type="text" class="form-control" id="edit_alt_gambar" name="alt_gambar" value="' + escapeHtml(data.alt_gambar || '') + '">' +
                             '</div>';
-                        
+
                         $('#editAgendaContent').html(content);
                         $('#formEditAgenda').attr('action', '/admin/agenda/update/' + id);
                         $('#editAgendaModal').modal('show');
