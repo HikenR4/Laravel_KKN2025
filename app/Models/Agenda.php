@@ -35,9 +35,21 @@ class Agenda extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
+    // PERBAIKAN ACCESSOR GAMBAR
     public function getGambarAttribute($value)
     {
-        return $value ? asset('storage/agenda/gambar/' . $value) : asset('images/default-event.jpg');
+        // Jika value kosong, return default
+        if (!$value) {
+            return asset('images/default-event.jpg');
+        }
+
+        // Jika sudah berupa full URL (dimulai dengan http), return langsung
+        if (str_starts_with($value, 'http')) {
+            return $value;
+        }
+
+        // Jika hanya nama file, buat full URL
+        return asset('uploads/agenda/' . $value);
     }
 
     public function getTanggalLengkapAttribute()
@@ -86,9 +98,5 @@ class Agenda extends Model
     public function admin()
     {
         return $this->belongsTo(Admin::class, 'admin_id');
-    }
-    public function agenda()
-    {
-    return $this->hasMany(Agenda::class, 'admin_id');
     }
 }

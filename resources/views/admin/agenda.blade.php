@@ -18,12 +18,12 @@
         /* CSS Khusus untuk Halaman Agenda */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg,
-                @if(isset($agenda_detail)) #f0fdf4 0%, #dcfce7 100% @else #f3f4f6 0%, #e5e7eb 100% @endif
-            );
-        }
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg,
+        @if(isset($agenda_detail)) #f8fafc 0%, #e2e8f0 100% @else #f3f4f6 0%, #e5e7eb 100% @endif
+    );
+}
 
         .page-main-wrapper {
             margin-left: 280px;
@@ -65,7 +65,23 @@
             text-decoration: none;
             transition: color 0.3s ease;
         }
+/* Override tombol success menjadi biru formal */
+.btn-success,
+.btn-success:not(:disabled):not(.disabled):active,
+.btn-success:focus,
+.btn-success.focus {
+    background: linear-gradient(135deg, #1e40af, #1e3a8a) !important;
+    border-color: #1e40af !important;
+    color: white !important;
+}
 
+.btn-success:hover {
+    background: linear-gradient(135deg, #1e3a8a, #1d4ed8) !important;
+    border-color: #1e3a8a !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3) !important;
+    color: white !important;
+}
         .breadcrumb-custom .breadcrumb-item a:hover {
             color: #059669;
         }
@@ -100,26 +116,26 @@
             transform: translateY(-2px);
         }
 
-        /* Hero Section for Detail */
-        .hero-section {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 3rem 2rem;
-            border-radius: 1rem 1rem 0 0;
-            position: relative;
-            overflow: hidden;
-        }
+/* Hero Section for Detail - Warna Formal */
+.hero-section {
+    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+    color: white;
+    padding: 3rem 2rem;
+    border-radius: 1rem 1rem 0 0;
+    position: relative;
+    overflow: hidden;
+}
 
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="agenda-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.2"/></pattern></defs><rect width="100" height="100" fill="url(%23agenda-pattern)"/></svg>');
-            opacity: 0.3;
-        }
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="agenda-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23agenda-pattern)"/></svg>');
+    opacity: 0.3;
+}
 
         .hero-content {
             position: relative;
@@ -141,15 +157,16 @@
             margin-bottom: 1.5rem;
         }
 
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            backdrop-filter: blur(10px);
-        }
+/* Meta Items - Formal */
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    backdrop-filter: blur(10px);
+}
 
         .content-section {
             padding: 2rem;
@@ -195,25 +212,26 @@
             text-transform: uppercase;
         }
 
-        .status-planned {
-            background: #3b82f6;
-            color: white;
-        }
+/* Agenda Status Colors - More Formal */
+.status-planned {
+    background: #1e40af;
+    color: white;
+}
 
-        .status-ongoing {
-            background: #f59e0b;
-            color: white;
-        }
+.status-ongoing {
+    background: #d97706;
+    color: white;
+}
 
-        .status-completed {
-            background: #10b981;
-            color: white;
-        }
+.status-completed {
+    background: #059669;
+    color: white;
+}
 
-        .status-cancelled {
-            background: #ef4444;
-            color: white;
-        }
+.status-cancelled {
+    background: #dc2626;
+    color: white;
+}
 
         .agenda-date {
             font-weight: 600;
@@ -306,17 +324,18 @@
             text-decoration: none;
         }
 
-        .btn-success-custom {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
+/* Buttons - Formal */
+.btn-success-custom {
+    background: linear-gradient(135deg, #1e40af, #1e3a8a);
+    color: white;
+}
 
-        .btn-success-custom:hover {
-            background: linear-gradient(135deg, #059669, #047857);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-            color: white;
-        }
+.btn-success-custom:hover {
+    background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(30, 64, 175, 0.3);
+    color: white;
+}
 
         .btn-secondary-custom {
             background: linear-gradient(135deg, #6b7280, #4b5563);
@@ -375,15 +394,16 @@
             gap: 1rem;
         }
 
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem;
-            background: #f8fafc;
-            border-radius: 0.5rem;
-            border-left: 4px solid #10b981;
-        }
+/* Info Items - Formal */
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    border-left: 4px solid #1e40af;
+}
 
         .info-label {
             font-weight: 600;
@@ -406,43 +426,45 @@
             margin-bottom: 2rem;
         }
 
-        .stat-card {
-            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            text-align: center;
-            border: 1px solid #bbf7d0;
-            transition: all 0.3s ease;
-        }
+        /* Statistics Cards - Formal */
+.stat-card {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    border: 1px solid #cbd5e1;
+    transition: all 0.3s ease;
+}
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
 
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #10b981;
-            display: block;
-        }
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e40af;
+    display: block;
+}
 
-        .stat-label {
-            font-size: 0.875rem;
-            color: #6b7280;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
+.stat-label {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
 
-        .countdown-section {
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+/* Countdown Section - Formal */
+.countdown-section {
+    background: linear-gradient(45deg, #64748b 0%, #475569 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
 
         .countdown-timer {
             display: flex;
@@ -469,88 +491,91 @@
             opacity: 0.8;
         }
 
-        .schedule-section {
-            background: linear-gradient(135deg, #eff6ff, #dbeafe);
-            border: 1px solid #bfdbfe;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
+/* Schedule Section - Formal */
+.schedule-section {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    border: 1px solid #cbd5e1;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
 
-        .schedule-title {
-            font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+.schedule-title {
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
         .agenda-timeline {
             position: relative;
             padding-left: 2rem;
         }
 
-        .agenda-timeline::before {
-            content: '';
-            position: absolute;
-            left: 0.5rem;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #10b981;
-        }
+.agenda-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #1e40af;
+}
 
         .timeline-item {
             position: relative;
             margin-bottom: 1.5rem;
         }
 
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -2rem;
-            top: 0.25rem;
-            width: 12px;
-            height: 12px;
-            background: #10b981;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px #10b981;
-        }
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0.25rem;
+    width: 12px;
+    height: 12px;
+    background: #1e40af;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px #1e40af;
+}
 
-        .location-section {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 1px solid #f59e0b;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
+/* Location Section - Formal */
+.location-section {
+    background: linear-gradient(135deg, #fefce8, #fef3c7);
+    border: 1px solid #d97706;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
 
-        .location-title {
-            font-weight: 700;
-            color: #92400e;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+.location-title {
+    font-weight: 700;
+    color: #b45309;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
-        .participants-section {
-            background: linear-gradient(135deg, #fce7f3, #fbcfe8);
-            border: 1px solid #ec4899;
-            border-radius: 1rem;
-            padding: 1.5rem;
-        }
+/* Participants Section - Formal */
+.participants-section {
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    border: 1px solid #6b7280;
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
 
-        .participants-title {
-            font-weight: 700;
-            color: #be185d;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+.participants-title {
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
         .agenda-content {
             font-size: 1.125rem;
@@ -571,10 +596,11 @@
             padding: 0.5rem 1rem;
         }
 
-        .pagination-links .page-item.active .page-link {
-            background: #10b981;
-            border-color: #10b981;
-        }
+/* Pagination - Formal */
+.pagination-links .page-item.active .page-link {
+    background: #1e40af;
+    border-color: #1e40af;
+}
 
         .modal-content {
             border-radius: 1rem;
@@ -636,19 +662,31 @@
             }
         }
 
-        .agenda-upcoming {
-            border-left: 4px solid #10b981;
-        }
+/* Table Row States - Formal */
+.agenda-upcoming {
+    border-left: 4px solid #1e40af;
+}
 
-        .agenda-past {
-            opacity: 0.7;
-            border-left: 4px solid #6b7280;
-        }
+.agenda-past {
+    opacity: 0.7;
+    border-left: 4px solid #64748b;
+}
 
-        .agenda-today {
-            border-left: 4px solid #f59e0b;
-            background: #fffbeb;
-        }
+.agenda-today {
+    border-left: 4px solid #d97706;
+    background: #fffbeb;
+}
+
+        /* Breadcrumb Formal */
+.breadcrumb-custom .breadcrumb-item a {
+    color: #1e40af;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-custom .breadcrumb-item a:hover {
+    color: #1e3a8a;
+}
 
         /* Print styles */
         @media print {

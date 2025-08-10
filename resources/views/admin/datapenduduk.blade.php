@@ -60,7 +60,7 @@
         }
 
         .btn-tambah-penduduk {
-            background: #8b5cf6;
+            background: #3b82f6;
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
@@ -69,7 +69,7 @@
         }
 
         .btn-tambah-penduduk:hover {
-            background: #7c3aed;
+            background: #2563eb;
             transform: translateY(-2px);
             color: white;
         }
@@ -444,7 +444,7 @@
                                     <td>
                                         @if($item->tempat_lahir || $item->tanggal_lahir)
                                             <div class="fw-semibold">
-                                                {{ $item->tempat_lahir ?? 'Tempat' }}, 
+                                                {{ $item->tempat_lahir ?? 'Tempat' }},
                                                 {{ $item->tanggal_lahir ? $item->tanggal_lahir->format('d/m/Y') : '01/01/1990' }}
                                             </div>
                                             <small class="text-muted">Umur: {{ $umur }} tahun</small>
@@ -528,7 +528,7 @@
                                         <hr>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="nik" class="form-label">NIK <span class="text-danger">*</span></label>
@@ -927,10 +927,10 @@
                 success: function(response) {
                     if (response.success) {
                         const data = response.data;
-                        
+
                         // Build edit form content
                         const content = buildEditForm(data);
-                        
+
                         $('#editPendudukContent').html(content);
                         $('#formEditPenduduk').attr('action', '/admin/datapenduduk/update/' + id);
                         $('#editPendudukModal').modal('show');
@@ -941,7 +941,7 @@
                 error: function(xhr, status, error) {
                     console.error('AJAX Error:', xhr.responseText);
                     let errorMessage = 'Terjadi kesalahan saat memuat form edit.';
-                    
+
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage = xhr.responseJSON.message;
                     } else if (xhr.status === 404) {
@@ -949,7 +949,7 @@
                     } else if (xhr.status === 500) {
                         errorMessage = 'Terjadi kesalahan server. Silakan coba lagi.';
                     }
-                    
+
                     showAlert('error', errorMessage);
                 },
                 complete: function() {
@@ -978,7 +978,7 @@
         function showAlert(type, message) {
             const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
             const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-            
+
             const alert = $(`
                 <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
                     <i class="fas ${iconClass} me-2"></i>
@@ -986,9 +986,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             `);
-            
+
             $('.page-content').prepend(alert);
-            
+
             setTimeout(function() {
                 alert.fadeOut('slow', function() {
                     $(this).remove();

@@ -285,9 +285,13 @@
             </a>
 
             <a href="{{ route('admin.datapenduduk') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.datapenduduk*')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
-            <a href="#" class="sidebar-nav-item flex items-center py-3 px-4 text-red-100 transition-all duration-300 hover:bg-white/10 hover:text-white">
                 <i class="fas fa-users text-lg min-w-[20px]"></i>
                 <span class="sidebar-menu-text ml-4 font-medium">Data Penduduk</span>
+            </a>
+
+            <a href="{{ route('admin.komentar') }}" class="sidebar-nav-item flex items-center py-3 px-4 rounded-xl @if(request()->routeIs('admin.komentar*')) bg-white/20 text-white @else text-blue-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
+                <i class="fas fa-comments text-lg min-w-[20px]"></i>
+                <span class="sidebar-menu-text ml-4 font-medium">Komentar</span>
             </a>
 
             <a href="{{ route('admin.layanan') }}" class="sidebar-nav-item flex items-center py-3 px-4 @if(request()->routeIs('admin.layanan*')) active @else text-red-100 hover:bg-white/10 hover:text-white @endif transition-all duration-300">
