@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AgendaController;
 use App\Http\Controllers\Admin\LayananController;
 use App\Http\Controllers\Admin\PerangkatController;
 use App\Http\Controllers\Admin\DataPendudukController;
+use App\Http\Controllers\Admin\KomentarController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -100,6 +101,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('pengumuman/penting', [PengumumanController::class, 'getPenting'])->name('pengumuman.penting');
         Route::delete('pengumuman/bulk-delete', [PengumumanController::class, 'bulkDelete'])->name('pengumuman.bulk-delete');
 
+        // Komentar
+        Route::get('komentar', [KomentarController::class, 'index'])->name('komentar');
+        Route::get('komentar/show/{id}', [KomentarController::class, 'show'])->name('komentar.show');
+        Route::patch('komentar/{id}/approve', [KomentarController::class, 'approve'])->name('komentar.approve');
+        Route::patch('komentar/{id}/reject', [KomentarController::class, 'reject'])->name('komentar.reject');
+        Route::delete('komentar/delete/{id}', [KomentarController::class, 'destroy'])->name('komentar.delete');
+        Route::get('komentar/filter', [KomentarController::class, 'filter'])->name('komentar.filter');
+        Route::delete('komentar/bulk-delete', [KomentarController::class, 'bulkDelete'])->name('komentar.bulk-delete');
+        Route::post('komentar/bulk-action', [KomentarController::class, 'bulkAction'])->name('komentar.bulk-action');
+
         // Layanan routes - BARU
         Route::get('layanan', [LayananController::class, 'index'])->name('layanan');
         Route::post('layanan/store', [LayananController::class, 'store'])->name('layanan.store');
@@ -121,7 +132,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('datapenduduk/update/{id}', [DataPendudukController::class, 'update'])->name('datapenduduk.update');
         Route::delete('datapenduduk/delete/{id}', [DataPendudukController::class, 'destroy'])->name('datapenduduk.delete');
         Route::patch('datapenduduk/{id}/status', [DataPendudukController::class, 'updateStatus'])->name('datapenduduk.update-status');
-        
+
         // Additional data penduduk routes
         Route::get('datapenduduk/search', [DataPendudukController::class, 'search'])->name('datapenduduk.search');
         Route::get('datapenduduk/filter', [DataPendudukController::class, 'filter'])->name('datapenduduk.filter');
