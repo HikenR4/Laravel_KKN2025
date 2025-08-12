@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\LayananController;
 use App\Http\Controllers\Admin\PerangkatController;
 use App\Http\Controllers\Admin\DataPendudukController;
 use App\Http\Controllers\Admin\KomentarController;
+use App\Http\Controllers\Admin\PublicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,17 @@ Route::get('/', function () {
 Route::get('/test', function () {
     return 'Test route works!';
 });
+
+// Landing page untuk masyarakat
+Route::get('/landing', function () {
+    return view('public.landing');
+});
+
+// Public routes for berita
+Route::get('/', [PublicController::class, 'landing'])->name('landing');
+Route::get('/berita', [PublicController::class, 'berita'])->name('berita');
+Route::get('/berita/{slug}', [PublicController::class, 'beritaDetail'])->name('berita.detail');
+Route::get('/berita/kategori/{kategori}', [PublicController::class, 'beritaByKategori'])->name('berita.kategori');
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->group(function () {
