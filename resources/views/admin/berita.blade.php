@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+<style>
         /* CSS Khusus untuk Halaman Berita */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -76,10 +76,12 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Perbaikan untuk text wrapping pada tabel */
         .custom-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
+            table-layout: fixed; /* Tambahkan ini untuk kontrol yang lebih baik */
         }
 
         .custom-table th,
@@ -87,12 +89,56 @@
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #e5e7eb;
+            word-wrap: break-word; /* Tambahkan ini */
+            word-break: break-word; /* Tambahkan ini */
+            overflow-wrap: break-word; /* Tambahkan ini */
+            vertical-align: top; /* Tambahkan ini untuk alignment yang lebih baik */
         }
 
         .custom-table th {
             background: #f8fafc;
             font-weight: 600;
             color: #374151;
+        }
+
+        /* Perbaikan untuk kolom dengan max-width */
+        .custom-table td {
+            max-width: 0; /* Trick untuk memastikan word-wrap bekerja dengan table-layout: fixed */
+        }
+
+        /* Perbaikan khusus untuk kolom judul berita */
+        .judul-berita {
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #1f2937;
+            max-width: 100%; /* Pastikan tidak melebihi lebar kolom */
+        }
+
+        /* Perbaikan untuk excerpt */
+        .judul-berita + small {
+            display: block !important;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.3;
+            margin-top: 0.25rem;
+            color: #6b7280;
+        }
+
+        /* Perbaikan untuk kolom tanggal */
+        .tanggal-berita {
+            white-space: nowrap; /* Tanggal sebaiknya tetap dalam satu baris */
+            margin-bottom: 0.25rem;
+        }
+
+        /* Responsive table wrapper */
+        .table-container {
+            overflow-x: auto;
+            margin: -1px; /* Kompensasi untuk border */
         }
 
         .kategori-badge {
@@ -109,6 +155,7 @@
             height: 60px;
             object-fit: cover;
             border-radius: 0.5rem;
+            flex-shrink: 0; /* Prevent shrinking */
         }
 
         .no-image {
@@ -120,11 +167,14 @@
             justify-content: center;
             border-radius: 0.5rem;
             color: #6b7280;
+            flex-shrink: 0; /* Prevent shrinking */
         }
 
         .action-buttons {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: nowrap; /* Prevent wrapping untuk action buttons */
+            min-width: max-content; /* Pastikan cukup ruang */
         }
 
         .action-btn {
@@ -257,6 +307,50 @@
             border-radius: 0.5rem;
             font-size: 0.75rem;
             font-weight: 600;
+        }
+
+        /* Perbaikan untuk mobile responsiveness */
+        @media (max-width: 768px) {
+            .custom-table th,
+            .custom-table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.875rem;
+            }
+
+            .judul-berita {
+                font-size: 0.875rem;
+                line-height: 1.3;
+            }
+
+            .custom-table th:nth-child(1),
+            .custom-table td:nth-child(1) {
+                width: 15%;
+                min-width: 80px;
+            }
+
+            .custom-table th:nth-child(2),
+            .custom-table td:nth-child(2) {
+                width: 40%;
+                min-width: 200px;
+            }
+
+            .custom-table th:nth-child(3),
+            .custom-table td:nth-child(3) {
+                width: 20%;
+                min-width: 120px;
+            }
+
+            .custom-table th:nth-child(4),
+            .custom-table td:nth-child(4) {
+                width: 12%;
+                min-width: 80px;
+            }
+
+            .custom-table th:nth-child(5),
+            .custom-table td:nth-child(5) {
+                width: 13%;
+                min-width: 100px;
+            }
         }
     </style>
 </head>

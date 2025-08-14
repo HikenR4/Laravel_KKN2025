@@ -16,6 +16,13 @@
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         }
 
+        /* Global text wrapping for all elements */
+        * {
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
         .page-main-wrapper {
             margin-left: 280px;
             padding: 1rem;
@@ -33,6 +40,7 @@
             border-radius: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             margin-bottom: 1.5rem;
+            overflow: hidden; /* Prevent content overflow */
         }
 
         .breadcrumb-custom {
@@ -45,6 +53,7 @@
             color: #3b82f6;
             text-decoration: none;
             transition: color 0.3s ease;
+            word-break: break-all;
         }
 
         .breadcrumb-custom .breadcrumb-item a:hover {
@@ -53,6 +62,7 @@
 
         .breadcrumb-custom .breadcrumb-item.active {
             color: #6b7280;
+            word-break: break-all;
         }
 
         .hero-section {
@@ -85,6 +95,11 @@
             font-weight: 800;
             line-height: 1.2;
             margin-bottom: 1rem;
+            /* Enhanced text wrapping for title */
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
         }
 
         .hero-meta {
@@ -103,6 +118,10 @@
             padding: 0.5rem 1rem;
             border-radius: 2rem;
             backdrop-filter: blur(10px);
+            /* Ensure meta items wrap properly */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
         }
 
         .kategori-badge {
@@ -112,6 +131,8 @@
             border-radius: 2rem;
             font-weight: 600;
             backdrop-filter: blur(10px);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .status-badge {
@@ -120,6 +141,8 @@
             font-size: 0.875rem;
             font-weight: 600;
             text-transform: uppercase;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .status-published {
@@ -141,14 +164,18 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .content-section {
             padding: 2rem;
+            overflow: hidden; /* Prevent horizontal overflow */
         }
 
         .article-image {
             width: 100%;
+            max-width: 100%; /* Ensure image doesn't overflow */
             max-height: 500px;
             object-fit: cover;
             border-radius: 1rem;
@@ -161,6 +188,14 @@
             line-height: 1.8;
             color: #374151;
             margin-bottom: 2rem;
+            /* Enhanced text wrapping for content */
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            white-space: pre-wrap; /* Preserve line breaks but allow wrapping */
+            max-width: 100%;
+            overflow: hidden;
         }
 
         .article-content h1, .article-content h2, .article-content h3 {
@@ -168,15 +203,24 @@
             margin-bottom: 1rem;
             font-weight: 700;
             color: #1f2937;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .article-content p {
             margin-bottom: 1.5rem;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .article-content ul, .article-content ol {
             margin-bottom: 1.5rem;
             padding-left: 2rem;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .article-content blockquote {
@@ -187,6 +231,9 @@
             background: #f8fafc;
             padding: 1.5rem;
             border-radius: 0.5rem;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .sidebar-card {
@@ -196,6 +243,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             margin-bottom: 1.5rem;
             border: 1px solid #e5e7eb;
+            overflow: hidden; /* Prevent overflow */
         }
 
         .sidebar-title {
@@ -206,6 +254,8 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .info-grid {
@@ -216,11 +266,14 @@
         .info-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start; /* Changed from center to flex-start */
             padding: 0.75rem;
             background: #f8fafc;
             border-radius: 0.5rem;
             border-left: 4px solid #3b82f6;
+            /* Allow items to wrap */
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .info-label {
@@ -229,12 +282,34 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            flex: 1;
+            min-width: 120px;
         }
 
         .info-value {
             color: #1f2937;
             font-weight: 600;
             text-align: right;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Special handling for long values like slugs */
+        .info-item .info-value.long-text {
+            text-align: left;
+            max-width: 100%;
+            width: 100%;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            background: #e2e8f0;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            word-break: break-all;
         }
 
         .action-buttons {
@@ -254,6 +329,8 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .btn-primary-custom {
@@ -319,6 +396,9 @@
             font-size: 0.875rem;
             font-weight: 500;
             transition: all 0.3s ease;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
         }
 
         .tag:hover {
@@ -341,6 +421,7 @@
             text-align: center;
             border: 1px solid #e5e7eb;
             transition: all 0.3s ease;
+            overflow: hidden;
         }
 
         .stat-card:hover {
@@ -353,6 +434,8 @@
             font-weight: 800;
             color: #3b82f6;
             display: block;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .stat-label {
@@ -361,6 +444,8 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .excerpt-section {
@@ -369,6 +454,7 @@
             border-radius: 1rem;
             padding: 1.5rem;
             margin-bottom: 2rem;
+            overflow: hidden;
         }
 
         .excerpt-title {
@@ -378,6 +464,14 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .excerpt-section p {
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .seo-section {
@@ -385,6 +479,13 @@
             border: 1px solid #bbf7d0;
             border-radius: 1rem;
             padding: 1.5rem;
+            overflow: hidden;
+        }
+
+        .seo-section p {
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .fade-in {
@@ -415,6 +516,55 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Mobile responsive improvements */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-meta {
+                gap: 1rem;
+            }
+
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .info-value {
+                text-align: left;
+                max-width: 100%;
+                margin-top: 0.25rem;
+            }
+
+            .content-section {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-custom {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         /* Print styles */
         @media print {
             .sidebar-card, .action-buttons, .breadcrumb-custom {
@@ -422,6 +572,12 @@
             }
             .page-main-wrapper {
                 margin-left: 0 !important;
+            }
+
+            * {
+                word-wrap: break-word;
+                word-break: break-word;
+                overflow-wrap: break-word;
             }
         }
     </style>
@@ -608,12 +764,12 @@
                                 </span>
                                 <span class="info-value">#{{ $berita->id }}</span>
                             </div>
-                            <div class="info-item">
+                            <div class="info-item" style="flex-direction: column; align-items: flex-start;">
                                 <span class="info-label">
                                     <i class="fas fa-link"></i>
                                     Slug
                                 </span>
-                                <span class="info-value">{{ $berita->slug }}</span>
+                                <span class="info-value long-text">{{ $berita->slug }}</span>
                             </div>
                             <div class="info-item">
                                 <span class="info-label">
