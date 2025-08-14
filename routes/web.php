@@ -33,11 +33,20 @@ Route::get('/landing', function () {
     return view('public.landing');
 });
 
-// Public routes for berita
+// Public routes for berita - UPDATED DENGAN ROUTE TAMBAHAN
 Route::get('/', [PublicController::class, 'landing'])->name('landing');
 Route::get('/berita', [PublicController::class, 'berita'])->name('berita');
 Route::get('/berita/{slug}', [PublicController::class, 'beritaDetail'])->name('berita.detail');
 Route::get('/berita/kategori/{kategori}', [PublicController::class, 'beritaByKategori'])->name('berita.kategori');
+
+// Additional public routes for better SEO and functionality
+Route::get('/cari-berita', [PublicController::class, 'searchBerita'])->name('berita.search');
+Route::get('/tag/{tag}', [PublicController::class, 'beritaByTag'])->name('berita.tag');
+
+// Agenda routes - PUBLIC
+Route::get('/agenda', [PublicController::class, 'agenda'])->name('agenda');
+Route::get('/agenda/{slug}', [PublicController::class, 'agendaDetail'])->name('agenda.detail');
+Route::get('/agenda/kategori/{kategori}', [PublicController::class, 'agendaByKategori'])->name('agenda.kategori');
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->group(function () {

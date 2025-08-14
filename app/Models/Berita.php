@@ -34,11 +34,11 @@ class Berita extends Model
     public function getGambarAttribute($value)
     {
         if (!$value) {
-            return asset('images/default-news.jpg'); // Gambar default
+            return null;
         }
 
         // Jika sudah berupa URL lengkap, return as is
-        if (filter_var($value, FILTER_VALIDATE_URL)) {
+        if (str_contains($value, 'http') || str_contains($value, 'uploads/')) {
             return $value;
         }
 
