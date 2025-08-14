@@ -1239,7 +1239,7 @@
             <div class="nav-links">
                 <a href="{{ url('/') }}">Beranda</a>
                 <a href="{{ route('berita') }}">Berita</a>
-                <a href="#agenda">Agenda</a>
+                <a href="{{ route('agenda') }}">Agenda</a>
                 <a href="#pengumuman">Pengumuman</a>
                 <a href="#layanan">Layanan</a>
                 <a href="#tentang">Tentang</a>
@@ -1289,6 +1289,10 @@
                     <a href="{{ route('berita') }}" class="btn btn-secondary">
                         <i class="fas fa-newspaper"></i>
                         Lihat Berita
+                    </a>
+                    <a href="{{ route('agenda') }}" class="btn btn-secondary">
+                        <i class="fas fa-calendar"></i>
+                        Lihat Agenda
                     </a>
                 </div>
             </div>
