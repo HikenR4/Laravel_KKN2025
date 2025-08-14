@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\PerangkatController;
 use App\Http\Controllers\Admin\DataPendudukController;
 use App\Http\Controllers\Admin\KomentarController;
 use App\Http\Controllers\Admin\PublicController;
+use App\Http\Controllers\Public\PengumumanpublicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,13 @@ Route::get('/', [PublicController::class, 'landing'])->name('landing');
 Route::get('/berita', [PublicController::class, 'berita'])->name('berita');
 Route::get('/berita/{slug}', [PublicController::class, 'beritaDetail'])->name('berita.detail');
 Route::get('/berita/kategori/{kategori}', [PublicController::class, 'beritaByKategori'])->name('berita.kategori');
+
+// Public routes for pengumuman
+Route::get('/pengumuman', [PengumumanpublicController::class, 'index'])->name('pengumuman');
+Route::get('/pengumuman/{slug}', [PengumumanpublicController::class, 'show'])->name('pengumuman.detail');
+Route::get('/pengumuman/kategori/{kategori}', [PengumumanpublicController::class, 'byKategori'])->name('pengumuman.kategori');
+Route::get('/pengumuman/target/{target}', [PengumumanpublicController::class, 'byTarget'])->name('pengumuman.target');
+Route::get('/pengumuman-penting', [PengumumanpublicController::class, 'penting'])->name('pengumuman.penting');
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->group(function () {

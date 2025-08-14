@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Berita Terkini - Nagari Mungo</title>
+    <title>Pengumuman Resmi - Nagari Mungo</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -19,8 +19,8 @@
             background: linear-gradient(135deg, #FFFFFF 0%, #FFFAFA 50%, #FFF5F5 100%);
         }
 
-        /* Hero Section for Berita */
-        .hero-berita {
+        /* Hero Section for Pengumuman - RED GRADIENT THEME */
+        .hero-pengumuman {
             background: linear-gradient(135deg, #FF6B6B 0%, #DC143C 25%, #B22222 50%, #8B0000 75%, #660000 100%);
             padding: 12rem 0 6rem;
             text-align: center;
@@ -29,14 +29,14 @@
             overflow: hidden;
         }
 
-        .hero-berita::before {
+        .hero-pengumuman::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><circle cx="100" cy="100" r="80" fill="white" opacity="0.05"/><circle cx="1100" cy="300" r="120" fill="white" opacity="0.03"/><polygon points="600,50 650,100 600,150 550,100" fill="white" opacity="0.04"/></svg>');
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><circle cx="100" cy="100" r="80" fill="white" opacity="0.1"/><circle cx="1100" cy="300" r="120" fill="white" opacity="0.08"/><polygon points="600,50 650,100 600,150 550,100" fill="white" opacity="0.06"/><rect x="200" y="200" width="60" height="60" fill="white" opacity="0.05" transform="rotate(45 230 230)"/></svg>');
             animation: gentleFloat 20s infinite linear;
         }
 
@@ -54,15 +54,15 @@
             padding: 0 2rem;
         }
 
-        .hero-berita h1 {
-            font-size: 3rem;
+        .hero-pengumuman h1 {
+            font-size: 3.2rem;
             font-weight: 700;
             margin-bottom: 1rem;
             text-shadow: 0 4px 20px rgba(0,0,0,0.3);
             animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .hero-berita p {
+        .hero-pengumuman p {
             font-size: 1.3rem;
             opacity: 0.95;
             margin-bottom: 2rem;
@@ -77,19 +77,20 @@
         /* Search & Filter Section */
         .search-filter {
             background: white;
-            border-radius: 20px;
+            border-radius: 25px;
             padding: 2rem;
             margin-top: 3rem;
-            box-shadow: 0 15px 40px rgba(220, 20, 60, 0.15);
+            box-shadow: 0 20px 50px rgba(220, 20, 60, 0.15);
             border: 1px solid rgba(220, 20, 60, 0.1);
             animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
         }
 
         .search-form {
             display: grid;
-            grid-template-columns: 1fr auto auto;
+            grid-template-columns: 1fr auto auto auto; /* Ubah dari 2fr 1fr 1fr auto */
             gap: 1rem;
             align-items: center;
+            width: 100%;
         }
 
         .search-input {
@@ -99,6 +100,8 @@
             font-size: 1rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             background: rgba(255, 245, 245, 0.5);
+            min-width: 0; /* Tambahkan ini untuk mencegah overflow */
+            width: 100%; /* Pastikan input menggunakan ruang yang tersedia */
         }
 
         .search-input:focus {
@@ -108,7 +111,7 @@
             box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.1);
         }
 
-        .category-select {
+        .filter-select {
             padding: 1rem 1.5rem;
             border: 2px solid rgba(220, 20, 60, 0.2);
             border-radius: 50px;
@@ -116,19 +119,22 @@
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 140px; /* Tambahkan min-width untuk konsistensi */
+            white-space: nowrap; /* Mencegah text wrap */
         }
 
-        .category-select:focus {
+        .filter-select:focus {
             outline: none;
             border-color: #DC143C;
             background: white;
         }
 
+        /* Perbaikan untuk Search Button */
         .search-btn {
             background: linear-gradient(135deg, #FF6B6B, #DC143C, #B22222);
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem; /* Kurangi padding horizontal */
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
@@ -139,6 +145,8 @@
             box-shadow: 0 4px 20px rgba(220, 20, 60, 0.3);
             position: relative;
             overflow: hidden;
+            white-space: nowrap; /* Mencegah text wrap */
+            min-width: fit-content; /* Sesuaikan dengan konten */
         }
 
         .search-btn::before {
@@ -161,17 +169,46 @@
             left: 100%;
         }
 
+        /* Quick Filters */
+        .quick-filters {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .quick-filter {
+            background: linear-gradient(135deg, rgba(220, 20, 60, 0.1), rgba(255, 107, 107, 0.05));
+            color: #DC143C;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+        }
+
+        .quick-filter:hover,
+        .quick-filter.active {
+            background: linear-gradient(135deg, #FF6B6B, #DC143C);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
+        }
+
         /* Main Content */
         .main-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 4rem 2rem;
             display: grid;
-            grid-template-columns: 1fr 300px;
+            grid-template-columns: 1fr 320px;
             gap: 3rem;
         }
 
-        /* Featured Berita */
+        /* Featured Pengumuman */
         .featured-section {
             margin-bottom: 3rem;
         }
@@ -196,44 +233,67 @@
             border-radius: 2px;
         }
 
+        /* Perbaikan untuk Grid Layout */
         .featured-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-bottom: 3rem;
+            width: 100%;
         }
 
-        .featured-main {
-            position: relative;
+        .featured-card {
+            background: white;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 40px rgba(220, 20, 60, 0.15);
+            box-shadow: 0 15px 40px rgba(220, 20, 60, 0.12);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 1px solid rgba(220, 20, 60, 0.08);
             animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+            width: 100%;
+            max-width: 100%;
         }
 
-        .featured-main:hover {
-            transform: translateY(-8px) scale(1.02);
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(135deg, #FF6B6B, #DC143C, #B22222);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left;
+        }
+
+        .featured-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .featured-card:hover {
+            transform: translateY(-10px) scale(1.02);
             box-shadow: 0 25px 60px rgba(220, 20, 60, 0.2);
         }
 
-        .featured-main img {
+        .featured-image {
             width: 100%;
-            height: 300px;
+            height: 200px;
             object-fit: cover;
+            transition: transform 0.4s ease;
         }
 
-        .featured-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white;
-            padding: 2rem;
-            /* FIXED: Ensure content doesn't overflow */
-            width: 100%;
-            min-width: 0;
+        .featured-card:hover .featured-image {
+            transform: scale(1.05);
+        }
+
+        .featured-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
         }
 
         .featured-category {
@@ -243,213 +303,75 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
-            display: inline-block;
-            margin-bottom: 0.8rem;
             box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
+            white-space: nowrap;
+        }
+
+        .priority-badge {
+            background: linear-gradient(135deg, #FF4444, #CC0000);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .featured-content {
+            padding: 0 1.5rem 1.5rem;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .featured-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
-            line-height: 1.3;
-            /* FIXED: Add text wrapping */
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            hyphens: auto;
-            width: 100%;
-        }
-
-        .featured-meta {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .featured-side {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .featured-small {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(220, 20, 60, 0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
-        }
-
-        .featured-small:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(220, 20, 60, 0.15);
-        }
-
-        .featured-small img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-        }
-
-        .featured-small-content {
-            padding: 1rem;
-            /* FIXED: Ensure content doesn't overflow */
-            width: 100%;
-            min-width: 0;
-        }
-
-        .featured-small-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
-            /* FIXED: Add text wrapping */
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            hyphens: auto;
-            width: 100%;
-        }
-
-        .featured-small-meta {
-            font-size: 0.8rem;
-            color: #DC143C;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Berita Grid - FIXED */
-        .berita-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .berita-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(220, 20, 60, 0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            border: 1px solid rgba(220, 20, 60, 0.05);
-            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            /* FIXED: Add proper width constraints */
-            width: 100%;
-            min-width: 0; /* Allow shrinking */
-        }
-
-        .berita-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #FF6B6B, #DC143C, #B22222);
-            transform: scaleX(0);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: left;
-        }
-
-        .berita-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .berita-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(220, 20, 60, 0.2);
-        }
-
-        .berita-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .berita-card:hover img {
-            transform: scale(1.05);
-        }
-
-        .berita-content {
-            padding: 1.5rem;
-            /* FIXED: Ensure content doesn't overflow */
-            width: 100%;
-            min-width: 0; /* Allow shrinking */
-        }
-
-        .berita-category {
-            background: linear-gradient(135deg, #FF6B6B, #DC143C);
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
-        }
-
-        .berita-title {
             font-size: 1.2rem;
             font-weight: 700;
             color: #333;
             margin-bottom: 0.8rem;
             line-height: 1.4;
             transition: color 0.3s ease;
-            /* FIXED: Add text wrapping */
             word-wrap: break-word;
             overflow-wrap: break-word;
-            hyphens: auto;
-            width: 100%;
+            max-width: 100%;
         }
 
-        .berita-card:hover .berita-title {
+        .featured-card:hover .featured-title {
             color: #DC143C;
         }
 
-        .berita-excerpt {
+        .featured-excerpt {
             color: #666;
             line-height: 1.6;
             margin-bottom: 1rem;
-            /* FIXED: Add text wrapping */
+            font-size: 0.95rem;
             word-wrap: break-word;
             overflow-wrap: break-word;
-            hyphens: auto;
-            width: 100%;
+            max-width: 100%;
         }
 
-        .berita-meta {
+        .featured-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #999;
             margin-bottom: 1rem;
-            /* FIXED: Allow wrapping on smaller screens */
-            flex-wrap: wrap;
-            gap: 0.5rem;
         }
 
-        .berita-author {
+        .featured-date {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             color: #DC143C;
-            /* FIXED: Prevent text overflow */
-            min-width: 0;
-            flex-shrink: 1;
         }
 
-        .berita-read-more {
-            background: linear-gradient(135deg, #FF6B6B, #DC143C, #B22222);
+        .featured-read-more {
+            background: linear-gradient(135deg, #FF6B6B, #DC143C);
             color: white;
             padding: 0.8rem 1.5rem;
             border-radius: 50px;
@@ -465,7 +387,7 @@
             overflow: hidden;
         }
 
-        .berita-read-more::before {
+        .featured-read-more::before {
             content: '';
             position: absolute;
             top: 0;
@@ -476,13 +398,182 @@
             transition: all 0.6s ease;
         }
 
-        .berita-read-more:hover {
+        .featured-read-more:hover {
             transform: translateY(-3px) scale(1.05);
             box-shadow: 0 8px 30px rgba(220, 20, 60, 0.4);
             color: white;
         }
 
-        .berita-read-more:hover::before {
+        .featured-read-more:hover::before {
+            left: 100%;
+        }
+
+        /* Pengumuman Grid */
+        .pengumuman-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .pengumuman-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(220, 20, 60, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 1px solid rgba(220, 20, 60, 0.05);
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .pengumuman-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #FF6B6B, #DC143C, #B22222);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left;
+        }
+
+        .pengumuman-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .pengumuman-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(220, 20, 60, 0.2);
+        }
+
+        .pengumuman-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .pengumuman-card:hover .pengumuman-image {
+            transform: scale(1.05);
+        }
+
+        .pengumuman-header {
+            padding: 1.5rem 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .pengumuman-category {
+            background: linear-gradient(135deg, #FF6B6B, #DC143C);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
+        }
+
+        .pengumuman-content {
+            padding: 1rem 1.5rem 1.5rem;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .pengumuman-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+        .pengumuman-card:hover .pengumuman-title {
+            color: #DC143C;
+        }
+
+        .pengumuman-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .pengumuman-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .pengumuman-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #DC143C;
+        }
+
+        .pengumuman-target {
+            background: rgba(220, 20, 60, 0.1);
+            color: #DC143C;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pengumuman-read-more {
+            background: linear-gradient(135deg, #FF6B6B, #DC143C);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(220, 20, 60, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pengumuman-read-more::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .pengumuman-read-more:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(220, 20, 60, 0.4);
+            color: white;
+        }
+
+        .pengumuman-read-more:hover::before {
             left: 100%;
         }
 
@@ -540,6 +631,9 @@
             border-radius: 10px;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .category-link::before {
@@ -549,7 +643,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(220, 20, 60, 0.05));
+            background: linear-gradient(135deg, rgba(220, 20, 60, 0.1), rgba(255, 107, 107, 0.05));
             transition: left 0.3s ease;
         }
 
@@ -562,9 +656,18 @@
             left: 0;
         }
 
+        .category-count {
+            background: linear-gradient(135deg, #FF6B6B, #DC143C);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
         /* Info Section */
         .info-section {
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(220, 20, 60, 0.05));
+            background: linear-gradient(135deg, rgba(220, 20, 60, 0.1), rgba(255, 107, 107, 0.05));
             padding: 1.5rem;
             border-radius: 15px;
             color: #666;
@@ -578,6 +681,44 @@
 
         .info-section strong {
             color: #DC143C;
+        }
+
+        /* Statistics Cards */
+        /* Perbaikan untuk Statistics Cards - mencegah overflow */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            width: 100%; /* Pastikan tidak overflow */
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #FF6B6B, #DC143C);
+            color: white;
+            padding: 1rem; /* Kurangi padding untuk mencegah overflow */
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            min-width: 0; /* Mencegah overflow */
+            word-wrap: break-word; /* Wrap text jika terlalu panjang */
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 1.8rem; /* Kurangi sedikit ukuran font */
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.2; /* Tambahkan line-height */
+        }
+
+        .stat-label {
+            font-size: 0.85rem; /* Kurangi sedikit ukuran font */
+            opacity: 0.9;
+            line-height: 1.3; /* Tambahkan line-height */
         }
 
         /* Pagination */
@@ -638,17 +779,21 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero-berita h1 {
-                font-size: 2rem;
+            .hero-pengumuman h1 {
+                font-size: 2.2rem;
             }
 
-            .hero-berita p {
+            .hero-pengumuman p {
                 font-size: 1.1rem;
             }
 
             .search-form {
                 grid-template-columns: 1fr;
                 gap: 1rem;
+            }
+
+            .quick-filters {
+                justify-content: flex-start;
             }
 
             .main-content {
@@ -661,12 +806,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .featured-side {
-                grid-template-columns: 1fr 1fr;
-                display: grid;
-            }
-
-            .berita-grid {
+            .pengumuman-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -674,11 +814,8 @@
                 position: static;
             }
 
-            /* FIXED: Improve mobile text handling */
-            .berita-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -692,11 +829,7 @@
                 padding: 1.5rem;
             }
 
-            .featured-side {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-berita h1 {
+            .hero-pengumuman h1 {
                 font-size: 1.8rem;
             }
         }
@@ -716,9 +849,10 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Active Category Styling */
-        .category-link.active {
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(220, 20, 60, 0.05));
+        /* Active states */
+        .category-link.active,
+        .quick-filter.active {
+            background: linear-gradient(135deg, rgba(220, 20, 60, 0.1), rgba(255, 107, 107, 0.05));
             color: #DC143C !important;
             transform: translateX(8px);
             border-left: 4px solid #DC143C;
@@ -729,16 +863,10 @@
             left: 0;
         }
 
-        /* Enhanced dropdown styling */
-        .category-select option:checked {
-            background: linear-gradient(135deg, #FF6B6B, #DC143C);
-            color: white;
-        }
-
-        /* Active filter indication */
+        /* Enhanced filter indication */
         .search-filter.has-filter {
             border: 2px solid rgba(220, 20, 60, 0.2);
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.02), rgba(220, 20, 60, 0.01));
+            background: linear-gradient(135deg, rgba(220, 20, 60, 0.02), rgba(255, 107, 107, 0.01));
         }
 
         .search-filter.has-filter::before {
@@ -753,23 +881,6 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
-
-        /* Badge untuk jumlah berita per kategori */
-        .category-count {
-            background: linear-gradient(135deg, #FF6B6B, #DC143C);
-            color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: auto;
-        }
-
-        .category-link {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
     </style>
 </head>
 <body>
@@ -777,26 +888,34 @@
     @include('layouts.header')
 
     <!-- Hero Section -->
-    <section class="hero-berita">
+    <section class="hero-pengumuman">
         <div class="hero-content">
-            <h1>Berita Terkini</h1>
-            <p>Informasi terbaru dan terupdate seputar Nagari Mungo dan sekitarnya</p>
+            <h1>Pengumuman Resmi</h1>
+            <p>Informasi penting dan pengumuman resmi dari Pemerintah Nagari Mungo</p>
 
             <!-- Search & Filter -->
-            <div class="search-filter {{ (request('search') || request('kategori')) ? 'has-filter' : '' }}">
-                <form class="search-form" method="GET" action="{{ route('berita') }}">
+            <div class="search-filter {{ (request('search') || request('kategori') || request('target') || request('penting')) ? 'has-filter' : '' }}">
+                <form class="search-form" method="GET" action="{{ route('pengumuman') }}">
                     <input
                         type="text"
                         name="search"
                         class="search-input"
-                        placeholder="Cari berita..."
+                        placeholder="Cari pengumuman..."
                         value="{{ request('search') }}"
                     >
-                    <select name="kategori" class="category-select">
+                    <select name="kategori" class="filter-select">
                         <option value="">Semua Kategori</option>
                         @foreach($categories as $key => $label)
                             <option value="{{ $key }}" {{ request('kategori') == $key ? 'selected' : '' }}>
-                            {{ $label }}
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <select name="target" class="filter-select">
+                        <option value="">Semua Target</option>
+                        @foreach($targetAudiences as $key => $label)
+                            <option value="{{ $key }}" {{ request('target') == $key ? 'selected' : '' }}>
+                                {{ $label }}
                             </option>
                         @endforeach
                     </select>
@@ -805,6 +924,25 @@
                         Cari
                     </button>
                 </form>
+
+                <!-- Quick Filters -->
+                <div class="quick-filters">
+                    <a href="{{ route('pengumuman') }}" class="quick-filter {{ !request()->hasAny(['kategori', 'target', 'penting']) ? 'active' : '' }}">
+                        <i class="fas fa-list"></i> Semua
+                    </a>
+                    <a href="{{ route('pengumuman.penting') }}" class="quick-filter {{ request('penting') ? 'active' : '' }}">
+                        <i class="fas fa-exclamation-triangle"></i> Penting
+                    </a>
+                    <a href="{{ route('pengumuman.kategori', 'kegiatan') }}" class="quick-filter {{ request('kategori') == 'kegiatan' ? 'active' : '' }}">
+                        <i class="fas fa-calendar"></i> Kegiatan
+                    </a>
+                    <a href="{{ route('pengumuman.kategori', 'pelayanan') }}" class="quick-filter {{ request('kategori') == 'pelayanan' ? 'active' : '' }}">
+                        <i class="fas fa-concierge-bell"></i> Pelayanan
+                    </a>
+                    <a href="{{ route('pengumuman.kategori', 'lainnya') }}" class="quick-filter {{ request('kategori') == 'lainnya' ? 'active' : '' }}">
+                        <i class="fas fa-ellipsis-h"></i> Lainnya
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -812,73 +950,102 @@
     <!-- Main Content -->
     <div class="main-content">
         <main>
-            <!-- Featured Berita -->
-            @if($featuredBerita->count() > 0 && !request('search') && !request('kategori'))
+            <!-- Featured Pengumuman -->
+            @if($featuredPengumuman->count() > 0 && !request('search') && !request('kategori') && !request('target') && !request('penting'))
             <section class="featured-section">
-                <h2 class="section-title">Berita Unggulan</h2>
+                <h2 class="section-title">Pengumuman Penting</h2>
                 <div class="featured-grid">
-                    <article class="featured-main">
-                        <img src="{{ $featuredBerita->first()->gambar }}" alt="{{ $featuredBerita->first()->alt_gambar }}">
-                        <div class="featured-overlay">
-                            <span class="featured-category">{{ ucfirst($featuredBerita->first()->kategori) }}</span>
-                            <h3 class="featured-title">{{ $featuredBerita->first()->judul }}</h3>
-                            <div class="featured-meta">
-                                <span><i class="fas fa-calendar"></i> {{ $featuredBerita->first()->tanggal->format('d F Y') }}</span>
-                                <span><i class="fas fa-user"></i> {{ $featuredBerita->first()->admin->nama_lengkap }}</span>
-                                <span><i class="fas fa-eye"></i> {{ $featuredBerita->first()->views }} views</span>
+                    @foreach($featuredPengumuman as $featured)
+                    <article class="featured-card">
+                        @if($featured->gambar)
+                            <div class="featured-image">
+                                <img src="{{ asset('uploads/pengumuman/' . basename($featured->gambar)) }}"
+                                    alt="{{ $featured->alt_gambar ?? $featured->judul }}"
+                                    style="width: 100%; height: 200px; object-fit: cover;">
                             </div>
+                        @endif
+                        <div class="featured-header">
+                            <span class="featured-category">{{ ucfirst($featured->kategori) }}</span>
+                            @if($featured->penting)
+                                <span class="priority-badge">
+                                    <i class="fas fa-exclamation"></i> PENTING
+                                </span>
+                            @endif
                         </div>
-                    </article>
-
-                    <div class="featured-side">
-                        @foreach($featuredBerita->skip(1)->take(2) as $featured)
-                        <article class="featured-small">
-                            <img src="{{ $featured->gambar }}" alt="{{ $featured->alt_gambar }}">
-                            <div class="featured-small-content">
-                                <h4 class="featured-small-title">{{ Str::limit($featured->judul, 60) }}</h4>
-                                <div class="featured-small-meta">
-                                    <i class="fas fa-calendar"></i> {{ $featured->tanggal->format('d M Y') }}
+                        <div class="featured-content">
+                            <h3 class="featured-title">{{ $featured->judul }}</h3>
+                            <p class="featured-excerpt">{{ Str::limit(strip_tags($featured->konten), 100) }}</p>
+                            <div class="featured-meta">
+                                <div class="featured-date">
+                                    <i class="fas fa-calendar"></i>
+                                    {{ $featured->tanggal_mulai->format('d M Y') }}
+                                </div>
+                                <div>
+                                    <i class="fas fa-eye"></i> {{ $featured->views }}
                                 </div>
                             </div>
-                        </article>
-                        @endforeach
-                    </div>
+                            <a href="{{ route('pengumuman.detail', $featured->slug) }}" class="featured-read-more">
+                                Baca Selengkapnya
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                    @endforeach
                 </div>
             </section>
             @endif
 
-            <!-- Berita List -->
+            <!-- Pengumuman List -->
             <section>
                 <h2 class="section-title">
                     @if(request('search'))
                         Hasil Pencarian: "{{ request('search') }}"
                     @elseif(request('kategori'))
-                        Kategori: {{ ucfirst(request('kategori')) }}
+                        Kategori: {{ $categories[request('kategori')] ?? ucfirst(request('kategori')) }}
+                    @elseif(request('target'))
+                        Target: {{ $targetAudiences[request('target')] ?? ucfirst(request('target')) }}
+                    @elseif(request('penting'))
+                        Pengumuman Penting
                     @else
-                        Semua Berita
+                        Semua Pengumuman
                     @endif
                 </h2>
 
-                @if($berita->count() > 0)
-                    <div class="berita-grid">
-                        @foreach($berita as $item)
-                        <article class="berita-card">
-                            <img src="{{ $item->gambar }}" alt="{{ $item->alt_gambar }}">
-                            <div class="berita-content">
-                                <span class="berita-category">{{ ucfirst($item->kategori) }}</span>
-                                <h3 class="berita-title">{{ $item->judul }}</h3>
-                                <p class="berita-excerpt">{{ $item->excerpt }}</p>
-                                <div class="berita-meta">
-                                    <div class="berita-author">
-                                        <i class="fas fa-user"></i>
-                                        {{ $item->admin->nama_lengkap }}
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-calendar"></i>
-                                        {{ $item->tanggal->format('d M Y') }}
-                                    </div>
+                @if($pengumuman->count() > 0)
+                    <div class="pengumuman-grid">
+                        @foreach($pengumuman as $item)
+                        <article class="pengumuman-card">
+                            @if($item->gambar)
+                                <div class="pengumuman-image">
+                                    <img src="{{ asset('uploads/pengumuman/' . basename($item->gambar)) }}"
+                                        alt="{{ $item->alt_gambar ?? $item->judul }}"
+                                        style="width: 100%; height: 200px; object-fit: cover;">
                                 </div>
-                                <a href="{{ route('berita.detail', $item->slug) }}" class="berita-read-more">
+                            @endif
+                            <div class="pengumuman-header">
+                                <span class="pengumuman-category">{{ ucfirst($item->kategori) }}</span>
+                                @if($item->penting)
+                                    <span class="priority-badge">
+                                        <i class="fas fa-exclamation"></i> PENTING
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="pengumuman-content">
+                                <h3 class="pengumuman-title">{{ $item->judul }}</h3>
+                                <p class="pengumuman-excerpt">{{ Str::limit(strip_tags($item->konten), 120) }}</p>
+                                <div class="pengumuman-meta">
+                                    <div class="pengumuman-date">
+                                        <i class="fas fa-calendar"></i>
+                                        {{ $item->tanggal_mulai->format('d M Y') }}
+                                        @if($item->tanggal_berakhir)
+                                            - {{ $item->tanggal_berakhir->format('d M Y') }}
+                                        @endif
+                                    </div>
+                                    <span class="pengumuman-target">
+                                        {{ $targetAudiences[$item->target_audience] ?? ucfirst($item->target_audience) }}
+                                    </span>
+                                </div>
+                                <a href="{{ route('pengumuman.detail', $item->slug) }}" class="pengumuman-read-more">
                                     Baca Selengkapnya
                                     <i class="fas fa-arrow-right"></i>
                                 </a>
@@ -889,13 +1056,13 @@
 
                     <!-- Pagination -->
                     <div class="pagination-wrapper">
-                        {{ $berita->appends(request()->query())->links() }}
+                        {{ $pengumuman->appends(request()->query())->links() }}
                     </div>
                 @else
                     <div class="empty-state">
-                        <i class="fas fa-newspaper"></i>
-                        <h3>Tidak ada berita yang ditemukan</h3>
-                        <p>Coba ubah kata kunci pencarian atau pilih kategori lain.</p>
+                        <i class="fas fa-bullhorn"></i>
+                        <h3>Tidak ada pengumuman yang ditemukan</h3>
+                        <p>Coba ubah kata kunci pencarian atau pilih filter lain.</p>
                     </div>
                 @endif
             </section>
@@ -903,20 +1070,35 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
+            <!-- Statistics -->
+            <div class="sidebar-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">{{ $totalPengumuman }}</div>
+                        <div class="stat-label">Total Pengumuman</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ $totalPenting }}</div>
+                        <div class="stat-label">Pengumuman Penting</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Kategori</h3>
                 <ul class="category-list">
                     <li class="category-item">
-                        <a href="{{ route('berita') }}" class="category-link {{ !request('kategori') ? 'active' : '' }}">
+                        <a href="{{ route('pengumuman') }}" class="category-link {{ !request('kategori') ? 'active' : '' }}">
                             <span>
                                 <i class="fas fa-list"></i> Semua Kategori
                             </span>
-                            <span class="category-count">{{ $totalBerita ?? $berita->total() }}</span>
+                            <span class="category-count">{{ $totalPengumuman }}</span>
                         </a>
                     </li>
                     @foreach($categoriesWithCounts as $key => $data)
                     <li class="category-item">
-                        <a href="{{ route('berita.kategori', $key) }}"
+                        <a href="{{ route('pengumuman.kategori', $key) }}"
                             class="category-link {{ request('kategori') == $key ? 'active' : '' }}">
                             <span>
                                 <i class="fas fa-tag"></i> {{ $data['label'] }}
@@ -930,14 +1112,34 @@
                 </ul>
             </div>
 
+            <!-- Target Audience -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Target Sasaran</h3>
+                <ul class="category-list">
+                    @foreach($targetAudiences as $key => $label)
+                    <li class="category-item">
+                        <a href="{{ route('pengumuman.target', $key) }}"
+                            class="category-link {{ request('target') == $key ? 'active' : '' }}">
+                            <span>
+                                <i class="fas fa-users"></i> {{ $label }}
+                            </span>
+                        </a>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <!-- Info -->
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Info</h3>
                 <div class="info-section">
-                    <p><strong>Total Berita:</strong> {{ $berita->total() }}</p>
-                    <p><strong>Halaman:</strong> {{ $berita->currentPage() }} dari {{ $berita->lastPage() }}</p>
-                    <p><strong>Kategori:</strong> {{ $categories->count() }} kategori tersedia</p>
+                    <p><strong>Total Pengumuman:</strong> {{ $pengumuman->total() }}</p>
+                    <p><strong>Halaman:</strong> {{ $pengumuman->currentPage() }} dari {{ $pengumuman->lastPage() }}</p>
                     @if(request('kategori'))
                         <p><strong>Kategori Aktif:</strong> {{ $categories[request('kategori')] ?? 'Tidak diketahui' }}</p>
+                    @endif
+                    @if(request('target'))
+                        <p><strong>Target Aktif:</strong> {{ $targetAudiences[request('target')] ?? 'Tidak diketahui' }}</p>
                     @endif
                     @if(request('search'))
                         <p><strong>Pencarian:</strong> "{{ request('search') }}"</p>
