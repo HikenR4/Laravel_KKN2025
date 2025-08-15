@@ -925,12 +925,12 @@
         .info-section p {
             gap: 0.8rem; /* Reduce gap on mobile */
         }
-    
+
         .info-section strong {
             min-width: 70px; /* Smaller min-width on mobile */
             font-size: 0.9rem;
         }
-    
+
         .info-section span {
             font-size: 0.9rem;
         /* Tetap right aligned di mobile juga */
@@ -1024,16 +1024,16 @@
         .info-section {
             padding: 1.2rem;
         }
-    
+
         .info-section p {
             margin-bottom: 0.6rem;
         }
-    
+
         .info-section strong {
             min-width: 70px;
             font-size: 0.9rem;
         }
-    
+
         .info-section span {
             font-size: 0.9rem;
         }
@@ -1070,7 +1070,7 @@
             </nav>
 
             <h1>{{ $berita->judul }}</h1>
-            
+
             <div class="hero-detail-meta">
                 <div class="meta-item">
                     <i class="fas fa-user"></i>
@@ -1106,10 +1106,10 @@
                             'uploads/' . $berita->gambar,
                             'images/berita/' . $berita->gambar
                         ];
-                        
+
                         $imageFound = false;
                         $imagePath = '';
-                        
+
                         foreach($imagePaths as $path) {
                             if(file_exists(public_path($path))) {
                                 $imagePath = asset($path);
@@ -1117,7 +1117,7 @@
                                 break;
                             }
                         }
-                        
+
                         if(!$imageFound && $berita->gambar) {
                             $imagePath = $berita->gambar;
                             $imageFound = true;
@@ -1126,11 +1126,11 @@
 
                     @if($imageFound)
                     <div class="article-header">
-                        <img src="{{ $imagePath }}" 
-                             alt="{{ $berita->alt_gambar ?? $berita->judul }}" 
+                        <img src="{{ $imagePath }}"
+                             alt="{{ $berita->alt_gambar ?? $berita->judul }}"
                              class="article-image"
                              onerror="this.parentElement.style.display='none'; this.parentElement.nextElementSibling.style.display='block';">
-                        
+
                         <div class="article-overlay">
                             <span class="category-badge">{{ ucfirst($berita->kategori) }}</span>
                             @if($berita->featured)
@@ -1210,19 +1210,19 @@
                             Bagikan Artikel Ini:
                         </h6>
                         <div class="share-buttons">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
                                target="_blank" class="share-btn share-facebook" title="Share to Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="https://twitter.com/intent/tweet?text={{ urlencode($berita->judul) }}&url={{ urlencode(url()->current()) }}" 
+                            <a href="https://twitter.com/intent/tweet?text={{ urlencode($berita->judul) }}&url={{ urlencode(url()->current()) }}"
                                target="_blank" class="share-btn share-twitter" title="Share to Twitter">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a href="https://wa.me/?text={{ urlencode($berita->judul . ' ' . url()->current()) }}" 
+                            <a href="https://wa.me/?text={{ urlencode($berita->judul . ' ' . url()->current()) }}"
                                target="_blank" class="share-btn share-whatsapp" title="Share to WhatsApp">
                                 <i class="fab fa-whatsapp"></i>
                             </a>
-                            <a href="mailto:?subject={{ urlencode($berita->judul) }}&body={{ urlencode('Baca selengkapnya: ' . url()->current()) }}" 
+                            <a href="mailto:?subject={{ urlencode($berita->judul) }}&body={{ urlencode('Baca selengkapnya: ' . url()->current()) }}"
                                class="share-btn share-email" title="Share via Email">
                                 <i class="fas fa-envelope"></i>
                             </a>
@@ -1236,7 +1236,7 @@
                         <i class="fas fa-arrow-left"></i>
                         Kembali ke Berita
                     </a>
-                    
+
                     <a href="{{ route('berita') }}?kategori={{ $berita->kategori }}" class="nav-btn">
                         Berita {{ ucfirst($berita->kategori) }}
                         <i class="fas fa-arrow-right"></i>
@@ -1251,7 +1251,7 @@
                         <i class="fas fa-newspaper"></i>
                         Berita Terkait
                     </h2>
-                    
+
                     <div class="related-grid">
                         @foreach($relatedBerita as $related)
                             <article class="related-card">
@@ -1262,10 +1262,10 @@
                                             'uploads/berita/' . $related->gambar,
                                             'uploads/' . $related->gambar
                                         ];
-                                        
+
                                         $relatedImageFound = false;
                                         $relatedImagePath = '';
-                                        
+
                                         foreach($relatedImagePaths as $path) {
                                             if(file_exists(public_path($path))) {
                                                 $relatedImagePath = asset($path);
@@ -1273,28 +1273,28 @@
                                                 break;
                                             }
                                         }
-                                        
+
                                         if(!$relatedImageFound) {
                                             $relatedImagePath = $related->gambar;
                                         }
                                     @endphp
-                                    
-                                    <img src="{{ $relatedImagePath }}" 
+
+                                    <img src="{{ $relatedImagePath }}"
                                          alt="{{ $related->alt_gambar ?? $related->judul }}"
                                          onerror="this.style.display='none';">
                                 @endif
-                                
+
                                 <div class="related-content">
                                     <h3 class="related-title">
                                         <a href="{{ route('berita.detail', $related->slug) }}">
                                             {{ Str::limit($related->judul, 80) }}
                                         </a>
                                     </h3>
-                                    
+
                                     <p class="related-excerpt">
                                         {{ Str::limit($related->excerpt, 100) }}
                                     </p>
-                                    
+
                                     <div class="related-meta">
                                         <div>
                                             <i class="fas fa-calendar"></i>
@@ -1321,7 +1321,7 @@
                     <i class="fas fa-clock"></i>
                     Berita Terbaru
                 </h5>
-                
+
                 @forelse($latestBerita as $latest)
                     <div class="news-item">
                         @if($latest->gambar)
@@ -1336,7 +1336,7 @@
                                 }
                                 if(!$latestImageFound) $latestImagePath = $latest->gambar;
                             @endphp
-                            <img src="{{ $latestImagePath }}" 
+                            <img src="{{ $latestImagePath }}"
                                  alt="{{ $latest->judul }}" class="news-image"
                                  onerror="this.style.display='none';">
                         @else
@@ -1367,7 +1367,7 @@
                     <i class="fas fa-fire"></i>
                     Berita Populer
                 </h5>
-                
+
                 @forelse($popularBerita as $index => $popular)
                     <div class="popular-item">
                         <div class="popular-number">{{ $index + 1 }}</div>
@@ -1394,7 +1394,7 @@
                     <i class="fas fa-list"></i>
                     Kategori
                 </h5>
-                
+
                 <ul class="category-list">
                     <li class="category-item">
                         <a href="{{ route('berita') }}" class="category-link">
@@ -1414,16 +1414,16 @@
                             'pendidikan' => 'Pendidikan',
                             'olahraga' => 'Olahraga'
                         ];
-                        
+
                         $categoryCounts = \App\Models\Berita::where('status', 'published')
                             ->selectRaw('kategori, COUNT(*) as total')
                             ->groupBy('kategori')
                             ->pluck('total', 'kategori');
                     @endphp
-                    
+
                     @foreach($availableCategories as $key => $label)
                     <li class="category-item">
-                        <a href="{{ route('berita') }}?kategori={{ $key }}" 
+                        <a href="{{ route('berita') }}?kategori={{ $key }}"
                            class="category-link {{ $berita->kategori == $key ? 'active' : '' }}">
                             <span>
                                 <i class="fas fa-tag"></i> {{ $label }}
@@ -1443,7 +1443,7 @@
                     <i class="fas fa-info-circle"></i>
                     Info Artikel
                 </h5>
-                
+
                 <div class="info-section">
                     <p><strong>Kategori:</strong> <span>{{ ucfirst($berita->kategori) }}</span></p>
                     <p><strong>Tanggal:</strong> <span>{{ $berita->tanggal->format('d F Y') }}</span></p>
@@ -1456,6 +1456,8 @@
             </div>
         </aside>
     </div>
+    <!-- Include Footer -->
+    @include('layouts.footer')
 @endsection
 
 @push('scripts')
@@ -1474,7 +1476,7 @@
             transition: width 0.1s ease;
         `;
         document.body.appendChild(progressBar);
-        
+
         window.addEventListener('scroll', function() {
             const article = document.querySelector('.article-body');
             if (article) {
@@ -1482,12 +1484,12 @@
                 const articleTop = article.offsetTop;
                 const scrollTop = window.pageYOffset;
                 const windowHeight = window.innerHeight;
-                
+
                 const scrolled = Math.min(
-                    Math.max((scrollTop - articleTop + windowHeight/2) / articleHeight, 0), 
+                    Math.max((scrollTop - articleTop + windowHeight/2) / articleHeight, 0),
                     1
                 );
-                
+
                 progressBar.style.width = (scrolled * 100) + '%';
             }
         });
@@ -1498,7 +1500,7 @@
                 const platform = this.classList.contains('share-facebook') ? 'Facebook' :
                                this.classList.contains('share-twitter') ? 'Twitter' :
                                this.classList.contains('share-whatsapp') ? 'WhatsApp' : 'Email';
-                
+
                 console.log(`Shared to ${platform}: {{ $berita->judul }}`);
             });
         });

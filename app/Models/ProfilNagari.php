@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class ProfilNagari extends Model
 {
@@ -31,12 +32,10 @@ class ProfilNagari extends Model
         'video_size' => 'decimal:2',
     ];
 
-    // Logo accessors
-    public function getLogoAttribute($value)
-    {
-        return $value ? asset('uploads/' . $value) : asset('images/default-logo.png');
-    }
+    // FIXED: Remove automatic URL conversion from accessors
+    // The accessors were causing issues with database storage
 
+    // Logo methods - FIXED
     public function getLogoFilename()
     {
         return $this->attributes['logo'] ?? null;
@@ -45,21 +44,32 @@ class ProfilNagari extends Model
     public function getLogoUrl()
     {
         $filename = $this->getLogoFilename();
-        return $filename ? asset('uploads/' . $filename) : asset('images/default-logo.png');
+        if (!$filename) {
+            return asset('images/default-logo.png');
+        }
+        return asset('uploads/' . $filename);
     }
 
     public function hasLogoFile()
     {
         $filename = $this->getLogoFilename();
-        return $filename && File::exists(public_path('uploads/' . $filename));
+        if (!$filename) {
+            return false;
+        }
+
+        $path = public_path('uploads/' . $filename);
+        $exists = File::exists($path);
+
+        Log::info('Logo file check', [
+            'filename' => $filename,
+            'path' => $path,
+            'exists' => $exists
+        ]);
+
+        return $exists;
     }
 
-    // Banner accessors
-    public function getBannerAttribute($value)
-    {
-        return $value ? asset('uploads/' . $value) : asset('images/default-banner.jpg');
-    }
-
+    // Banner methods - FIXED
     public function getBannerFilename()
     {
         return $this->attributes['banner'] ?? null;
@@ -68,21 +78,32 @@ class ProfilNagari extends Model
     public function getBannerUrl()
     {
         $filename = $this->getBannerFilename();
-        return $filename ? asset('uploads/' . $filename) : asset('images/default-banner.jpg');
+        if (!$filename) {
+            return asset('images/default-banner.jpg');
+        }
+        return asset('uploads/' . $filename);
     }
 
     public function hasBannerFile()
     {
         $filename = $this->getBannerFilename();
-        return $filename && File::exists(public_path('uploads/' . $filename));
+        if (!$filename) {
+            return false;
+        }
+
+        $path = public_path('uploads/' . $filename);
+        $exists = File::exists($path);
+
+        Log::info('Banner file check', [
+            'filename' => $filename,
+            'path' => $path,
+            'exists' => $exists
+        ]);
+
+        return $exists;
     }
 
-    // Video accessors
-    public function getVideoProfilAttribute($value)
-    {
-        return $value ? asset('uploads/videos/' . $value) : null;
-    }
-
+    // Video methods - FIXED
     public function getVideoFilename()
     {
         return $this->attributes['video_profil'] ?? null;
@@ -91,15 +112,32 @@ class ProfilNagari extends Model
     public function getVideoUrl()
     {
         $filename = $this->getVideoFilename();
-        return $filename ? asset('uploads/videos/' . $filename) : null;
+        if (!$filename) {
+            return null;
+        }
+        return asset('uploads/videos/' . $filename);
     }
 
     public function hasVideoFile()
     {
         $filename = $this->getVideoFilename();
-        return $filename && File::exists(public_path('uploads/videos/' . $filename));
+        if (!$filename) {
+            return false;
+        }
+
+        $path = public_path('uploads/videos/' . $filename);
+        $exists = File::exists($path);
+
+        Log::info('Video file check', [
+            'filename' => $filename,
+            'path' => $path,
+            'exists' => $exists
+        ]);
+
+        return $exists;
     }
 
+    // Video duration formatter
     public function getVideoDurasiFormattedAttribute()
     {
         if (!$this->video_durasi) return null;
@@ -110,6 +148,7 @@ class ProfilNagari extends Model
         return sprintf('%02d:%02d', $minutes, $seconds);
     }
 
+    // Video size formatter
     public function getVideoSizeFormattedAttribute()
     {
         if (!$this->video_size) return null;
@@ -152,5 +191,42 @@ class ProfilNagari extends Model
         }
 
         return $this->video_url;
+    }
+
+    // Override save method to add debugging
+    public function save(array $options = [])
+    {
+        Log::info('ProfilNagari save called', [
+            'attributes' => $this->attributes,
+            'dirty' => $this->getDirty(),
+            'exists' => $this->exists
+        ]);
+
+        $result = parent::save($options);
+
+        Log::info('ProfilNagari save result', [
+            'result' => $result,
+            'final_attributes' => $this->attributes
+        ]);
+
+        return $result;
+    }
+
+    // Override update method to add debugging
+    public function update(array $attributes = [], array $options = [])
+    {
+        Log::info('ProfilNagari update called', [
+            'input_attributes' => $attributes,
+            'current_attributes' => $this->attributes
+        ]);
+
+        $result = parent::update($attributes, $options);
+
+        Log::info('ProfilNagari update result', [
+            'result' => $result,
+            'final_attributes' => $this->fresh()->attributes ?? 'could not refresh'
+        ]);
+
+        return $result;
     }
 }

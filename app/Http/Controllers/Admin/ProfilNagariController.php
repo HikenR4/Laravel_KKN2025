@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-use getID3;
 
 class ProfilNagariController extends Controller
 {
@@ -19,21 +18,26 @@ class ProfilNagariController extends Controller
      */
     public function index()
     {
-        $profil = ProfilNagari::first();
+        try {
+            $profil = ProfilNagari::first();
 
-        // Debug info
-        if ($profil) {
-            Log::info('Profil data loaded', [
-                'logo' => $profil->getLogoFilename(),
-                'banner' => $profil->getBannerFilename(),
-                'video' => $profil->getVideoFilename(),
-                'logo_exists' => $profil->hasLogoFile(),
-                'banner_exists' => $profil->hasBannerFile(),
-                'video_exists' => $profil->hasVideoFile()
-            ]);
+            // Debug info
+            if ($profil) {
+                Log::info('Profil data loaded', [
+                    'logo' => $profil->getLogoFilename(),
+                    'banner' => $profil->getBannerFilename(),
+                    'video' => $profil->getVideoFilename(),
+                    'logo_exists' => $profil->hasLogoFile(),
+                    'banner_exists' => $profil->hasBannerFile(),
+                    'video_exists' => $profil->hasVideoFile()
+                ]);
+            }
+
+            return view('admin.profil', compact('profil'));
+        } catch (\Exception $e) {
+            Log::error('Error loading profil page: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat halaman profil.');
         }
-
-        return view('admin.profil', compact('profil'));
     }
 
     /**
@@ -41,6 +45,7 @@ class ProfilNagariController extends Controller
      */
     public function store(Request $request)
     {
+        // Validation rules
         $validator = Validator::make($request->all(), [
             'nama_nagari' => 'required|string|max:100',
             'kode_nagari' => 'nullable|string|max:20',
@@ -54,7 +59,7 @@ class ProfilNagariController extends Controller
             'website' => 'nullable|url|max:100',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
-            'video_profil' => 'nullable|mimetypes:video/mp4,video/avi,video/mov,video/wmv,video/flv,video/webm|max:51200', // 50MB max
+            'video_profil' => 'nullable|mimetypes:video/mp4,video/avi,video/mov,video/wmv,video/flv,video/webm|max:51200',
             'video_url' => 'nullable|url',
             'video_deskripsi' => 'nullable|string|max:500',
             'koordinat_lat' => 'nullable|numeric|between:-90,90',
@@ -69,13 +74,19 @@ class ProfilNagariController extends Controller
         ], [
             'nama_nagari.required' => 'Nama nagari wajib diisi.',
             'logo.max' => 'Ukuran logo maksimal 2MB.',
+            'logo.image' => 'Logo harus berupa file gambar.',
+            'logo.mimes' => 'Logo harus berformat JPEG, PNG, JPG, GIF, atau SVG.',
             'banner.max' => 'Ukuran banner maksimal 5MB.',
+            'banner.image' => 'Banner harus berupa file gambar.',
+            'banner.mimes' => 'Banner harus berformat JPEG, PNG, JPG, GIF, atau SVG.',
             'video_profil.max' => 'Ukuran video maksimal 50MB.',
             'video_profil.mimetypes' => 'Format video harus MP4, AVI, MOV, WMV, FLV, atau WebM.',
             'video_url.url' => 'URL video tidak valid.',
         ]);
 
         if ($validator->fails()) {
+            Log::error('Validation failed', ['errors' => $validator->errors()->toArray()]);
+
             if ($request->ajax()) {
                 return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
             }
@@ -86,49 +97,87 @@ class ProfilNagariController extends Controller
             // Ensure directories exist
             $this->ensureDirectoriesExist();
 
-            $data = $request->except(['logo', 'banner', 'video_profil']);
+            // Get existing profile
             $profil = ProfilNagari::first();
+
+            // Prepare data (exclude file fields initially)
+            $data = $request->except(['logo', 'banner', 'video_profil']);
+
+            Log::info('Processing form data', [
+                'has_logo' => $request->hasFile('logo'),
+                'has_banner' => $request->hasFile('banner'),
+                'has_video' => $request->hasFile('video_profil'),
+                'logo_valid' => $request->hasFile('logo') ? $request->file('logo')->isValid() : false,
+                'banner_valid' => $request->hasFile('banner') ? $request->file('banner')->isValid() : false,
+                'video_valid' => $request->hasFile('video_profil') ? $request->file('video_profil')->isValid() : false,
+            ]);
 
             // Handle logo upload
             if ($request->hasFile('logo') && $request->file('logo')->isValid()) {
+                Log::info('Processing logo upload');
                 $logoResult = $this->handleFileUpload($request->file('logo'), 'logo', $profil);
                 if ($logoResult['success']) {
                     $data['logo'] = $logoResult['filename'];
+                    Log::info('Logo upload successful', ['filename' => $logoResult['filename']]);
                 } else {
+                    Log::error('Logo upload failed', ['message' => $logoResult['message']]);
                     return $this->handleUploadError($logoResult['message'], $request);
                 }
+            } else {
+                Log::info('No logo file to process or file invalid');
             }
 
             // Handle banner upload
             if ($request->hasFile('banner') && $request->file('banner')->isValid()) {
+                Log::info('Processing banner upload');
                 $bannerResult = $this->handleFileUpload($request->file('banner'), 'banner', $profil);
                 if ($bannerResult['success']) {
                     $data['banner'] = $bannerResult['filename'];
+                    Log::info('Banner upload successful', ['filename' => $bannerResult['filename']]);
                 } else {
+                    Log::error('Banner upload failed', ['message' => $bannerResult['message']]);
                     return $this->handleUploadError($bannerResult['message'], $request);
                 }
+            } else {
+                Log::info('No banner file to process or file invalid');
             }
 
             // Handle video upload
             if ($request->hasFile('video_profil') && $request->file('video_profil')->isValid()) {
+                Log::info('Processing video upload');
                 $videoResult = $this->handleVideoUpload($request->file('video_profil'), $profil);
                 if ($videoResult['success']) {
                     $data['video_profil'] = $videoResult['filename'];
                     $data['video_durasi'] = $videoResult['duration'];
                     $data['video_size'] = $videoResult['size'];
+                    Log::info('Video upload successful', ['filename' => $videoResult['filename']]);
                 } else {
+                    Log::error('Video upload failed', ['message' => $videoResult['message']]);
                     return $this->handleUploadError($videoResult['message'], $request);
                 }
             }
 
+            Log::info('Final data to save', $data);
+
+            // Save or update profile
             if ($profil) {
                 $profil->update($data);
                 $message = 'Profil Nagari berhasil diperbarui!';
-                Log::info('Profil nagari updated', ['data' => $data]);
+                Log::info('Profil nagari updated', ['id' => $profil->id, 'data' => $data]);
             } else {
-                ProfilNagari::create($data);
+                $profil = ProfilNagari::create($data);
                 $message = 'Profil Nagari berhasil disimpan!';
-                Log::info('Profil nagari created', ['data' => $data]);
+                Log::info('Profil nagari created', ['id' => $profil->id, 'data' => $data]);
+            }
+
+            // Verify data was saved
+            if ($profil) {
+                $savedData = $profil->fresh();
+                Log::info('Verification - saved data', [
+                    'logo_saved' => $savedData->getLogoFilename(),
+                    'banner_saved' => $savedData->getBannerFilename(),
+                    'video_saved' => $savedData->getVideoFilename(),
+                ]);
             }
 
             if ($request->ajax()) {
@@ -145,10 +194,148 @@ class ProfilNagariController extends Controller
             ]);
 
             if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()], 500);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()
+                ], 500);
             }
 
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage())->withInput();
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage())
+                ->withInput();
+        }
+    }
+
+    /**
+     * Handle file upload (logo & banner) - IMPROVED VERSION
+     */
+    private function handleFileUpload($file, $type, $existingProfile = null)
+    {
+        try {
+            Log::info("Starting {$type} upload", [
+                'original_name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime_type' => $file->getMimeType(),
+                'extension' => $file->getClientOriginalExtension()
+            ]);
+
+            // Validate file size
+            $maxSize = $type === 'logo' ? 2048 * 1024 : 5120 * 1024; // 2MB untuk logo, 5MB untuk banner
+            if ($file->getSize() > $maxSize) {
+                return [
+                    'success' => false,
+                    'message' => "Ukuran {$type} terlalu besar. Maksimal " . ($type === 'logo' ? '2MB' : '5MB')
+                ];
+            }
+
+            // Validate file extension
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
+            $extension = strtolower($file->getClientOriginalExtension());
+            if (!in_array($extension, $allowedExtensions)) {
+                return [
+                    'success' => false,
+                    'message' => "Format {$type} tidak didukung. Gunakan JPG, PNG, GIF, atau SVG."
+                ];
+            }
+
+            // Validate MIME type
+            $allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml'];
+            if (!in_array($file->getMimeType(), $allowedMimes)) {
+                return [
+                    'success' => false,
+                    'message' => "MIME type {$type} tidak valid: " . $file->getMimeType()
+                ];
+            }
+
+            // Delete old file if exists
+            if ($existingProfile) {
+                $oldFilename = $type === 'logo' ? $existingProfile->getLogoFilename() : $existingProfile->getBannerFilename();
+                if ($oldFilename) {
+                    $oldPath = public_path('uploads/' . $oldFilename);
+                    if (File::exists($oldPath)) {
+                        File::delete($oldPath);
+                        Log::info("Old {$type} deleted: " . $oldPath);
+                    }
+                }
+            }
+
+            // Generate unique filename
+            $filename = $type . '_' . time() . '_' . Str::random(10) . '.' . $extension;
+            $destinationPath = public_path('uploads');
+
+            // Ensure destination exists
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true);
+                Log::info('Created uploads directory: ' . $destinationPath);
+            }
+
+            // Move file using Laravel's move method
+            $fullPath = $destinationPath . '/' . $filename;
+
+            try {
+                $moved = $file->move($destinationPath, $filename);
+                Log::info("File moved successfully", [
+                    'from' => $file->getPathname(),
+                    'to' => $fullPath,
+                    'moved_object' => get_class($moved)
+                ]);
+            } catch (\Exception $moveException) {
+                Log::error("File move failed: " . $moveException->getMessage());
+                return [
+                    'success' => false,
+                    'message' => "Gagal memindahkan file {$type}: " . $moveException->getMessage()
+                ];
+            }
+
+            // Verify file exists after move
+            if (!File::exists($fullPath)) {
+                Log::error("File verification failed - file does not exist at: " . $fullPath);
+                return [
+                    'success' => false,
+                    'message' => "File {$type} tidak dapat diverifikasi setelah upload."
+                ];
+            }
+
+            // Set proper permissions
+            try {
+                chmod($fullPath, 0644);
+                Log::info("File permissions set successfully");
+            } catch (\Exception $chmodException) {
+                Log::warning("Could not set file permissions: " . $chmodException->getMessage());
+                // Don't fail the upload for this
+            }
+
+            // Final verification
+            $fileSize = filesize($fullPath);
+            $isReadable = is_readable($fullPath);
+
+            Log::info("{$type} upload completed successfully", [
+                'filename' => $filename,
+                'full_path' => $fullPath,
+                'file_size' => $fileSize,
+                'is_readable' => $isReadable,
+                'url' => asset('uploads/' . $filename)
+            ]);
+
+            return [
+                'success' => true,
+                'filename' => $filename,
+                'path' => $fullPath,
+                'url' => asset('uploads/' . $filename),
+                'size' => $fileSize
+            ];
+
+        } catch (\Exception $e) {
+            Log::error("Error uploading {$type}: " . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return [
+                'success' => false,
+                'message' => "Terjadi kesalahan saat upload {$type}: " . $e->getMessage()
+            ];
         }
     }
 
@@ -158,8 +345,14 @@ class ProfilNagariController extends Controller
     private function handleVideoUpload($file, $existingProfile = null)
     {
         try {
-            // Validasi ukuran file (50MB max)
-            $maxSize = 50 * 1024 * 1024; // 50MB
+            Log::info("Starting video upload", [
+                'original_name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime_type' => $file->getMimeType()
+            ]);
+
+            // Validate file size (50MB max)
+            $maxSize = 50 * 1024 * 1024;
             if ($file->getSize() > $maxSize) {
                 return [
                     'success' => false,
@@ -167,7 +360,7 @@ class ProfilNagariController extends Controller
                 ];
             }
 
-            // Validasi format video
+            // Validate MIME type
             $allowedMimes = ['video/mp4', 'video/avi', 'video/mov', 'video/wmv', 'video/flv', 'video/webm'];
             if (!in_array($file->getMimeType(), $allowedMimes)) {
                 return [
@@ -176,7 +369,7 @@ class ProfilNagariController extends Controller
                 ];
             }
 
-            // Hapus video lama jika ada
+            // Delete old video if exists
             if ($existingProfile && $existingProfile->getVideoFilename()) {
                 $oldPath = public_path('uploads/videos/' . $existingProfile->getVideoFilename());
                 if (File::exists($oldPath)) {
@@ -185,42 +378,39 @@ class ProfilNagariController extends Controller
                 }
             }
 
-            // Generate nama file unik
+            // Generate unique filename
             $extension = $file->getClientOriginalExtension();
             $filename = 'video_profil_' . time() . '_' . Str::random(10) . '.' . $extension;
             $destinationPath = public_path('uploads/videos');
 
-            // Pindahkan file
-            $moved = $file->move($destinationPath, $filename);
+            // Ensure destination exists
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true);
+                Log::info('Created videos directory: ' . $destinationPath);
+            }
 
-            if (!$moved) {
+            // Move file
+            $moved = $file->move($destinationPath, $filename);
+            $fullPath = $destinationPath . '/' . $filename;
+
+            if (!$moved || !File::exists($fullPath)) {
                 return [
                     'success' => false,
                     'message' => 'Gagal menyimpan video. Silakan coba lagi.'
                 ];
             }
 
-            $fullPath = $destinationPath . '/' . $filename;
-
-            // Verifikasi file tersimpan
-            if (!File::exists($fullPath)) {
-                return [
-                    'success' => false,
-                    'message' => 'Video tidak dapat diverifikasi setelah upload.'
-                ];
-            }
-
-            // Set permission yang benar
+            // Set permissions
             chmod($fullPath, 0644);
 
-            // Get video metadata (duration, size)
-            $duration = null;
+            // Get video metadata
             $sizeInMB = round($file->getSize() / (1024 * 1024), 2);
+            $duration = null;
 
             // Try to get video duration using getID3 (if available)
             if (class_exists('getID3')) {
                 try {
-                    $getID3 = new getID3;
+                    $getID3 = new \getID3;
                     $fileInfo = $getID3->analyze($fullPath);
                     if (isset($fileInfo['playtime_seconds'])) {
                         $duration = (int) $fileInfo['playtime_seconds'];
@@ -261,96 +451,6 @@ class ProfilNagariController extends Controller
     }
 
     /**
-     * Handle image upload (logo & banner)
-     */
-    private function handleFileUpload($file, $type, $existingProfile = null)
-    {
-        try {
-            // Validasi file
-            $maxSize = $type === 'logo' ? 2048 * 1024 : 5120 * 1024;
-            if ($file->getSize() > $maxSize) {
-                return [
-                    'success' => false,
-                    'message' => "Ukuran {$type} terlalu besar. Maksimal " . ($type === 'logo' ? '2MB' : '5MB')
-                ];
-            }
-
-            // Cek ekstensi file
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
-            $extension = strtolower($file->getClientOriginalExtension());
-            if (!in_array($extension, $allowedExtensions)) {
-                return [
-                    'success' => false,
-                    'message' => "Format {$type} tidak didukung. Gunakan JPG, PNG, GIF, atau SVG."
-                ];
-            }
-
-            // Hapus file lama jika ada
-            if ($existingProfile) {
-                $oldFilename = $type === 'logo' ? $existingProfile->getLogoFilename() : $existingProfile->getBannerFilename();
-                if ($oldFilename) {
-                    $oldPath = public_path('uploads/' . $oldFilename);
-                    if (File::exists($oldPath)) {
-                        File::delete($oldPath);
-                        Log::info("Old {$type} deleted: " . $oldPath);
-                    }
-                }
-            }
-
-            // Generate nama file unik
-            $filename = $type . '_' . time() . '_' . Str::random(10) . '.' . $extension;
-            $destinationPath = public_path('uploads');
-            $fullPath = $destinationPath . '/' . $filename;
-
-            // Pindahkan file
-            $moved = $file->move($destinationPath, $filename);
-
-            if (!$moved) {
-                return [
-                    'success' => false,
-                    'message' => "Gagal menyimpan {$type}. Silakan coba lagi."
-                ];
-            }
-
-            // Verifikasi file tersimpan
-            if (!File::exists($fullPath)) {
-                return [
-                    'success' => false,
-                    'message' => "File {$type} tidak dapat diverifikasi setelah upload."
-                ];
-            }
-
-            // Set permission yang benar
-            chmod($fullPath, 0644);
-
-            Log::info("{$type} uploaded successfully", [
-                'filename' => $filename,
-                'path' => $fullPath,
-                'size' => $file->getSize(),
-                'url' => asset('uploads/' . $filename)
-            ]);
-
-            return [
-                'success' => true,
-                'filename' => $filename,
-                'path' => $fullPath,
-                'url' => asset('uploads/' . $filename)
-            ];
-
-        } catch (\Exception $e) {
-            Log::error("Error uploading {$type}: " . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
-
-            return [
-                'success' => false,
-                'message' => "Terjadi kesalahan saat upload {$type}: " . $e->getMessage()
-            ];
-        }
-    }
-
-    /**
      * Ensure required directories exist
      */
     private function ensureDirectoriesExist()
@@ -373,6 +473,8 @@ class ProfilNagariController extends Controller
      */
     private function handleUploadError($message, $request)
     {
+        Log::error('Upload error: ' . $message);
+
         if ($request->ajax()) {
             return response()->json(['success' => false, 'message' => $message], 400);
         }
@@ -404,36 +506,20 @@ class ProfilNagariController extends Controller
             'videos_path' => public_path('uploads/videos'),
             'uploads_exists' => File::exists(public_path('uploads')),
             'videos_exists' => File::exists(public_path('uploads/videos')),
-            'files_in_uploads' => File::exists(public_path('uploads')) ? File::files(public_path('uploads')) : 'Directory not exists',
-            'files_in_videos' => File::exists(public_path('uploads/videos')) ? File::files(public_path('uploads/videos')) : 'Directory not exists'
+            'uploads_writable' => is_writable(public_path('uploads')),
+            'videos_writable' => is_writable(public_path('uploads/videos')),
         ];
+
+        if (File::exists(public_path('uploads'))) {
+            $debug['files_in_uploads'] = File::files(public_path('uploads'));
+        }
+
+        if (File::exists(public_path('uploads/videos'))) {
+            $debug['files_in_videos'] = File::files(public_path('uploads/videos'));
+        }
 
         Log::info('Debug files info', $debug);
         return response()->json($debug);
-    }
-
-    /**
-     * Get coordinates via AJAX
-     */
-    public function getCoordinates(Request $request)
-    {
-        try {
-            $address = $request->input('address');
-
-            return response()->json([
-                'success' => true,
-                'lat' => -0.9471,
-                'lng' => 100.3543,
-                'formatted_address' => $address ?? 'Padang, West Sumatra, Indonesia'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error getting coordinates: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mendapatkan koordinat'
-            ], 500);
-        }
     }
 
     /**
@@ -451,7 +537,7 @@ class ProfilNagariController extends Controller
                 ], 404);
             }
 
-            // Hapus file video
+            // Delete video file
             $videoPath = public_path('uploads/videos/' . $profil->getVideoFilename());
             if (File::exists($videoPath)) {
                 File::delete($videoPath);

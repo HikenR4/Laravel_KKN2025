@@ -12,15 +12,29 @@
         <!-- Navigation Menu di Tengah -->
         <div class="nav-links">
             <a href="{{ url('/') }}" class="{{ request()->routeIs('home') || request()->is('/') ? 'active' : '' }}">Beranda</a>
+
+            <!-- Menu Profil dengan Dropdown -->
+            <div class="dropdown">
+                <a href="#" class="{{ request()->routeIs('profil*') ? 'active' : '' }} dropdown-toggle">
+                    Profil <i class="fas fa-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="{{ route('profil.sejarah') }}">Sejarah</a>
+                    <a href="{{ route('profil.visi-misi') }}">Visi Misi</a>
+                    <a href="{{ route('profil.perangkat-nagari') }}">Perangkat Nagari</a>
+                    <a href="{{ route('profil.data-wilayah') }}">Data Wilayah</a>
+                </div>
+            </div>
+
             <a href="{{ route('berita') }}" class="{{ request()->routeIs('berita*') ? 'active' : '' }}">Berita</a>
             <a href="{{ route('agenda') }}" class="{{ request()->routeIs('agenda*') ? 'active' : '' }}">Agenda</a>
             <a href="{{ route('pengumuman') }}" class="{{ request()->routeIs('pengumuman*') ? 'active' : '' }}">Pengumuman</a>
-            <a href="#layanan" class="{{ request()->routeIs('layanan*') ? 'active' : '' }}">Layanan</a>
+            <a href="{{ route('layanan') }}" class="{{ request()->routeIs('layanan*') ? 'active' : '' }}">Layanan</a>
             <a href="#tentang" class="{{ request()->routeIs('tentang*') ? 'active' : '' }}">Tentang</a>
         </div>
 
         <!-- Login Button di Kanan -->
-        <a href="#login" class="cta-nav">
+        <a href="{{ route('admin.login') }}" class="cta-nav">
             <i class="fas fa-sign-in-alt"></i>
             Login
         </a>
@@ -33,10 +47,24 @@
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="{{ url('/') }}">Beranda</a>
+
+            <!-- Mobile Profil Menu -->
+            <div class="mobile-dropdown">
+                <a href="#" class="mobile-dropdown-toggle" onclick="toggleMobileDropdown(event)">
+                    Profil <i class="fas fa-chevron-down"></i>
+                </a>
+                <div class="mobile-dropdown-menu">
+                    <a href="{{ route('sejarah') }}">Sejarah</a>
+                    <a href="{{ route('visi-misi') }}">Visi Misi</a>
+                    <a href="{{ route('perangkat-nagari') }}">Perangkat Nagari</a>
+                    <a href="{{ route('data-wilayah') }}">Data Wilayah</a>
+                </div>
+            </div>
+
             <a href="{{ route('berita') }}">Berita</a>
-            <a href="#agenda">Agenda</a>
+            <a href="{{ route('agenda') }}">Agenda</a>
             <a href="{{ route('pengumuman') }}">Pengumuman</a>
-            <a href="#layanan">Layanan</a>
+            <a href="{{ route('layanan') }}">Layanan</a>
             <a href="#tentang">Tentang</a>
         </div>
     </nav>
@@ -170,6 +198,128 @@
     .nav-links a:hover::before,
     .nav-links a.active::before {
         width: 100%;
+    }
+
+    /* Dropdown Styles */
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+    }
+
+    .dropdown-toggle i {
+        font-size: 0.8rem;
+        transition: transform 0.3s ease;
+    }
+
+    .dropdown:hover .dropdown-toggle i {
+        transform: rotate(180deg);
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(15px);
+        border-radius: 12px;
+        padding: 1rem 0;
+        min-width: 200px;
+        box-shadow: 0 8px 30px rgba(220, 20, 60, 0.15);
+        border: 1px solid rgba(220, 20, 60, 0.1);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(-50%) translateY(-10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1001;
+    }
+
+    .dropdown:hover .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .dropdown-menu a {
+        display: block;
+        padding: 0.8rem 1.5rem;
+        color: #555;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-bottom: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dropdown-menu a::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(220, 20, 60, 0.1), rgba(255, 107, 107, 0.1));
+        transition: width 0.3s ease;
+    }
+
+    .dropdown-menu a:hover {
+        color: #DC143C;
+        background: rgba(220, 20, 60, 0.05);
+        transform: translateX(5px);
+    }
+
+    .dropdown-menu a:hover::before {
+        width: 100%;
+    }
+
+    /* Mobile Dropdown */
+    .mobile-dropdown {
+        position: relative;
+    }
+
+    .mobile-dropdown-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+
+    .mobile-dropdown-toggle i {
+        transition: transform 0.3s ease;
+    }
+
+    .mobile-dropdown-toggle.active i {
+        transform: rotate(180deg);
+    }
+
+    .mobile-dropdown-menu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        background: rgba(220, 20, 60, 0.05);
+        margin: 0.5rem 0;
+        border-radius: 8px;
+    }
+
+    .mobile-dropdown-menu.active {
+        max-height: 300px;
+    }
+
+    .mobile-dropdown-menu a {
+        padding: 0.8rem 3rem;
+        font-size: 0.9rem;
+        border-bottom: 1px solid rgba(220, 20, 60, 0.1);
+    }
+
+    .mobile-dropdown-menu a:last-child {
+        border-bottom: none;
     }
 
     /* CTA Button */
@@ -390,8 +540,20 @@
         }
     }
 
+    // Mobile dropdown toggle
+    function toggleMobileDropdown(event) {
+        event.preventDefault();
+        const dropdownToggle = event.currentTarget;
+        const dropdownMenu = dropdownToggle.nextElementSibling;
+        const icon = dropdownToggle.querySelector('i');
+
+        // Toggle active class
+        dropdownToggle.classList.toggle('active');
+        dropdownMenu.classList.toggle('active');
+    }
+
     // Close mobile menu when clicking a link
-    document.querySelectorAll('.mobile-menu a').forEach(link => {
+    document.querySelectorAll('.mobile-menu a:not(.mobile-dropdown-toggle)').forEach(link => {
         link.addEventListener('click', () => {
             document.getElementById('mobileMenu').style.display = 'none';
             document.querySelector('.mobile-toggle i').classList.remove('fa-times');
@@ -419,6 +581,16 @@
                     behavior: 'smooth',
                     block: 'start'
                 });
+            }
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const dropdowns = document.querySelectorAll('.dropdown');
+        dropdowns.forEach(dropdown => {
+            if (!dropdown.contains(event.target)) {
+                // Dropdown will close automatically with CSS :hover
             }
         });
     });

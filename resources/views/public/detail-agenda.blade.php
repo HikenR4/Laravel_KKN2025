@@ -840,6 +840,8 @@
         @endif
     </aside>
 </div>
+<!-- Include Footer -->
+    @include('layouts.footer')
 @endsection
 
 @push('scripts')
@@ -884,7 +886,7 @@
 
             if (distance < 0) {
                 clearInterval(countdown);
-                document.querySelector('.countdown-section').innerHTML = 
+                document.querySelector('.countdown-section').innerHTML =
                     '<h3 class="countdown-title">Agenda sudah dimulai!</h3>';
             }
         }, 1000);
