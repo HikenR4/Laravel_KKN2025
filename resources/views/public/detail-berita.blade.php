@@ -181,7 +181,7 @@ body {
     animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
     line-height: 1.3;
     text-align: center;
-    
+
     /* PERBAIKAN UTAMA: Text wrapping untuk judul panjang */
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
@@ -368,7 +368,7 @@ body {
     color: #333;
     margin-bottom: 1.5rem;
     line-height: 1.3;
-    
+
     /* PERBAIKAN UTAMA: Text wrapping untuk artikel title */
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
@@ -990,19 +990,19 @@ body {
         gap: 2rem;
         padding: 2rem 1rem;
     }
-    
+
     .hero-detail h1 {
         font-size: 2rem;
     }
-    
+
     .hero-detail-meta {
         gap: 1rem;
     }
-    
+
     .article-image {
         height: 350px;
     }
-    
+
     .article-header {
         height: 350px;
     }
@@ -1012,105 +1012,105 @@ body {
     .hero-detail {
         padding: 6rem 0 3rem;
     }
-    
+
     .hero-detail h1 {
         font-size: 1.8rem;
     }
-    
+
     .hero-detail-content {
         padding: 0 1rem;
     }
-    
+
     .hero-detail-meta {
         flex-direction: column;
         align-items: center;
         gap: 0.8rem;
     }
-    
+
     .meta-item {
         min-width: 200px;
         justify-content: center;
     }
-    
+
     .meta-item span {
         white-space: normal;
         text-align: center;
     }
-    
+
     .article-content {
         padding: 2rem 1.5rem;
     }
-    
+
     .article-title {
         font-size: 1.8rem;
     }
-    
+
     .article-meta-detail {
         grid-template-columns: 1fr;
         padding: 1.5rem;
         gap: 1.2rem;
     }
-    
+
     .meta-detail-item {
         min-height: 38px;
     }
-    
+
     .meta-detail-item i {
         width: 24px;
         height: 24px;
         font-size: 1.2rem;
     }
-    
+
     .navigation-section {
         flex-direction: column;
         padding: 0 1.5rem 2rem;
     }
-    
+
     .nav-btn {
         justify-content: center;
         text-align: center;
     }
-    
+
     .related-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .breadcrumb-nav {
         padding: 0.8rem 1.5rem;
     }
-    
+
     .breadcrumb-item.active {
         max-width: 200px;
     }
-    
+
     .breadcrumb-item + .breadcrumb-item::before {
         padding: 0 0.6rem;
         font-size: 1.1rem;
     }
-    
+
     .breadcrumb-item a,
     .breadcrumb-item.active {
         font-size: 0.9rem;
         height: 22px;
     }
-    
+
     .article-image {
         height: 300px;
     }
-    
+
     .article-header {
         height: 300px;
     }
-    
+
     .info-section p {
         gap: 0.8rem;
     }
-    
+
     .info-section strong {
         min-width: 70px;
         font-size: 0.9rem;
     }
-    
+
     .info-section span {
         font-size: 0.9rem;
     }
@@ -1120,111 +1120,111 @@ body {
     .hero-detail {
         padding: 5rem 0 2rem;
     }
-    
+
     .hero-detail h1 {
         font-size: 1.6rem;
         line-height: 1.2;
         padding: 0 0.5rem;
     }
-    
+
     .hero-detail-content {
         padding: 0 0.5rem;
     }
-    
+
     .article-content {
         padding: 1.5rem 1rem;
     }
-    
+
     .article-title {
         font-size: 1.6rem;
         line-height: 1.2;
     }
-    
+
     .sidebar-widget {
         padding: 1.5rem;
     }
-    
+
     .meta-item {
         padding: 0.4rem 0.8rem;
         font-size: 0.9rem;
         min-height: 36px;
         min-width: 150px;
     }
-    
+
     .meta-item i {
         width: 16px;
         height: 16px;
         font-size: 0.9rem;
     }
-    
+
     .meta-item span {
         font-size: 0.85rem;
         white-space: normal;
         text-align: center;
     }
-    
+
     .article-meta-detail {
         padding: 1.2rem;
         gap: 1rem;
     }
-    
+
     .meta-detail-item {
         min-height: 36px;
         gap: 0.8rem;
     }
-    
+
     .meta-detail-item i {
         width: 22px;
         height: 22px;
         font-size: 1.1rem;
     }
-    
+
     .breadcrumb-nav {
         padding: 0.7rem 1rem;
     }
-    
+
     .breadcrumb-item.active {
         max-width: 150px;
     }
-    
+
     .breadcrumb-item + .breadcrumb-item::before {
         padding: 0 0.4rem;
         font-size: 1rem;
     }
-    
+
     .breadcrumb-item a,
     .breadcrumb-item.active {
         font-size: 0.85rem;
         height: 20px;
     }
-    
+
     .breadcrumb-item a i {
         font-size: 0.8rem;
         margin-right: 0.3rem;
         width: 14px;
     }
-    
+
     .article-image {
         height: 280px;
     }
-    
+
     .article-header {
         height: 280px;
     }
-    
+
     .info-section {
         padding: 1.2rem;
     }
-    
+
     .info-section p {
         margin-bottom: 0.6rem;
     }
-    
+
     .info-section strong {
         min-width: 70px;
         font-size: 0.9rem;
     }
-    
+
     .info-section span {
         font-size: 0.9rem;
     }
@@ -1236,29 +1236,29 @@ body {
         line-height: 1.2;
         padding: 0 0.25rem;
     }
-    
+
     .article-title {
         font-size: 1.4rem;
         line-height: 1.2;
     }
-    
+
     .hero-detail-content {
         padding: 0 0.25rem;
     }
-    
+
     .article-content {
         padding: 1.2rem 0.8rem;
     }
-    
+
     .meta-item {
         min-width: 120px;
         padding: 0.3rem 0.6rem;
     }
-    
+
     .meta-item span {
         font-size: 0.8rem;
     }
-    
+
     .breadcrumb-item.active {
         max-width: 120px;
         font-size: 0.8rem;
@@ -1293,10 +1293,10 @@ body {
                 </li>
             </ol>
         </nav>
-        
+
         <!-- Title dengan Perbaikan Text Wrapping -->
         <h1 class="text-wrap container-safe">{{ $berita->judul }}</h1>
-        
+
         <!-- Meta Information dengan Layout Responsif -->
         <div class="hero-detail-meta container-safe">
             <div class="meta-item">
@@ -1349,7 +1349,7 @@ body {
                     $imageFound = true;
                 }
                 @endphp
-                
+
                 @if($imageFound)
                 <div class="article-header">
                     <img src="{{ $imagePath }}"
@@ -1367,7 +1367,7 @@ body {
                 </div>
                 @endif
             @endif
-            
+
             <!-- Header alternatif jika tidak ada gambar -->
             @if(!$berita->gambar || !($imageFound ?? false))
             <div class="article-header-no-image" @if($berita->gambar) style="display:none;" @endif>
@@ -1381,18 +1381,18 @@ body {
                 </div>
             </div>
             @endif
-            
+
             <!-- Article Content dengan Perbaikan Text Wrapping -->
             <div class="article-content container-safe">
                 <!-- Article Title dengan Text Wrapping -->
                 <h1 class="article-title text-wrap container-safe">{{ $berita->judul }}</h1>
-                
+
                 <!-- Article Meta Detail -->
                 <div class="article-meta-detail">
                     <div class="meta-detail-item">
                         <i class="fas fa-user"></i>
                         <span>
-                            <strong>Penulis:</strong> 
+                            <strong>Penulis:</strong>
                             <span class="text-wrap">{{ $berita->admin->nama_lengkap ?? 'Admin' }}</span>
                         </span>
                     </div>
@@ -1409,12 +1409,12 @@ body {
                         <span><strong>Kategori:</strong> {{ ucfirst($berita->kategori) }}</span>
                     </div>
                 </div>
-                
+
                 <!-- Article Body dengan Text Wrapping -->
                 <div class="article-body text-wrap container-safe">
                     {!! nl2br(e($berita->konten)) !!}
                 </div>
-                
+
                 <!-- Tags Section dengan Perbaikan -->
                 @if($berita->tags)
                 <div class="tags-section container-safe">
@@ -1431,7 +1431,7 @@ body {
                     </div>
                 </div>
                 @endif
-                
+
                 <!-- Share Section -->
                 <div class="share-section container-safe">
                     <h6 class="share-title">
@@ -1458,7 +1458,7 @@ body {
                     </div>
                 </div>
             </div>
-            
+
             <!-- Navigation Section -->
             <div class="navigation-section container-safe">
                 <a href="{{ route('berita') }}" class="nav-btn">
@@ -1670,18 +1670,20 @@ body {
         </div>
     </aside>
 </div>
+<!-- Include Footer -->
+    @include('layouts.footer')
 @endsection
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    
+
     // ===== FUNGSI UTAMA: PREVENT HORIZONTAL OVERFLOW =====
     function preventHorizontalOverflow() {
         // 1. Pastikan body tidak overflow horizontal
         document.body.style.overflowX = 'hidden';
         document.documentElement.style.overflowX = 'hidden';
-        
+
         // 2. Set max-width untuk semua elemen yang potensial bermasalah
         const problematicElements = [
             '.hero-detail h1',
@@ -1691,7 +1693,7 @@ document.addEventListener('DOMContentLoaded', function() {
             '.article-content',
             '.meta-item span'
         ];
-        
+
         problematicElements.forEach(selector => {
             const elements = document.querySelectorAll(selector);
             elements.forEach(element => {
@@ -1708,19 +1710,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function detectAndFixOverflow() {
         const allElements = document.querySelectorAll('*');
         const windowWidth = window.innerWidth;
-        
+
         allElements.forEach(element => {
             const rect = element.getBoundingClientRect();
-            
+
             if (rect.width > windowWidth) {
                 console.warn('Element causing overflow:', element);
-                
+
                 element.style.maxWidth = '100%';
                 element.style.wordWrap = 'break-word';
                 element.style.overflowWrap = 'break-word';
                 element.style.boxSizing = 'border-box';
-                
-                if (element.tagName === 'H1' || element.tagName === 'H2' || 
+
+                if (element.tagName === 'H1' || element.tagName === 'H2' ||
                     element.tagName === 'H3' || element.tagName === 'P') {
                     element.style.wordBreak = 'break-word';
                     element.style.hyphens = 'auto';
@@ -1733,10 +1735,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function responsiveTextSizing() {
         const heroTitle = document.querySelector('.hero-detail h1');
         const articleTitle = document.querySelector('.article-title');
-        
+
         if (heroTitle) {
             const titleLength = heroTitle.textContent.length;
-            
+
             if (window.innerWidth <= 480) {
                 if (titleLength > 50) {
                     heroTitle.style.fontSize = '1.4rem';
@@ -1755,10 +1757,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
-        
+
         if (articleTitle) {
             const titleLength = articleTitle.textContent.length;
-            
+
             if (window.innerWidth <= 480) {
                 if (titleLength > 50) {
                     articleTitle.style.fontSize = '1.4rem';
@@ -1785,7 +1787,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (activeBreadcrumb) {
             const containerWidth = activeBreadcrumb.closest('.breadcrumb-nav').clientWidth;
             const availableWidth = containerWidth * 0.4;
-            
+
             activeBreadcrumb.style.maxWidth = availableWidth + 'px';
             activeBreadcrumb.style.overflow = 'hidden';
             activeBreadcrumb.style.textOverflow = 'ellipsis';
@@ -1812,7 +1814,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             if (document.body.scrollWidth > document.body.clientWidth) {
                 console.warn('Horizontal overflow detected, applying emergency fix');
-                
+
                 const style = document.createElement('style');
                 style.textContent = `
                     * {
@@ -1877,7 +1879,7 @@ document.addEventListener('DOMContentLoaded', function() {
         transition: width 0.1s ease;
     `;
     document.body.appendChild(progressBar);
-    
+
     window.addEventListener('scroll', function() {
         const article = document.querySelector('.article-body');
         if (article) {
