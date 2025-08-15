@@ -8,7 +8,9 @@
     <meta name="description" content="{{ $profilNagari && $profilNagari->sejarah ? Str::limit(strip_tags($profilNagari->sejarah), 160) : 'Portal digital resmi untuk layanan masyarakat' }}">
     <meta name="keywords" content="nagari, {{ $profilNagari->nama_nagari ?? 'mungo' }}, layanan digital, pemerintahan">
 
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
 
     <style>
         * {
@@ -17,12 +19,14 @@
             box-sizing: border-box;
         }
 
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             overflow-x: hidden;
         }
+
 
         /* Hero Section */
         .hero {
@@ -34,6 +38,7 @@
             padding-top: 70px;
         }
 
+
         .hero-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -44,9 +49,11 @@
             align-items: center;
         }
 
+
         .hero-content {
             color: #333;
         }
+
 
         .hero-badge {
             background: rgba(255, 255, 255, 0.9);
@@ -61,6 +68,7 @@
             box-shadow: 0 4px 15px rgba(220, 20, 60, 0.1);
         }
 
+
         .hero h1 {
             font-size: 3.5rem;
             font-weight: 700;
@@ -69,12 +77,14 @@
             color: #333;
         }
 
+
         .hero-highlight {
             background: linear-gradient(135deg, #FF6B6B, #DC143C);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+
 
         .hero p {
             font-size: 1.2rem;
@@ -83,11 +93,13 @@
             line-height: 1.6;
         }
 
+
         .hero-buttons {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
         }
+
 
         .btn {
             padding: 1rem 2rem;
@@ -103,11 +115,13 @@
             gap: 0.5rem;
         }
 
+
         .btn-primary {
             background: linear-gradient(135deg, #FF6B6B, #DC143C);
             color: white;
             box-shadow: 0 8px 25px rgba(220, 20, 60, 0.3);
         }
+
 
         .btn-secondary {
             background: white;
@@ -115,18 +129,22 @@
             border: 2px solid #DC143C;
         }
 
+
         .btn:hover {
             transform: translateY(-2px);
         }
+
 
         .btn-primary:hover {
             box-shadow: 0 12px 35px rgba(220, 20, 60, 0.4);
         }
 
+
         .btn-secondary:hover {
             background: #DC143C;
             color: white;
         }
+
 
         /* Video Section - Enhanced */
         .hero-visual {
@@ -134,6 +152,7 @@
             justify-content: center;
             align-items: center;
         }
+
 
         .video-container {
             background: white;
@@ -144,6 +163,7 @@
             width: 100%;
             border: 1px solid rgba(220, 20, 60, 0.1);
         }
+
 
         .video-player {
             width: 100%;
@@ -159,6 +179,7 @@
             background: #f8f9fa;
         }
 
+
         .video-player video {
             width: 100%;
             height: 100%;
@@ -166,6 +187,7 @@
             border-radius: 20px;
             opacity: 1;
         }
+
 
         .video-overlay {
             position: absolute;
@@ -181,6 +203,7 @@
             transition: all 0.3s ease;
         }
 
+
         .video-player img {
             width: 100%;
             height: 100%;
@@ -189,6 +212,7 @@
             /* Memastikan gambar langsung terlihat */
             opacity: 1;
         }
+
 
         .play-button {
             width: 80px;
@@ -205,17 +229,21 @@
             border: 3px solid rgba(255,255,255,0.3);
             cursor: pointer;
 
+
         }
+
 
         .video-player:hover .play-button {
             background: white;
             transform: scale(1.1);
         }
 
+
         .video-player.playing .video-overlay {
             opacity: 0;
             pointer-events: none;
         }
+
 
         /* Video embed styles */
         .video-embed {
@@ -225,10 +253,12 @@
             border-radius: 20px;
         }
 
+
         .video-info {
             padding: 1.5rem;
             text-align: center;
         }
+
 
         .video-title {
             color: #DC143C;
@@ -237,11 +267,13 @@
             margin-bottom: 0.5rem;
         }
 
+
         .video-subtitle {
             color: #666;
             font-size: 0.9rem;
             margin-bottom: 1rem;
         }
+
 
         .video-stats {
             display: flex;
@@ -250,9 +282,11 @@
             border-top: 1px solid rgba(220, 20, 60, 0.1);
         }
 
+
         .video-stat {
             text-align: center;
         }
+
 
         .video-stat-number {
             font-size: 1.2rem;
@@ -261,10 +295,12 @@
             margin-bottom: 0.2rem;
         }
 
+
         .video-stat-label {
             font-size: 0.8rem;
             color: #666;
         }
+
 
         /* Statistics Section */
         .statistics {
@@ -273,11 +309,13 @@
             backdrop-filter: blur(10px);
         }
 
+
         .statistics-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
         }
+
 
         .stats-grid {
             display: grid;
@@ -285,6 +323,7 @@
             gap: 2rem;
             text-align: center;
         }
+
 
         .stat-item {
             background: white;
@@ -295,10 +334,12 @@
             border: 1px solid rgba(220, 20, 60, 0.05);
         }
 
+
         .stat-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(220, 20, 60, 0.15);
         }
+
 
         .stat-number {
             font-size: 2.5rem;
@@ -307,11 +348,13 @@
             margin-bottom: 0.5rem;
         }
 
+
         .stat-label {
             font-size: 1rem;
             color: #666;
             font-weight: 500;
         }
+
 
         /* Features Section */
         .features {
@@ -319,16 +362,19 @@
             background: linear-gradient(135deg, #FFFFFF 0%, #FFFAFA 50%, #FFF5F5 100%);
         }
 
+
         .features-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
+
         .section-header {
             text-align: center;
             margin-bottom: 4rem;
         }
+
 
         .section-badge {
             background: linear-gradient(135deg, #FF6B6B, #DC143C);
@@ -341,12 +387,14 @@
             box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
         }
 
+
         .section-title {
             font-size: 2.5rem;
             color: #333;
             margin-bottom: 1rem;
             font-weight: 700;
         }
+
 
         .section-subtitle {
             font-size: 1.1rem;
@@ -355,11 +403,13 @@
             margin: 0 auto;
         }
 
+
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
+
 
         .feature-card {
             background: white;
@@ -371,10 +421,12 @@
             border: 1px solid rgba(220, 20, 60, 0.05);
         }
 
+
         .feature-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(220, 20, 60, 0.15);
         }
+
 
         .feature-icon {
             width: 80px;
@@ -390,9 +442,11 @@
             transition: all 0.3s ease;
         }
 
+
         .feature-card:hover .feature-icon {
             transform: scale(1.05);
         }
+
 
         .feature-card h3 {
             font-size: 1.3rem;
@@ -401,14 +455,17 @@
             font-weight: 600;
         }
 
+
         .feature-card:hover h3 {
             color: #DC143C;
         }
+
 
         .feature-card p {
             color: #666;
             line-height: 1.6;
         }
+
 
         /* Process Section */
         .process {
@@ -416,11 +473,13 @@
             background: white;
         }
 
+
         .process-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
         }
+
 
         .process-steps {
             display: grid;
@@ -429,10 +488,12 @@
             margin-top: 4rem;
         }
 
+
         .process-step {
             text-align: center;
             position: relative;
         }
+
 
         .step-number {
             width: 70px;
@@ -449,6 +510,7 @@
             box-shadow: 0 8px 25px rgba(220, 20, 60, 0.3);
         }
 
+
         .process-step h3 {
             color: #333;
             margin-bottom: 1rem;
@@ -456,10 +518,12 @@
             font-weight: 600;
         }
 
+
         .process-step p {
             color: #666;
             line-height: 1.6;
         }
+
 
         /* CTA Section */
         .cta-section {
@@ -469,11 +533,13 @@
             text-align: center;
         }
 
+
         .cta-container {
             max-width: 800px;
             margin: 0 auto;
             padding: 0 2rem;
         }
+
 
         .cta-section h2 {
             font-size: 2.5rem;
@@ -481,11 +547,13 @@
             font-weight: 700;
         }
 
+
         .cta-section p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
             opacity: 0.95;
         }
+
 
         .cta-button {
             background: white;
@@ -504,12 +572,14 @@
             box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
         }
 
+
         .cta-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3);
             background: #DC143C;
             color: white;
         }
+
 
         /* Error states */
         .error-message {
@@ -521,6 +591,7 @@
             margin: 1rem 0;
         }
 
+
         /* Loading states */
         .loading {
             display: flex;
@@ -528,6 +599,7 @@
             align-items: center;
             min-height: 200px;
         }
+
 
         .spinner {
             width: 50px;
@@ -538,10 +610,12 @@
             animation: spin 1s linear infinite;
         }
 
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -551,17 +625,21 @@
                 text-align: center;
             }
 
+
             .hero h1 {
                 font-size: 2.5rem;
             }
+
 
             .section-title {
                 font-size: 2rem;
             }
 
+
             .cta-section h2 {
                 font-size: 2rem;
             }
+
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -569,18 +647,22 @@
             }
         }
 
+
         @media (max-width: 480px) {
             .hero h1 {
                 font-size: 2rem;
             }
 
+
             .features-grid {
                 grid-template-columns: 1fr;
             }
 
+
             .feature-card {
                 padding: 2rem;
             }
+
 
             .stats-grid {
                 grid-template-columns: 1fr;
@@ -591,6 +673,7 @@
 <body>
     <!-- Include Header -->
     @include('layouts.header')
+
 
     <!-- Hero Section -->
     <section id="beranda" class="hero">
@@ -624,6 +707,7 @@
                 </div>
             </div>
 
+
             <div class="hero-visual">
                 <div class="video-container">
                     <div class="video-player" id="videoPlayer">
@@ -650,12 +734,14 @@
                             </div>
                         @endif
 
+
                         <div class="video-overlay">
                             <div class="play-button">
                                 <i class="fas fa-play"></i>
                             </div>
                         </div>
                     </div>
+
 
                     <div class="video-info">
                         <h3 class="video-title">
@@ -697,6 +783,7 @@
             </div>
     </section>
 
+
     <!-- Features Section -->
     <section id="layanan" class="features">
         <div class="features-container">
@@ -710,6 +797,7 @@
                 </p>
             </div>
 
+
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -719,6 +807,7 @@
                     <p>Ajukan surat keterangan, domisili, dan dokumen lainnya secara online tanpa perlu datang ke kantor nagari</p>
                 </div>
 
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
@@ -726,6 +815,7 @@
                     <h3>Data Kependudukan Real-time</h3>
                     <p>Akses informasi statistik dan data kependudukan nagari yang selalu update dan akurat</p>
                 </div>
+
 
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -735,6 +825,7 @@
                     <p>Pantau jadwal kegiatan, rapat, dan acara nagari agar tidak ketinggalan informasi penting</p>
                 </div>
 
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-bullhorn"></i>
@@ -743,6 +834,7 @@
                     <p>Dapatkan informasi dan pengumuman resmi dari pemerintah nagari secara langsung</p>
                 </div>
 
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-building"></i>
@@ -750,6 +842,7 @@
                     <h3>Profil Nagari Lengkap</h3>
                     <p>Informasi komprehensif tentang sejarah, visi misi, dan struktur pemerintahan nagari</p>
                 </div>
+
 
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -761,6 +854,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- Process Section -->
     <section id="tentang" class="process">
@@ -775,6 +869,7 @@
                 </p>
             </div>
 
+
             <div class="process-steps">
                 <div class="process-step">
                     <div class="step-number">1</div>
@@ -782,11 +877,13 @@
                     <p>Daftarkan diri dengan NIK dan data personal untuk verifikasi identitas sebagai warga nagari</p>
                 </div>
 
+
                 <div class="process-step">
                     <div class="step-number">2</div>
                     <h3>Pilih Layanan</h3>
                     <p>Pilih layanan yang dibutuhkan dari dashboard dan lengkapi formulir sesuai persyaratan</p>
                 </div>
+
 
                 <div class="process-step">
                     <div class="step-number">3</div>
@@ -796,6 +893,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- CTA Section -->
     <section id="login" class="cta-section">
@@ -809,8 +907,10 @@
         </div>
     </section>
 
+
     <!-- Include Footer -->
     @include('layouts.footer')
+
 
     <script>
         // Video player functionality
@@ -823,11 +923,13 @@
             const playButton = document.querySelector('.play-button');
             const videoOverlay = document.querySelector('.video-overlay');
 
+
             if (videoPlayer && playButton) {
                 videoPlayer.addEventListener('click', function() {
                     playVideo();
                 });
             }
+
 
             function playVideo() {
                 // Animate play button
@@ -837,6 +939,7 @@
                         playButton.style.transform = 'scale(1.1)';
                     }, 150);
                 }
+
 
                 // Handle local video
                 if (localVideo) {
@@ -854,6 +957,7 @@
                     }
                 }
 
+
                 // Handle external video (iframe)
                 else if (externalVideo) {
                     const src = externalVideo.getAttribute('data-src');
@@ -864,11 +968,13 @@
                     }
                 }
 
+
                 // Handle placeholder (no video available)
                 else if (videoPlaceholder) {
                     showNoVideoMessage();
                 }
             }
+
 
             // Handle video end
             if (localVideo) {
@@ -876,12 +982,14 @@
                     videoPlayer.classList.remove('playing');
                 });
 
+
                 // Handle video error
                 localVideo.addEventListener('error', function() {
                     console.error('Video loading error');
                     showVideoError();
                 });
             }
+
 
             function incrementVideoViews(videoType) {
                 fetch('/api/profil-video/increment-views', {
@@ -905,12 +1013,14 @@
                 });
             }
 
+
             function updateVideoViews(newViews) {
                 const viewsElement = document.getElementById('videoViews');
                 if (viewsElement && newViews) {
                     viewsElement.textContent = newViews;
                 }
             }
+
 
             function showVideoError() {
                 const videoInfo = document.querySelector('.video-info');
@@ -924,6 +1034,7 @@
                     videoInfo.appendChild(errorMessage);
                 }
             }
+
 
             function showNoVideoMessage() {
                 // Create a more user-friendly notification
@@ -947,6 +1058,7 @@
                 `;
                 document.body.appendChild(notification);
 
+
                 // Auto close after 5 seconds
                 setTimeout(() => {
                     if (notification.parentElement) {
@@ -955,6 +1067,7 @@
                 }, 5000);
             }
         });
+
 
         // Smooth scroll for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -970,11 +1083,13 @@
             });
         });
 
+
         // Animation on scroll
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
+
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -985,6 +1100,7 @@
             });
         }, observerOptions);
 
+
         // Observe elements for animation
         document.querySelectorAll('.feature-card, .process-step, .stat-item').forEach(el => {
             el.style.opacity = '0';
@@ -993,12 +1109,14 @@
             observer.observe(el);
         });
 
+
         // Counter animation for statistics
         function animateCounters() {
             const counters = document.querySelectorAll('.stat-number');
             counters.forEach(counter => {
                 const target = parseInt(counter.textContent.replace(/[^0-9]/g, ''));
                 if (isNaN(target) || target === 0) return;
+
 
                 let current = 0;
                 const increment = target / 100;
@@ -1008,6 +1126,7 @@
                         current = target;
                         clearInterval(timer);
                     }
+
 
                     // Format number with commas
                     if (target >= 1000) {
@@ -1019,6 +1138,7 @@
             });
         }
 
+
         // Trigger counter animation when statistics section is visible
         const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1029,10 +1149,12 @@
             });
         }, { threshold: 0.5 });
 
+
         const statsSection = document.querySelector('.statistics');
         if (statsSection) {
             statsObserver.observe(statsSection);
         }
+
 
         // Loading states and error handling
         window.addEventListener('load', function() {
@@ -1041,9 +1163,11 @@
                 el.style.display = 'none';
             });
 
+
             // Fade in content
             document.body.style.opacity = '1';
         });
+
 
         // Handle image loading errors
         document.querySelectorAll('img').forEach(img => {
@@ -1051,6 +1175,7 @@
                 this.style.display = 'none';
             });
         });
+
 
         // Error handling for missing elements
         window.addEventListener('error', function(e) {

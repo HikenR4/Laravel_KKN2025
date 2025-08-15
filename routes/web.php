@@ -36,7 +36,7 @@ Route::get('/landing', function () {
     return view('public.landing');
 });
 
-// Public routes for berita - UPDATED DENGAN ROUTE TAMBAHAN
+// Public routes for berita
 Route::get('/', [PublicController::class, 'landing'])->name('landing');
 Route::get('/berita', [PublicController::class, 'berita'])->name('berita');
 Route::get('/berita/{slug}', [PublicController::class, 'beritaDetail'])->name('berita.detail');
@@ -97,6 +97,10 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::get('/search-suggestions', [PublicController::class, 'getSearchSuggestions'])->name('search-suggestions');
     Route::get('/popular-content', [PublicController::class, 'getPopularContent'])->name('popular-content');
 });
+
+// Tentang routes - PUBLIC
+Route::get('/tentang', [PublicController::class, 'tentang'])->name('tentang');
+
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->group(function () {

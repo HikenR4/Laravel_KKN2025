@@ -14,6 +14,41 @@ use Illuminate\Validation\ValidationException;
 class AgendaController extends Controller
 {
     /**
+     * Validate time format safely
+     */
+    private function validateTimeFormat($time)
+    {
+        if (!$time) return true;
+        
+        // Simple validation: check if it's in H:i or HH:MM format
+        if (strlen($time) == 5 && substr($time, 2, 1) == ':') {
+            $parts = explode(':', $time);
+            $hour = intval($parts[0]);
+            $minute = intval($parts[1]);
+            
+            return ($hour >= 0 && $hour <= 23) && ($minute >= 0 && $minute <= 59);
+        }
+        
+        return false;
+    }
+
+    /**
+     * Compare two time strings
+     */
+    private function isTimeAfter($timeEnd, $timeStart)
+    {
+        if (!$timeStart || !$timeEnd) return true;
+        
+        try {
+            $start = \Carbon\Carbon::createFromFormat('H:i', $timeStart);
+            $end = \Carbon\Carbon::createFromFormat('H:i', $timeEnd);
+            return $end->gt($start);
+        } catch (\Exception $e) {
+            return true; // If parsing fails, allow it
+        }
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -23,7 +58,6 @@ class AgendaController extends Controller
                 ->latest('tanggal_mulai')
                 ->paginate(10);
 
-            // Return ke view terpadu dengan variable $agenda (untuk list)
             return view('admin.agenda', compact('agenda'));
         } catch (\Exception $e) {
             Log::error('Error in AgendaController@index: ' . $e->getMessage());
@@ -67,7 +101,6 @@ class AgendaController extends Controller
                 ]);
             }
 
-            // Return ke view terpadu dengan variable $agenda_detail (untuk detail)
             return view('admin.agenda', compact('agenda_detail'));
 
         } catch (\Exception $e) {
@@ -91,14 +124,14 @@ class AgendaController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validation
+            // Basic validation without complex regex
             $validated = $request->validate([
                 'judul' => 'required|string|max:200',
                 'deskripsi' => 'nullable|string',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
-                'waktu_mulai' => 'nullable|date_format:H:i',
-                'waktu_selesai' => 'nullable|date_format:H:i|after:waktu_mulai',
+                'waktu_mulai' => 'nullable|string|max:8',
+                'waktu_selesai' => 'nullable|string|max:8',
                 'lokasi' => 'nullable|string|max:200',
                 'kategori' => 'required|string|max:50',
                 'status' => 'required|in:planned,ongoing,completed,cancelled',
@@ -109,6 +142,28 @@ class AgendaController extends Controller
                 'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'alt_gambar' => 'nullable|string|max:255',
             ]);
+
+            // Manual time validation
+            if ($validated['waktu_mulai'] && !$this->validateTimeFormat($validated['waktu_mulai'])) {
+                return redirect()->back()
+                    ->withErrors(['waktu_mulai' => 'Format waktu mulai harus HH:MM (contoh: 08:30)'])
+                    ->withInput();
+            }
+
+            if ($validated['waktu_selesai'] && !$this->validateTimeFormat($validated['waktu_selesai'])) {
+                return redirect()->back()
+                    ->withErrors(['waktu_selesai' => 'Format waktu selesai harus HH:MM (contoh: 10:30)'])
+                    ->withInput();
+            }
+
+            // Check time comparison
+            if ($validated['waktu_mulai'] && $validated['waktu_selesai']) {
+                if (!$this->isTimeAfter($validated['waktu_selesai'], $validated['waktu_mulai'])) {
+                    return redirect()->back()
+                        ->withErrors(['waktu_selesai' => 'Waktu selesai harus setelah waktu mulai'])
+                        ->withInput();
+                }
+            }
 
             // Prepare data
             $data = [
@@ -135,10 +190,8 @@ class AgendaController extends Controller
                 $file = $request->file('gambar');
                 $filename = time() . '_' . Str::slug($validated['judul']) . '.' . $file->getClientOriginalExtension();
 
-                // Upload langsung ke folder public/uploads/agenda
                 $destinationPath = public_path('uploads/agenda');
 
-                // Pastikan folder ada
                 if (!is_dir($destinationPath)) {
                     mkdir($destinationPath, 0755, true);
                 }
@@ -146,7 +199,9 @@ class AgendaController extends Controller
                 $uploaded = $file->move($destinationPath, $filename);
 
                 if ($uploaded) {
-                    $data['gambar'] = asset('uploads/agenda/' . $filename);
+                    // Store just the filename, not the full URL
+                    $data['gambar'] = $filename;
+                    Log::info('Agenda image uploaded: ' . $filename);
                 } else {
                     return redirect()->back()
                         ->with('error', 'Gagal mengupload gambar.')
@@ -216,7 +271,6 @@ class AgendaController extends Controller
                 ]);
             }
 
-            // Jika bukan AJAX, bisa redirect atau return view (sesuai kebutuhan)
             return redirect()->route('admin.agenda');
 
         } catch (\Exception $e) {
@@ -242,13 +296,14 @@ class AgendaController extends Controller
         try {
             $agenda = Agenda::findOrFail($id);
 
+            // Basic validation without complex regex
             $validated = $request->validate([
                 'judul' => 'required|string|max:200',
                 'deskripsi' => 'nullable|string',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
-                'waktu_mulai' => 'nullable|date_format:H:i',
-                'waktu_selesai' => 'nullable|date_format:H:i',
+                'waktu_mulai' => 'nullable|string|max:8',
+                'waktu_selesai' => 'nullable|string|max:8',
                 'lokasi' => 'nullable|string|max:200',
                 'kategori' => 'required|string|max:50',
                 'status' => 'required|in:planned,ongoing,completed,cancelled',
@@ -259,6 +314,52 @@ class AgendaController extends Controller
                 'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'alt_gambar' => 'nullable|string|max:255',
             ]);
+
+            // Manual time validation
+            if ($validated['waktu_mulai'] && !$this->validateTimeFormat($validated['waktu_mulai'])) {
+                $error = ['waktu_mulai' => 'Format waktu mulai harus HH:MM (contoh: 08:30)'];
+                
+                if (request()->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Format waktu tidak valid',
+                        'errors' => $error
+                    ], 422);
+                }
+                
+                return redirect()->back()->withErrors($error)->withInput();
+            }
+
+            if ($validated['waktu_selesai'] && !$this->validateTimeFormat($validated['waktu_selesai'])) {
+                $error = ['waktu_selesai' => 'Format waktu selesai harus HH:MM (contoh: 10:30)'];
+                
+                if (request()->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Format waktu tidak valid',
+                        'errors' => $error
+                    ], 422);
+                }
+                
+                return redirect()->back()->withErrors($error)->withInput();
+            }
+
+            // Check time comparison
+            if ($validated['waktu_mulai'] && $validated['waktu_selesai']) {
+                if (!$this->isTimeAfter($validated['waktu_selesai'], $validated['waktu_mulai'])) {
+                    $error = ['waktu_selesai' => 'Waktu selesai harus setelah waktu mulai'];
+                    
+                    if (request()->ajax()) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Waktu selesai harus setelah waktu mulai',
+                            'errors' => $error
+                        ], 422);
+                    }
+                    
+                    return redirect()->back()->withErrors($error)->withInput();
+                }
+            }
 
             $data = [
                 'judul' => $validated['judul'],
@@ -278,12 +379,21 @@ class AgendaController extends Controller
                 'alt_gambar' => $validated['alt_gambar'],
             ];
 
-            // Handle file upload hanya jika ada file baru
+            // Handle file upload
             if ($request->hasFile('gambar')) {
                 // Delete old image if exists
-                if ($agenda->gambar && strpos($agenda->gambar, 'default-') === false) {
-                    $oldImagePath = str_replace(asset('uploads/agenda/'), '', $agenda->gambar);
-                    $oldImageFullPath = public_path('uploads/agenda/' . $oldImagePath);
+                if ($agenda->gambar) {
+                    // Get the actual filename from database
+                    $oldFilename = $agenda->getRawOriginal('gambar'); // Get raw value without accessor
+                    
+                    // If it's a full URL, extract filename
+                    if (strpos($oldFilename, 'uploads/agenda/') !== false) {
+                        $oldFilename = basename($oldFilename);
+                    } elseif (strpos($oldFilename, 'http') === 0) {
+                        $oldFilename = basename(parse_url($oldFilename, PHP_URL_PATH));
+                    }
+                    
+                    $oldImageFullPath = public_path('uploads/agenda/' . $oldFilename);
                     if (file_exists($oldImageFullPath)) {
                         unlink($oldImageFullPath);
                         Log::info('Old agenda image deleted: ' . $oldImageFullPath);
@@ -293,10 +403,8 @@ class AgendaController extends Controller
                 $file = $request->file('gambar');
                 $filename = time() . '_' . Str::slug($validated['judul']) . '.' . $file->getClientOriginalExtension();
 
-                // Upload langsung ke folder public/uploads/agenda
                 $destinationPath = public_path('uploads/agenda');
 
-                // Pastikan folder ada
                 if (!is_dir($destinationPath)) {
                     mkdir($destinationPath, 0755, true);
                 }
@@ -304,9 +412,17 @@ class AgendaController extends Controller
                 $uploaded = $file->move($destinationPath, $filename);
 
                 if ($uploaded) {
-                    $data['gambar'] = asset('uploads/agenda/' . $filename);
+                    // Store just the filename, not the full URL
+                    $data['gambar'] = $filename;
                     Log::info('New agenda image uploaded: ' . $filename);
                 } else {
+                    if (request()->ajax()) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Gagal mengupload gambar.'
+                        ], 500);
+                    }
+                    
                     return redirect()->back()
                         ->with('error', 'Gagal mengupload gambar.')
                         ->withInput();
@@ -364,9 +480,18 @@ class AgendaController extends Controller
             $agenda = Agenda::findOrFail($id);
 
             // Delete image file if exists
-            if ($agenda->gambar && strpos($agenda->gambar, 'default-') === false) {
-                $imagePath = str_replace(asset('uploads/agenda/'), '', $agenda->gambar);
-                $imageFullPath = public_path('uploads/agenda/' . $imagePath);
+            if ($agenda->gambar) {
+                // Get the actual filename from database
+                $filename = $agenda->getRawOriginal('gambar'); // Get raw value without accessor
+                
+                // If it's a full URL, extract filename
+                if (strpos($filename, 'uploads/agenda/') !== false) {
+                    $filename = basename($filename);
+                } elseif (strpos($filename, 'http') === 0) {
+                    $filename = basename(parse_url($filename, PHP_URL_PATH));
+                }
+                
+                $imageFullPath = public_path('uploads/agenda/' . $filename);
                 if (file_exists($imageFullPath)) {
                     unlink($imageFullPath);
                     Log::info('Agenda image deleted: ' . $imageFullPath);

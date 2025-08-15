@@ -65,23 +65,24 @@ body {
             text-decoration: none;
             transition: color 0.3s ease;
         }
-/* Override tombol success menjadi biru formal */
-.btn-success,
-.btn-success:not(:disabled):not(.disabled):active,
-.btn-success:focus,
-.btn-success.focus {
-    background: linear-gradient(135deg, #1e40af, #1e3a8a) !important;
-    border-color: #1e40af !important;
-    color: white !important;
-}
+    /* Override tombol success menjadi biru formal */
+        .btn-success,
+        .btn-success:not(:disabled):not(.disabled):active,
+        .btn-success:focus,
+        .btn-success.focus {
+            background: linear-gradient(135deg, #1e40af, #1e3a8a) !important;
+            border-color: #1e40af !important;
+            color: white !important;
+        }
 
-.btn-success:hover {
-    background: linear-gradient(135deg, #1e3a8a, #1d4ed8) !important;
-    border-color: #1e3a8a !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3) !important;
-    color: white !important;
-}
+        .btn-success:hover {
+            background: linear-gradient(135deg, #1e3a8a, #1d4ed8) !important;
+            border-color: #1e3a8a !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3) !important;
+            color: white !important;
+        }
+        
         .breadcrumb-custom .breadcrumb-item a:hover {
             color: #059669;
         }
@@ -116,26 +117,26 @@ body {
             transform: translateY(-2px);
         }
 
-/* Hero Section for Detail - Warna Formal */
-.hero-section {
-    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
-    color: white;
-    padding: 3rem 2rem;
-    border-radius: 1rem 1rem 0 0;
-    position: relative;
-    overflow: hidden;
-}
+        /* Hero Section for Detail - Warna Formal */
+        .hero-section {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem 1rem 0 0;
+            position: relative;
+            overflow: hidden;
+        }
 
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="agenda-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23agenda-pattern)"/></svg>');
-    opacity: 0.3;
-}
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="agenda-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23agenda-pattern)"/></svg>');
+            opacity: 0.3;
+        }
 
         .hero-content {
             position: relative;
@@ -157,16 +158,16 @@ body {
             margin-bottom: 1.5rem;
         }
 
-/* Meta Items - Formal */
-.meta-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
-    backdrop-filter: blur(10px);
-}
+        /* Meta Items - Formal */
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            backdrop-filter: blur(10px);
+        }
 
         .content-section {
             padding: 2rem;
@@ -212,26 +213,26 @@ body {
             text-transform: uppercase;
         }
 
-/* Agenda Status Colors - More Formal */
-.status-planned {
-    background: #1e40af;
-    color: white;
-}
+        /* Agenda Status Colors - More Formal */
+        .status-planned {
+            background: #1e40af;
+            color: white;
+        }
 
-.status-ongoing {
-    background: #d97706;
-    color: white;
-}
+        .status-ongoing {
+            background: #d97706;
+            color: white;
+        }
 
-.status-completed {
-    background: #059669;
-    color: white;
-}
+        .status-completed {
+            background: #059669;
+            color: white;
+        }
 
-.status-cancelled {
-    background: #dc2626;
-    color: white;
-}
+        .status-cancelled {
+            background: #dc2626;
+            color: white;
+        }
 
         .agenda-date {
             font-weight: 600;
@@ -324,18 +325,18 @@ body {
             text-decoration: none;
         }
 
-/* Buttons - Formal */
-.btn-success-custom {
-    background: linear-gradient(135deg, #1e40af, #1e3a8a);
-    color: white;
-}
+        /* Buttons - Formal */
+        .btn-success-custom {
+            background: linear-gradient(135deg, #1e40af, #1e3a8a);
+            color: white;
+        }
 
-.btn-success-custom:hover {
-    background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(30, 64, 175, 0.3);
-    color: white;
-}
+        .btn-success-custom:hover {
+            background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30, 64, 175, 0.3);
+            color: white;
+        }
 
         .btn-secondary-custom {
             background: linear-gradient(135deg, #6b7280, #4b5563);
@@ -394,16 +395,16 @@ body {
             gap: 1rem;
         }
 
-/* Info Items - Formal */
-.info-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    background: #f8fafc;
-    border-radius: 0.5rem;
-    border-left: 4px solid #1e40af;
-}
+        /* Info Items - Formal */
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            border-left: 4px solid #1e40af;
+        }
 
         .info-label {
             font-weight: 600;
@@ -427,44 +428,44 @@ body {
         }
 
         /* Statistics Cards - Formal */
-.stat-card {
-    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-    padding: 1.5rem;
-    border-radius: 1rem;
-    text-align: center;
-    border: 1px solid #cbd5e1;
-    transition: all 0.3s ease;
-}
+        .stat-card {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+            border: 1px solid #cbd5e1;
+            transition: all 0.3s ease;
+        }
 
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
 
-.stat-number {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #1e40af;
-    display: block;
-}
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e40af;
+            display: block;
+        }
 
-.stat-label {
-    font-size: 0.875rem;
-    color: #64748b;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
 
-/* Countdown Section - Formal */
-.countdown-section {
-    background: linear-gradient(45deg, #64748b 0%, #475569 100%);
-    color: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    text-align: center;
-    margin-bottom: 2rem;
-}
+        /* Countdown Section - Formal */
+        .countdown-section {
+            background: linear-gradient(45deg, #64748b 0%, #475569 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
 
         .countdown-timer {
             display: flex;
@@ -491,91 +492,91 @@ body {
             opacity: 0.8;
         }
 
-/* Schedule Section - Formal */
-.schedule-section {
-    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-    border: 1px solid #cbd5e1;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-}
+        /* Schedule Section - Formal */
+        .schedule-section {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border: 1px solid #cbd5e1;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
 
-.schedule-title {
-    font-weight: 700;
-    color: #1e40af;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .schedule-title {
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
         .agenda-timeline {
             position: relative;
             padding-left: 2rem;
         }
 
-.agenda-timeline::before {
-    content: '';
-    position: absolute;
-    left: 0.5rem;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: #1e40af;
-}
+        .agenda-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #1e40af;
+        }
 
         .timeline-item {
             position: relative;
             margin-bottom: 1.5rem;
         }
 
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -2rem;
-    top: 0.25rem;
-    width: 12px;
-    height: 12px;
-    background: #1e40af;
-    border-radius: 50%;
-    border: 3px solid white;
-    box-shadow: 0 0 0 3px #1e40af;
-}
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.25rem;
+            width: 12px;
+            height: 12px;
+            background: #1e40af;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #1e40af;
+        }
 
-/* Location Section - Formal */
-.location-section {
-    background: linear-gradient(135deg, #fefce8, #fef3c7);
-    border: 1px solid #d97706;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-}
+        /* Location Section - Formal */
+        .location-section {
+            background: linear-gradient(135deg, #fefce8, #fef3c7);
+            border: 1px solid #d97706;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
 
-.location-title {
-    font-weight: 700;
-    color: #b45309;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .location-title {
+            font-weight: 700;
+            color: #b45309;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-/* Participants Section - Formal */
-.participants-section {
-    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-    border: 1px solid #6b7280;
-    border-radius: 1rem;
-    padding: 1.5rem;
-}
+        /* Participants Section - Formal */
+        .participants-section {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            border: 1px solid #6b7280;
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
 
-.participants-title {
-    font-weight: 700;
-    color: #374151;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .participants-title {
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
         .agenda-content {
             font-size: 1.125rem;
@@ -596,11 +597,11 @@ body {
             padding: 0.5rem 1rem;
         }
 
-/* Pagination - Formal */
-.pagination-links .page-item.active .page-link {
-    background: #1e40af;
-    border-color: #1e40af;
-}
+        /* Pagination - Formal */
+        .pagination-links .page-item.active .page-link {
+            background: #1e40af;
+            border-color: #1e40af;
+        }
 
         .modal-content {
             border-radius: 1rem;
@@ -662,31 +663,31 @@ body {
             }
         }
 
-/* Table Row States - Formal */
-.agenda-upcoming {
-    border-left: 4px solid #1e40af;
-}
+        /* Table Row States - Formal */
+        .agenda-upcoming {
+            border-left: 4px solid #1e40af;
+        }
 
-.agenda-past {
-    opacity: 0.7;
-    border-left: 4px solid #64748b;
-}
+        .agenda-past {
+            opacity: 0.7;
+            border-left: 4px solid #64748b;
+        }
 
-.agenda-today {
-    border-left: 4px solid #d97706;
-    background: #fffbeb;
-}
+        .agenda-today {
+            border-left: 4px solid #d97706;
+            background: #fffbeb;
+        }
 
-        /* Breadcrumb Formal */
-.breadcrumb-custom .breadcrumb-item a {
-    color: #1e40af;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+                /* Breadcrumb Formal */
+        .breadcrumb-custom .breadcrumb-item a {
+            color: #1e40af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
-.breadcrumb-custom .breadcrumb-item a:hover {
-    color: #1e3a8a;
-}
+        .breadcrumb-custom .breadcrumb-item a:hover {
+            color: #1e3a8a;
+        }
 
         /* Print styles */
         @media print {
@@ -695,6 +696,251 @@ body {
             }
             .page-main-wrapper {
                 margin-left: 0 !important;
+            }
+        }
+
+        /* Perbaikan untuk wrapper judul agenda */
+        .agenda-info {
+            width: 100%;
+            min-width: 0; /* Penting untuk flex items agar bisa menyusut */
+        }
+
+        /* Perbaikan untuk judul agenda yang panjang */
+        .agenda-title-wrapper {
+            width: 100%;
+            min-width: 0; /* Penting untuk flex items */
+        }
+
+        .agenda-title {
+            font-weight: 700;
+            color: #1f2937;
+            font-size: 1rem;
+            line-height: 1.4;
+            margin-bottom: 0.25rem;
+            
+            /* CSS untuk wrapping text yang panjang */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            hyphens: auto;
+            
+            /* Batasi maksimal 3 baris untuk judul */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            
+            /* Fallback untuk browser yang tidak mendukung line-clamp */
+            max-height: 4.2em !important; /* 3 baris x 1.4 line-height */
+        }
+
+        /* Tambahkan class baru untuk slug */
+        /* .agenda-slug {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-family: 'Courier New', monospace;
+            background: #f3f4f6;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-top: 0.25rem; */
+            
+            /* CSS untuk wrapping slug yang panjang */
+            /* word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-all; */ /* break-all untuk URL/slug */
+            
+            /* Batasi maksimal 2 baris untuk slug */
+            /* display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden; */
+            
+            /* Fallback untuk browser yang tidak mendukung line-clamp */
+            /* max-height: 2.4em !important; /* 2 baris x 1.2 line-height */
+            /* line-height: 1.2 !important;
+        } */
+
+        /* Perbaikan untuk deskripsi singkat */
+        .agenda-description-short {
+            font-size: 0.875rem !important;
+            color: #6b7280 !important;
+            margin-top: 0.25rem !important;
+            margin-bottom: 0.5rem !important;
+            line-height: 1.4 !important;
+            
+            /* CSS untuk deskripsi */
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            
+            /* Batasi maksimal 2 baris untuk deskripsi */
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+            
+            /* Fallback */
+            max-height: 2.8em !important; /* 2 baris x 1.4 line-height */
+        }
+
+        /* Perbaikan untuk tabel agar lebih responsif dengan konten panjang */
+        .custom-table {
+            table-layout: auto !important; /* Ubah dari fixed ke auto */
+        }
+
+        /* Pengaturan lebar kolom yang lebih fleksibel */
+        .custom-table th:nth-child(1), 
+        .custom-table td:nth-child(1) {
+            width: 35% !important; /* Kolom agenda diperbesar */
+            min-width: 250px !important;
+        }
+
+        .custom-table th:nth-child(2), 
+        .custom-table td:nth-child(2) {
+            width: 12% !important; /* Kolom kategori */
+            min-width: 100px !important;
+        }
+
+        .custom-table th:nth-child(3), 
+        .custom-table td:nth-child(3) {
+            width: 18% !important; /* Kolom tanggal */
+            min-width: 120px !important;
+        }
+
+        .custom-table th:nth-child(4), 
+        .custom-table td:nth-child(4) {
+            width: 20% !important; /* Kolom lokasi */
+            min-width: 150px !important;
+        }
+
+        .custom-table th:nth-child(5), 
+        .custom-table td:nth-child(5) {
+            width: 15% !important; /* Kolom aksi */
+            min-width: 120px !important;
+        }
+
+        /* Perbaikan untuk alignment vertikal */
+        .custom-table td {
+            vertical-align: top !important;
+        }
+
+        /* Perbaikan untuk lokasi yang panjang */
+        .agenda-location {
+            font-size: 0.875rem;
+            color: #6b7280;
+            display: flex;
+            align-items: flex-start; /* Ubah ke flex-start */
+            gap: 0.25rem;
+            
+            /* CSS untuk wrapping lokasi yang panjang */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .agenda-location i {
+            margin-top: 0.125rem !important;
+            flex-shrink: 0 !important; /* Icon tidak menyusut */
+        }
+
+        /* Perbaikan untuk meta info agar tidak wrap badge */
+        .meta-info {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 0.5rem !important;
+            margin-top: 0.5rem !important;
+            align-items: center !important;
+        }
+
+        .status-badge, .kategori-badge {
+            white-space: nowrap !important; /* Jangan wrap untuk badge */
+            flex-shrink: 0 !important;
+        }
+
+        /* Responsive design untuk mobile */
+        @media (max-width: 768px) {
+            .custom-table th:nth-child(1), 
+            .custom-table td:nth-child(1) {
+                min-width: 200px !important;
+            }
+            
+            .agenda-title {
+                font-size: 0.875rem !important;
+                -webkit-line-clamp: 2 !important; /* Kurangi baris di mobile */
+                max-height: 2.45em !important; /* 2 baris x 1.4 line-height */
+            }
+            
+            .agenda-slug {
+                font-size: 0.625rem !important;
+                -webkit-line-clamp: 1 !important; /* Hanya 1 baris di mobile */
+                max-height: 1.2em !important;
+            }
+            
+            .agenda-description-short {
+                -webkit-line-clamp: 1 !important;
+                max-height: 1.4em !important;
+            }
+        }
+
+        /* Perbaikan untuk sidebar detail agenda (info-value) */
+        .info-value {
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            word-break: break-word !important;
+            line-height: 1.4 !important;
+            text-align: right !important;
+        }
+
+        /* Khusus untuk slug di sidebar */
+        .info-value.slug-value {
+            font-family: 'Courier New', monospace !important;
+            font-size: 0.875rem !important;
+            word-break: break-all !important; /* break-all untuk slug */
+        }
+
+        /* Tooltip untuk teks yang terpotong */
+        .text-truncated {
+            position: relative !important;
+            cursor: help !important;
+        }
+
+        .text-truncated:hover::after {
+            content: attr(data-full-text) !important;
+            position: absolute !important;
+            bottom: 100% !important;
+            left: 0 !important;
+            background: #1f2937 !important;
+            color: white !important;
+            padding: 0.5rem !important;
+            border-radius: 0.25rem !important;
+            font-size: 0.75rem !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            max-width: 300px !important;
+            z-index: 1000 !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+            pointer-events: none !important;
+        }
+
+        /* Perbaikan khusus untuk browser Safari */
+        @supports (-webkit-appearance: none) {
+            .agenda-title,
+            .agenda-slug,
+            .agenda-description-short {
+                /* Fallback untuk Safari yang tidak mendukung line-clamp dengan baik */
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+        }
+
+        /* Print styles - jangan truncate saat print */
+        @media print {
+            .agenda-title,
+            .agenda-slug,
+            .agenda-description-short {
+                -webkit-line-clamp: unset !important;
+                display: block !important;
+                overflow: visible !important;
+                max-height: none !important;
             }
         }
     </style>
@@ -1107,52 +1353,77 @@ body {
                             <table class="table custom-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 30%">Agenda</th>
-                                        <th style="width: 15%">Kategori</th>
-                                        <th style="width: 20%">Tanggal & Waktu</th>
+                                        <th style="width: 35%">Agenda</th>
+                                        <th style="width: 12%">Kategori</th>
+                                        <th style="width: 18%">Tanggal & Waktu</th>
                                         <th style="width: 20%">Lokasi</th>
                                         <th style="width: 15%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($agenda ?? [] as $index => $item)
-                                    @php
-                                        $isToday = $item->tanggal_mulai && $item->tanggal_mulai->isToday();
-                                        $isPast = $item->tanggal_mulai && $item->tanggal_mulai->isPast() && !$isToday;
-                                        $rowClass = $isToday ? 'agenda-today' : ($isPast ? 'agenda-past' : 'agenda-upcoming');
-                                    @endphp
-                                    <tr class="agenda-fade-in {{ $rowClass }}" style="animation-delay: {{ 0.3 + ($index * 0.1) }}s;">
-                                        <td>
-                                            <div class="agenda-info">
-                                                <div class="agenda-title fw-bold">
-                                                    {{ $item->judul ?? 'Agenda Kegiatan' }}
-                                                </div>
-                                                @if($item->deskripsi)
-                                                    <small class="text-muted d-block mt-1">{{ Str::limit($item->deskripsi, 80) }}</small>
-                                                @endif
-                                                <div class="mt-1">
-                                                    <span class="status-badge status-{{ $item->status ?? 'planned' }}">
-                                                        {{ ucfirst($item->status ?? 'Planned') }}
-                                                    </span>
-                                                    @if($item->peserta_target)
-                                                        <small class="text-muted ms-2">
+                                        @php
+                                            $isToday = $item->tanggal_mulai && $item->tanggal_mulai->isToday();
+                                            $isPast = $item->tanggal_mulai && $item->tanggal_mulai->isPast() && !$isToday;
+                                            $rowClass = $isToday ? 'agenda-today' : ($isPast ? 'agenda-past' : 'agenda-upcoming');
+                                        @endphp
+
+                                        <tr class="agenda-fade-in {{ $rowClass }}" style="animation-delay: {{ 0.3 + ($index * 0.1) }}s;">
+                                            <td>
+                                                <div class="agenda-info">
+                                                    <!-- Judul Agenda dengan wrapping yang diperbaiki -->
+                                                    <div class="agenda-title text-truncated" 
+                                                        data-full-text="{{ $item->judul ?? 'Agenda Kegiatan' }}"
+                                                        title="{{ $item->judul ?? 'Agenda Kegiatan' }}">
+                                                        {{ $item->judul ?? 'Agenda Kegiatan' }}
+                                                    </div>
+                                                    
+                                                    <!-- SLUG DIHILANGKAN DARI SINI -->
+                                                    
+                                                    <!-- Deskripsi singkat jika ada -->
+                                                    @if($item->deskripsi)
+                                                    <div class="agenda-description-short text-truncated" 
+                                                        data-full-text="{{ $item->deskripsi }}"
+                                                        title="{{ $item->deskripsi }}">
+                                                        {{ Str::limit($item->deskripsi, 120) }}
+                                                    </div>
+                                                    @endif
+                                                    
+                                                    <!-- Meta information -->
+                                                    <div class="meta-info">
+                                                        <span class="status-badge status-{{ $item->status ?? 'planned' }}">
+                                                            {{ ucfirst($item->status ?? 'Planned') }}
+                                                        </span>
+                                                        @if($item->peserta_target)
+                                                        <small class="text-muted">
                                                             <i class="fas fa-users"></i> {{ $item->peserta_target }} peserta
                                                         </small>
+                                                        @endif
+                                                        @if($item->biaya !== null)
+                                                            @if($item->biaya == 0)
+                                                            <small class="text-success">
+                                                                <i class="fas fa-gift"></i> Gratis
+                                                            </small>
+                                                            @else
+                                                            <small class="text-info">
+                                                                <i class="fas fa-money-bill-wave"></i> Rp {{ number_format($item->biaya, 0, ',', '.') }}
+                                                            </small>
+                                                            @endif
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="kategori-badge">{{ ucfirst($item->kategori ?? 'Lainnya') }}</span>
+                                            </td>
+                                            <td>
+                                                <div class="agenda-date">
+                                                    {{ $item->tanggal_mulai ? $item->tanggal_mulai->format('d/m/Y') : date('d/m/Y') }}
+                                                    @if($item->tanggal_selesai && !$item->tanggal_mulai->eq($item->tanggal_selesai))
+                                                        <br><small class="text-muted">s/d {{ $item->tanggal_selesai->format('d/m/Y') }}</small>
                                                     @endif
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="kategori-badge">{{ ucfirst($item->kategori ?? 'Lainnya') }}</span>
-                                        </td>
-                                        <td>
-                                            <div class="agenda-date">
-                                                {{ $item->tanggal_mulai ? $item->tanggal_mulai->format('d/m/Y') : date('d/m/Y') }}
-                                                @if($item->tanggal_selesai && !$item->tanggal_mulai->eq($item->tanggal_selesai))
-                                                    <br><small class="text-muted">s/d {{ $item->tanggal_selesai->format('d/m/Y') }}</small>
-                                                @endif
-                                            </div>
-                                            @if($item->waktu_mulai)
+                                                @if($item->waktu_mulai)
                                                 <div class="agenda-time">
                                                     <i class="fas fa-clock me-1"></i>
                                                     {{ \Carbon\Carbon::parse($item->waktu_mulai)->format('H:i') }}
@@ -1161,54 +1432,47 @@ body {
                                                     @endif
                                                     WIB
                                                 </div>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($item->lokasi)
-                                                <div class="agenda-location">
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($item->lokasi)
+                                                <div class="agenda-location text-truncated" 
+                                                    data-full-text="{{ $item->lokasi }}"
+                                                    title="{{ $item->lokasi }}">
                                                     <i class="fas fa-map-marker-alt"></i>
-                                                    {{ Str::limit($item->lokasi, 40) }}
+                                                    <span>{{ $item->lokasi }}</span>
                                                 </div>
-                                            @else
+                                                @else
                                                 <span class="text-muted">-</span>
-                                            @endif
-                                            @if($item->biaya && $item->biaya > 0)
-                                                <small class="text-success d-block">
-                                                    <i class="fas fa-money-bill-wave"></i> Rp {{ number_format($item->biaya, 0, ',', '.') }}
-                                                </small>
-                                            @elseif($item->biaya == 0)
-                                                <small class="text-info d-block">
-                                                    <i class="fas fa-gift"></i> Gratis
-                                                </small>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <button class="action-btn btn-delete" onclick="deleteItem({{ $item->id ?? ($index + 1) }})"
-                                                        title="Hapus" data-bs-toggle="tooltip">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                                <button class="action-btn btn-edit" onclick="editItem({{ $item->id ?? ($index + 1) }})"
-                                                        title="Edit" data-bs-toggle="tooltip">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="action-btn btn-view" onclick="viewItem({{ $item->id ?? ($index + 1) }})"
-                                                        title="Lihat" data-bs-toggle="tooltip">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button class="action-btn btn-delete" onclick="deleteItem({{ $item->id ?? ($index + 1) }})"
+                                                            title="Hapus" data-bs-toggle="tooltip">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                    <button class="action-btn btn-edit" onclick="editItem({{ $item->id ?? ($index + 1) }})"
+                                                            title="Edit" data-bs-toggle="tooltip">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="action-btn btn-view" onclick="viewItem({{ $item->id ?? ($index + 1) }})"
+                                                            title="Lihat" data-bs-toggle="tooltip">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center py-4">
-                                            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
-                                            <p class="text-muted">Belum ada agenda yang ditambahkan</p>
-                                            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#tambahAgendaModal">
-                                                <i class="fas fa-plus me-1"></i>Tambah Agenda Pertama
-                                            </button>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4">
+                                                <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                                                <p class="text-muted">Belum ada agenda yang ditambahkan</p>
+                                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#tambahAgendaModal">
+                                                    <i class="fas fa-plus me-1"></i>Tambah Agenda Pertama
+                                                </button>
+                                            </td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>

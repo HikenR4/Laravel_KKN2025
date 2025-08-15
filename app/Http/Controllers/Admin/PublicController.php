@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Http\Controllers\Admin;
+
 
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
@@ -14,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+
 
 class PublicController extends Controller
 {
@@ -29,6 +32,7 @@ class PublicController extends Controller
         'olahraga' => 'Olahraga'
     ];
 
+
     /**
      * Record visit untuk tracking statistik
      */
@@ -41,6 +45,7 @@ class PublicController extends Controller
             return null;
         }
     }
+
 
     /**
      * Format views untuk display
@@ -55,6 +60,7 @@ class PublicController extends Controller
         return (string) $views;
     }
 
+
     /**
      * Landing page dengan data dari database
      */
@@ -64,10 +70,12 @@ class PublicController extends Controller
             // Record kunjungan
             $this->recordVisit('landing');
 
+
             // Ambil profil nagari (cache selama 1 jam)
             $profilNagari = Cache::remember('profil_nagari', 3600, function () {
                 return ProfilNagari::first();
             });
+
 
             // Ambil statistik kependudukan (cache selama 30 menit)
             $statistik = Cache::remember('statistik_kependudukan', 1800, function () {
@@ -79,6 +87,7 @@ class PublicController extends Controller
                 ];
             });
 
+
             // Ambil views video (cache selama 5 menit)
             $videoViews = Cache::remember('video_views', 300, function () use ($profilNagari) {
                 if ($profilNagari && ($profilNagari->hasVideoFile() || $profilNagari->hasExternalVideo())) {
@@ -89,6 +98,7 @@ class PublicController extends Controller
                 return '0';
             });
 
+
             // Ambil berita terbaru (cache selama 15 menit)
             $latestBerita = Cache::remember('latest_berita', 900, function () {
                 return Berita::published()
@@ -97,6 +107,7 @@ class PublicController extends Controller
                     ->take(3)
                     ->get();
             });
+
 
             // Ambil agenda mendatang (cache selama 15 menit)
             $upcomingAgenda = Cache::remember('upcoming_agenda', 900, function () {
@@ -108,6 +119,7 @@ class PublicController extends Controller
                     ->get();
             });
 
+
             // Ambil pengumuman aktif (cache selama 10 menit)
             $activePengumuman = Cache::remember('active_pengumuman', 600, function () {
                 return Pengumuman::active()
@@ -117,6 +129,7 @@ class PublicController extends Controller
                     ->get();
             });
 
+
             Log::info('Landing page data loaded', [
                 'profil_nagari' => $profilNagari ? $profilNagari->nama_nagari : 'Not found',
                 'statistik' => $statistik,
@@ -124,6 +137,7 @@ class PublicController extends Controller
                 'has_video_file' => $profilNagari ? $profilNagari->hasVideoFile() : false,
                 'has_external_video' => $profilNagari ? $profilNagari->hasExternalVideo() : false,
             ]);
+
 
             return view('public.landing', compact(
                 'profilNagari',
@@ -134,10 +148,12 @@ class PublicController extends Controller
                 'activePengumuman'
             ));
 
+
         } catch (\Exception $e) {
             Log::error('Error in landing page: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
+
 
             // Return with minimal data if error occurs
             return view('public.landing', [
@@ -156,6 +172,7 @@ class PublicController extends Controller
         }
     }
 
+
     /**
      * API endpoint untuk mendapatkan profil nagari
      */
@@ -166,12 +183,14 @@ class PublicController extends Controller
                 return ProfilNagari::first();
             });
 
+
             if (!$profil) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Profil nagari tidak ditemukan'
                 ], 404);
             }
+
 
             return response()->json([
                 'success' => true,
@@ -189,8 +208,10 @@ class PublicController extends Controller
                 ]
             ]);
 
+
         } catch (\Exception $e) {
             Log::error('Error getting profil nagari: ' . $e->getMessage());
+
 
             return response()->json([
                 'success' => false,
@@ -198,6 +219,7 @@ class PublicController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * API endpoint untuk mendapatkan data video profil
@@ -207,12 +229,14 @@ class PublicController extends Controller
         try {
             $profil = ProfilNagari::first();
 
+
             if (!$profil) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Profil nagari tidak ditemukan'
                 ], 404);
             }
+
 
             $videoData = [
                 'has_video' => false,
@@ -223,6 +247,7 @@ class PublicController extends Controller
                 'durasi' => $profil->video_durasi_formatted ?? '5:42',
                 'size' => $profil->video_size_formatted ?? null,
             ];
+
 
             // Check for video file methods
             if ($profil->hasVideoFile()) {
@@ -240,13 +265,16 @@ class PublicController extends Controller
                 ]);
             }
 
+
             return response()->json([
                 'success' => true,
                 'data' => $videoData
             ]);
 
+
         } catch (\Exception $e) {
             Log::error('Error getting video profil: ' . $e->getMessage());
+
 
             return response()->json([
                 'success' => false,
@@ -254,6 +282,7 @@ class PublicController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * API endpoint untuk increment video views
@@ -263,19 +292,24 @@ class PublicController extends Controller
         try {
             $videoType = $request->input('video_type', 'local');
 
+
             // Record visit untuk video
             $stat = $this->recordVisit('video-profil', true);
+
 
             if (!$stat) {
                 throw new \Exception('Failed to record visit');
             }
 
+
             // Format views untuk response
             $views = $stat->jumlah_kunjungan;
             $formattedViews = $this->formatViews($views);
 
+
             // Clear cache setelah increment
             Cache::forget('video_views');
+
 
             return response()->json([
                 'success' => true,
@@ -284,8 +318,10 @@ class PublicController extends Controller
                 'type' => $videoType
             ]);
 
+
         } catch (\Exception $e) {
             Log::error('Error incrementing video views: ' . $e->getMessage());
+
 
             return response()->json([
                 'success' => false,
@@ -293,6 +329,7 @@ class PublicController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * API endpoint untuk mendapatkan statistik publik
@@ -302,6 +339,7 @@ class PublicController extends Controller
         try {
             $stats = Cache::remember('public_statistics', 1800, function () {
                 $profil = ProfilNagari::first();
+
 
                 return [
                     'penduduk' => [
@@ -323,13 +361,16 @@ class PublicController extends Controller
                 ];
             });
 
+
             return response()->json([
                 'success' => true,
                 'data' => $stats
             ]);
 
+
         } catch (\Exception $e) {
             Log::error('Error getting public statistics: ' . $e->getMessage());
+
 
             return response()->json([
                 'success' => false,
@@ -337,6 +378,7 @@ class PublicController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * API endpoint untuk mendapatkan konten terbaru
@@ -347,7 +389,9 @@ class PublicController extends Controller
             $type = $request->input('type', 'all');
             $limit = $request->input('limit', 5);
 
+
             $content = [];
+
 
             if ($type === 'all' || $type === 'berita') {
                 $content['berita'] = Cache::remember("latest_berita_{$limit}", 900, function () use ($limit) {
@@ -372,6 +416,7 @@ class PublicController extends Controller
                 });
             }
 
+
             if ($type === 'all' || $type === 'agenda') {
                 $content['agenda'] = Cache::remember("upcoming_agenda_{$limit}", 900, function () use ($limit) {
                     return Agenda::upcoming()
@@ -395,6 +440,7 @@ class PublicController extends Controller
                 });
             }
 
+
             if ($type === 'all' || $type === 'pengumuman') {
                 $content['pengumuman'] = Cache::remember("active_pengumuman_{$limit}", 600, function () use ($limit) {
                     return Pengumuman::active()
@@ -416,13 +462,16 @@ class PublicController extends Controller
                 });
             }
 
+
             return response()->json([
                 'success' => true,
                 'data' => $content
             ]);
 
+
         } catch (\Exception $e) {
             Log::error('Error getting latest content: ' . $e->getMessage());
+
 
             return response()->json([
                 'success' => false,
@@ -431,9 +480,11 @@ class PublicController extends Controller
         }
     }
 
+
     public function berita(Request $request)
     {
         $query = Berita::published()->with('admin')->latest('tanggal');
+
 
         // Search functionality
         if ($request->has('search') && $request->search != '') {
@@ -445,22 +496,27 @@ class PublicController extends Controller
             });
         }
 
+
         // Filter by category
         if ($request->has('kategori') && $request->kategori != '') {
             $query->where('kategori', $request->kategori);
         }
 
+
         // Get berita with pagination
         $berita = $query->paginate(9);
 
+
         // Get all available categories
         $categories = collect($this->availableCategories);
+
 
         // Get category counts for sidebar
         $categoryCounts = Berita::published()
             ->selectRaw('kategori, COUNT(*) as count')
             ->groupBy('kategori')
             ->pluck('count', 'kategori');
+
 
         // Add counts to categories
         $categoriesWithCounts = $categories->map(function($label, $key) use ($categoryCounts) {
@@ -470,8 +526,10 @@ class PublicController extends Controller
             ];
         });
 
+
         // Get total published berita count
         $totalBerita = Berita::published()->count();
+
 
         // Get featured berita
         $featuredBerita = Berita::published()
@@ -479,6 +537,7 @@ class PublicController extends Controller
             ->latest('tanggal')
             ->take(3)
             ->get();
+
 
         return view('public.berita', compact(
             'berita',
@@ -489,6 +548,7 @@ class PublicController extends Controller
         ));
     }
 
+
     public function beritaDetail($slug)
     {
         try {
@@ -498,8 +558,10 @@ class PublicController extends Controller
                 ->where('slug', $slug)
                 ->firstOrFail();
 
+
             // Increment views
             $berita->increment('views');
+
 
             // Get related berita (same category, exclude current)
             $relatedBerita = Berita::published()
@@ -509,12 +571,14 @@ class PublicController extends Controller
                 ->take(3)
                 ->get();
 
+
             // Get latest berita for sidebar
             $latestBerita = Berita::published()
                 ->where('id', '!=', $berita->id)
                 ->latest('tanggal')
                 ->take(5)
                 ->get();
+
 
             // Get popular berita (by views) for sidebar
             $popularBerita = Berita::published()
@@ -523,8 +587,10 @@ class PublicController extends Controller
                 ->take(5)
                 ->get();
 
+
             // Get total published berita count for categories widget
             $totalBerita = Berita::published()->count();
+
 
             // Get category counts for sidebar
             $categoryCounts = Berita::published()
@@ -532,8 +598,10 @@ class PublicController extends Controller
                 ->groupBy('kategori')
                 ->pluck('count', 'kategori');
 
+
             // Get all available categories for sidebar
             $categories = collect($this->availableCategories);
+
 
             return view('public.detail-berita', compact(
                 'berita',
@@ -545,15 +613,18 @@ class PublicController extends Controller
                 'categories'
             ));
 
+
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Error loading berita detail: ' . $e->getMessage());
+
 
             // Redirect with error message
             return redirect()->route('berita')
                 ->with('error', 'Berita yang Anda cari tidak ditemukan.');
         }
     }
+
 
     public function beritaByKategori($kategori)
     {
@@ -562,20 +633,24 @@ class PublicController extends Controller
             abort(404, 'Kategori tidak ditemukan');
         }
 
+
         $berita = Berita::published()
             ->with('admin')
             ->where('kategori', $kategori)
             ->latest('tanggal')
             ->paginate(9);
 
+
         // Get all available categories
         $categories = collect($this->availableCategories);
+
 
         // Get category counts for sidebar
         $categoryCounts = Berita::published()
             ->selectRaw('kategori, COUNT(*) as count')
             ->groupBy('kategori')
             ->pluck('count', 'kategori');
+
 
         // Add counts to categories
         $categoriesWithCounts = $categories->map(function($label, $key) use ($categoryCounts) {
@@ -585,10 +660,13 @@ class PublicController extends Controller
             ];
         });
 
+
         // Get total published berita count
         $totalBerita = Berita::published()->count();
 
+
         $featuredBerita = collect(); // Empty collection for category pages
+
 
         return view('public.berita', compact(
             'berita',
@@ -601,6 +679,7 @@ class PublicController extends Controller
         ->with('selectedKategoriLabel', $this->availableCategories[$kategori]);
     }
 
+
     public function home()
     {
         // Ambil data dari database untuk homepage
@@ -608,11 +687,13 @@ class PublicController extends Controller
         $pengumuman = Pengumuman::active()->latest('tanggal_mulai')->take(3)->get();
         $agenda = Agenda::upcoming()->latest('tanggal_mulai')->take(3)->get();
 
+
         // Data statistik
         $totalPenduduk = DataPenduduk::active()->count();
         $totalKK = DataPenduduk::active()->distinct('no_kk')->count('no_kk');
         $totalPria = DataPenduduk::active()->pria()->count();
         $totalWanita = DataPenduduk::active()->wanita()->count();
+
 
         return view('public.home', compact(
             'berita',
@@ -625,6 +706,7 @@ class PublicController extends Controller
         ));
     }
 
+
     /**
      * Get available categories
      */
@@ -632,6 +714,7 @@ class PublicController extends Controller
     {
         return $this->availableCategories;
     }
+
 
     /**
      * Get category label by key
@@ -641,6 +724,7 @@ class PublicController extends Controller
         return $this->availableCategories[$key] ?? ucfirst($key);
     }
 
+
     /**
      * Search berita by keyword
      */
@@ -648,9 +732,11 @@ class PublicController extends Controller
     {
         $keyword = $request->get('q', '');
 
+
         if (empty($keyword)) {
             return redirect()->route('berita');
         }
+
 
         $berita = Berita::published()
             ->with('admin')
@@ -663,14 +749,17 @@ class PublicController extends Controller
             ->latest('tanggal')
             ->paginate(9);
 
+
         // Get all available categories
         $categories = collect($this->availableCategories);
+
 
         // Get category counts for sidebar
         $categoryCounts = Berita::published()
             ->selectRaw('kategori, COUNT(*) as count')
             ->groupBy('kategori')
             ->pluck('count', 'kategori');
+
 
         // Add counts to categories
         $categoriesWithCounts = $categories->map(function($label, $key) use ($categoryCounts) {
@@ -680,10 +769,13 @@ class PublicController extends Controller
             ];
         });
 
+
         // Get total published berita count
         $totalBerita = Berita::published()->count();
 
+
         $featuredBerita = collect(); // Empty for search results
+
 
         return view('public.berita', compact(
             'berita',
@@ -693,6 +785,7 @@ class PublicController extends Controller
             'featuredBerita'
         ))->with('searchKeyword', $keyword);
     }
+
 
     /**
      * Get berita by tag
@@ -705,14 +798,17 @@ class PublicController extends Controller
             ->latest('tanggal')
             ->paginate(9);
 
+
         // Get all available categories
         $categories = collect($this->availableCategories);
+
 
         // Get category counts for sidebar
         $categoryCounts = Berita::published()
             ->selectRaw('kategori, COUNT(*) as count')
             ->groupBy('kategori')
             ->pluck('count', 'kategori');
+
 
         // Add counts to categories
         $categoriesWithCounts = $categories->map(function($label, $key) use ($categoryCounts) {
@@ -722,10 +818,13 @@ class PublicController extends Controller
             ];
         });
 
+
         // Get total published berita count
         $totalBerita = Berita::published()->count();
 
+
         $featuredBerita = collect(); // Empty for tag results
+
 
         return view('public.berita', compact(
             'berita',
@@ -736,11 +835,13 @@ class PublicController extends Controller
         ))->with('selectedTag', $tag);
     }
 
+
     public function agenda(Request $request)
     {
         $query = Agenda::with('admin')
             ->where('status', '!=', 'cancelled')
             ->latest('tanggal_mulai');
+
 
         // Search functionality
         if ($request->has('search') && $request->search != '') {
@@ -752,15 +853,18 @@ class PublicController extends Controller
             });
         }
 
+
         // Filter by category
         if ($request->has('kategori') && $request->kategori != '') {
             $query->where('kategori', $request->kategori);
         }
 
+
         // Filter by status
         if ($request->has('status') && $request->status != '') {
             $query->where('status', $request->status);
         }
+
 
         // Filter by date range
         if ($request->has('tanggal') && $request->tanggal != '') {
@@ -774,8 +878,10 @@ class PublicController extends Controller
             }
         }
 
+
         // Get agenda with pagination
         $agenda = $query->paginate(12);
+
 
         // Get available categories with counts
         $categories = [
@@ -789,10 +895,12 @@ class PublicController extends Controller
             'lainnya' => 'Lainnya'
         ];
 
+
         $categoryCounts = Agenda::where('status', '!=', 'cancelled')
             ->selectRaw('kategori, COUNT(*) as count')
             ->groupBy('kategori')
             ->pluck('count', 'kategori');
+
 
         // Add counts to categories
         $categoriesWithCounts = collect($categories)->map(function($label, $key) use ($categoryCounts) {
@@ -802,12 +910,14 @@ class PublicController extends Controller
             ];
         });
 
+
         // Get upcoming agenda for sidebar
         $upcomingAgenda = Agenda::upcoming()
             ->where('status', '!=', 'cancelled')
             ->latest('tanggal_mulai')
             ->take(5)
             ->get();
+
 
         // Get featured/important agenda
         $featuredAgenda = Agenda::upcoming()
@@ -816,6 +926,7 @@ class PublicController extends Controller
             ->latest('tanggal_mulai')
             ->take(3)
             ->get();
+
 
         return view('public.agenda', compact(
             'agenda',
@@ -826,6 +937,7 @@ class PublicController extends Controller
         ));
     }
 
+
     public function agendaDetail($slug)
     {
         try {
@@ -835,6 +947,7 @@ class PublicController extends Controller
                 ->where('status', '!=', 'cancelled')
                 ->firstOrFail();
 
+
             // Get related agenda (same category, exclude current)
             $relatedAgenda = Agenda::where('kategori', $agenda->kategori)
                 ->where('id', '!=', $agenda->id)
@@ -842,6 +955,7 @@ class PublicController extends Controller
                 ->latest('tanggal_mulai')
                 ->take(3)
                 ->get();
+
 
             // Get upcoming agenda for sidebar
             $upcomingAgenda = Agenda::upcoming()
@@ -851,17 +965,20 @@ class PublicController extends Controller
                 ->take(5)
                 ->get();
 
+
             return view('public.detail-agenda', compact(
                 'agenda',
                 'relatedAgenda',
                 'upcomingAgenda'
             ));
 
+
         } catch (\Exception $e) {
             return redirect()->route('agenda')
                 ->with('error', 'Agenda yang Anda cari tidak ditemukan.');
         }
     }
+
 
     public function agendaByKategori($kategori)
     {
@@ -876,10 +993,12 @@ class PublicController extends Controller
             'lainnya' => 'Lainnya'
         ];
 
+
         // Validate category
         if (!array_key_exists($kategori, $availableCategories)) {
             abort(404, 'Kategori tidak ditemukan');
         }
+
 
         $agenda = Agenda::with('admin')
             ->where('kategori', $kategori)
@@ -887,11 +1006,13 @@ class PublicController extends Controller
             ->latest('tanggal_mulai')
             ->paginate(12);
 
+
         // Get categories with counts
         $categoryCounts = Agenda::where('status', '!=', 'cancelled')
             ->selectRaw('kategori, COUNT(*) as count')
             ->groupBy('kategori')
             ->pluck('count', 'kategori');
+
 
         $categoriesWithCounts = collect($availableCategories)->map(function($label, $key) use ($categoryCounts) {
             return [
@@ -900,6 +1021,7 @@ class PublicController extends Controller
             ];
         });
 
+
         // Get upcoming agenda for sidebar
         $upcomingAgenda = Agenda::upcoming()
             ->where('status', '!=', 'cancelled')
@@ -907,7 +1029,9 @@ class PublicController extends Controller
             ->take(5)
             ->get();
 
+
         $featuredAgenda = collect(); // Empty for category pages
+
 
         return view('public.agenda', compact(
             'agenda',
@@ -918,6 +1042,7 @@ class PublicController extends Controller
         ->with('selectedKategori', $kategori)
         ->with('selectedKategoriLabel', $availableCategories[$kategori]);
     }
+
 
     /**
      * API untuk search suggestions
@@ -930,7 +1055,9 @@ class PublicController extends Controller
                 return response()->json(['suggestions' => []]);
             }
 
+
             $suggestions = [];
+
 
             // Search in berita
             $beritaSuggestions = Berita::published()
@@ -946,6 +1073,7 @@ class PublicController extends Controller
                     ];
                 });
 
+
             // Search in agenda
             $agendaSuggestions = Agenda::where('judul', 'like', '%' . $query . '%')
                 ->where('status', '!=', 'cancelled')
@@ -960,15 +1088,19 @@ class PublicController extends Controller
                     ];
                 });
 
+
             $suggestions = $beritaSuggestions->concat($agendaSuggestions);
 
+
             return response()->json(['suggestions' => $suggestions->take(8)]);
+
 
         } catch (\Exception $e) {
             Log::error('Error getting search suggestions: ' . $e->getMessage());
             return response()->json(['suggestions' => []]);
         }
     }
+
 
     /**
      * API untuk popular content
@@ -978,6 +1110,7 @@ class PublicController extends Controller
         try {
             $type = $request->get('type', 'berita');
             $limit = $request->get('limit', 5);
+
 
             if ($type === 'berita') {
                 $content = Berita::published()
@@ -996,10 +1129,12 @@ class PublicController extends Controller
                 $content = collect();
             }
 
+
             return response()->json([
                 'success' => true,
                 'data' => $content
             ]);
+
 
         } catch (\Exception $e) {
             Log::error('Error getting popular content: ' . $e->getMessage());
