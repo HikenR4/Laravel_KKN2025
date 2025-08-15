@@ -35,21 +35,132 @@ class Agenda extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
-    // PERBAIKAN ACCESSOR GAMBAR
     public function getGambarAttribute($value)
     {
-        // Jika value kosong, return default
         if (!$value) {
             return asset('images/default-event.jpg');
         }
-
-        // Jika sudah berupa full URL (dimulai dengan http), return langsung
-        if (str_starts_with($value, 'http')) {
+        
+        // If it's already a full URL (starts with http), return as is
+        if (strpos($value, 'http') === 0) {
             return $value;
         }
+        
+        // If it's just a filename, construct the full path
+        if (strpos($value, 'uploads/agenda/') === false) {
+            return asset('uploads/agenda/' . $value);
+        }
+        
+        // If it already contains the path, return as asset
+        return asset($value);
+    }
 
-        // Jika hanya nama file, buat full URL
-        return asset('uploads/agenda/' . $value);
+    // Simplified time accessors - safe approach
+    public function getWaktuMulaiAttribute($value)
+    {
+        if (!$value) return null;
+        
+        try {
+            // If value contains colons, try to extract H:i part
+            if (strpos($value, ':') !== false) {
+                $parts = explode(':', $value);
+                if (count($parts) >= 2) {
+                    return sprintf('%02d:%02d', $parts[0], $parts[1]);
+                }
+            }
+            
+            // Try parsing with Carbon
+            return Carbon::parse($value)->format('H:i');
+        } catch (\Exception $e) {
+            // If all fails, return original or null
+            return $value ?: null;
+        }
+    }
+
+    public function getWaktuSelesaiAttribute($value)
+    {
+        if (!$value) return null;
+        
+        try {
+            // If value contains colons, try to extract H:i part
+            if (strpos($value, ':') !== false) {
+                $parts = explode(':', $value);
+                if (count($parts) >= 2) {
+                    return sprintf('%02d:%02d', $parts[0], $parts[1]);
+                }
+            }
+            
+            // Try parsing with Carbon
+            return Carbon::parse($value)->format('H:i');
+        } catch (\Exception $e) {
+            // If all fails, return original or null
+            return $value ?: null;
+        }
+    }
+
+    // Simplified time mutators - safe approach
+    public function setWaktuMulaiAttribute($value)
+    {
+        if (!$value || trim($value) === '') {
+            $this->attributes['waktu_mulai'] = null;
+            return;
+        }
+        
+        try {
+            // If it already has seconds, keep it
+            if (substr_count($value, ':') == 2) {
+                $this->attributes['waktu_mulai'] = $value;
+                return;
+            }
+            
+            // If it's H:i format, add seconds
+            if (substr_count($value, ':') == 1) {
+                $this->attributes['waktu_mulai'] = $value . ':00';
+                return;
+            }
+            
+            // Try to parse with Carbon
+            $this->attributes['waktu_mulai'] = Carbon::parse($value)->format('H:i:s');
+        } catch (\Exception $e) {
+            // If parsing fails, try to add seconds to H:i format
+            if (strlen($value) == 5 && strpos($value, ':') == 2) {
+                $this->attributes['waktu_mulai'] = $value . ':00';
+            } else {
+                $this->attributes['waktu_mulai'] = null;
+            }
+        }
+    }
+
+    public function setWaktuSelesaiAttribute($value)
+    {
+        if (!$value || trim($value) === '') {
+            $this->attributes['waktu_selesai'] = null;
+            return;
+        }
+        
+        try {
+            // If it already has seconds, keep it
+            if (substr_count($value, ':') == 2) {
+                $this->attributes['waktu_selesai'] = $value;
+                return;
+            }
+            
+            // If it's H:i format, add seconds
+            if (substr_count($value, ':') == 1) {
+                $this->attributes['waktu_selesai'] = $value . ':00';
+                return;
+            }
+            
+            // Try to parse with Carbon
+            $this->attributes['waktu_selesai'] = Carbon::parse($value)->format('H:i:s');
+        } catch (\Exception $e) {
+            // If parsing fails, try to add seconds to H:i format
+            if (strlen($value) == 5 && strpos($value, ':') == 2) {
+                $this->attributes['waktu_selesai'] = $value . ':00';
+            } else {
+                $this->attributes['waktu_selesai'] = null;
+            }
+        }
     }
 
     public function getTanggalLengkapAttribute()
@@ -65,9 +176,9 @@ class Agenda extends Model
     {
         $waktu = '';
         if ($this->waktu_mulai) {
-            $waktu = Carbon::parse($this->waktu_mulai)->format('H:i');
+            $waktu = $this->waktu_mulai;
             if ($this->waktu_selesai) {
-                $waktu .= ' - ' . Carbon::parse($this->waktu_selesai)->format('H:i');
+                $waktu .= ' - ' . $this->waktu_selesai;
             }
             $waktu .= ' WIB';
         }

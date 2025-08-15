@@ -16,7 +16,7 @@
             <a href="{{ route('agenda') }}" class="{{ request()->routeIs('agenda*') ? 'active' : '' }}">Agenda</a>
             <a href="{{ route('pengumuman') }}" class="{{ request()->routeIs('pengumuman*') ? 'active' : '' }}">Pengumuman</a>
             <a href="#layanan" class="{{ request()->routeIs('layanan*') ? 'active' : '' }}">Layanan</a>
-            <a href="#tentang" class="{{ request()->routeIs('tentang*') ? 'active' : '' }}">Tentang</a>
+            <a href="{{ route('tentang') }}" class="{{ request()->routeIs('tentang*') ? 'active' : '' }}">Tentang</a>
         </div>
 
         <!-- Login Button di Kanan -->
@@ -34,10 +34,10 @@
         <div class="mobile-menu" id="mobileMenu">
             <a href="{{ url('/') }}">Beranda</a>
             <a href="{{ route('berita') }}">Berita</a>
-            <a href="#agenda">Agenda</a>
+            <a href="{{ route('agenda') }}">Agenda</a>
             <a href="{{ route('pengumuman') }}">Pengumuman</a>
             <a href="#layanan">Layanan</a>
-            <a href="#tentang">Tentang</a>
+            <a href="{{ route('tentang') }}">Tentang</a>
         </div>
     </nav>
 </header>
