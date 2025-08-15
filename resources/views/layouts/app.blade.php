@@ -6,7 +6,7 @@
     <title>@yield('title', 'Nagari Mungo')</title>
     <meta name="description" content="@yield('meta_description', 'Website resmi Nagari Mungo')">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
+
     <!-- Base Styles -->
     <style>
         * {
@@ -251,7 +251,7 @@
             .nav-links {
                 gap: 1.5rem;
             }
-            
+
             .nav-links a {
                 font-size: 0.9rem;
             }
@@ -261,11 +261,11 @@
             .nav-links {
                 gap: 1rem;
             }
-            
+
             .nav-links a {
                 font-size: 0.85rem;
             }
-            
+
             .cta-nav {
                 padding: 0.7rem 1.2rem;
                 font-size: 0.9rem;
@@ -279,38 +279,38 @@
                 padding: 0 1rem;
                 gap: 1rem;
             }
-            
+
             .logo {
                 justify-self: start;
                 font-size: 1.1rem;
             }
-            
+
             .logo-icon {
                 width: 35px;
                 height: 35px;
             }
-            
+
             .mobile-toggle {
                 display: block;
                 justify-self: center;
             }
-            
+
             .cta-nav {
                 justify-self: end;
                 padding: 0.6rem 1rem;
                 font-size: 0.85rem;
             }
-            
+
             .nav-links {
                 display: none;
             }
-            
+
             .nav-links.mobile-active {
                 display: flex;
                 flex-direction: column;
                 animation: slideDown 0.3s ease;
             }
-            
+
             @keyframes slideDown {
                 from { opacity: 0; transform: translateY(-20px); }
                 to { opacity: 1; transform: translateY(0); }
@@ -321,22 +321,22 @@
             .nav-container {
                 padding: 0 0.5rem;
             }
-            
+
             .logo {
                 font-size: 1rem;
                 gap: 0.5rem;
             }
-            
+
             .logo span {
                 font-size: 0.9rem;
             }
-            
+
             .logo-icon {
                 width: 30px;
                 height: 30px;
                 font-size: 0.8rem;
             }
-            
+
             .cta-nav {
                 padding: 0.5rem 0.8rem;
                 font-size: 0.8rem;
@@ -347,7 +347,7 @@
             .logo span {
                 display: none;
             }
-            
+
             .cta-nav {
                 padding: 0.4rem 0.6rem;
                 font-size: 0.75rem;
