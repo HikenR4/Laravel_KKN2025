@@ -13,7 +13,7 @@
         <div class="nav-links">
             <a href="{{ url('/') }}" class="{{ request()->routeIs('home') || request()->is('/') ? 'active' : '' }}">Beranda</a>
             <a href="{{ route('berita') }}" class="{{ request()->routeIs('berita*') ? 'active' : '' }}">Berita</a>
-            <a href="#agenda" class="{{ request()->routeIs('agenda*') ? 'active' : '' }}">Agenda</a>
+            <a href="{{ route('agenda') }}" class="{{ request()->routeIs('agenda*') ? 'active' : '' }}">Agenda</a>
             <a href="{{ route('pengumuman') }}" class="{{ request()->routeIs('pengumuman*') ? 'active' : '' }}">Pengumuman</a>
             <a href="#layanan" class="{{ request()->routeIs('layanan*') ? 'active' : '' }}">Layanan</a>
             <a href="#tentang" class="{{ request()->routeIs('tentang*') ? 'active' : '' }}">Tentang</a>
