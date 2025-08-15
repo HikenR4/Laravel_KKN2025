@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\DataPendudukController;
 use App\Http\Controllers\Admin\KomentarController;
 use App\Http\Controllers\Admin\PublicController;
 use App\Http\Controllers\Public\PengumumanpublicController;
+use App\Http\Controllers\Public\LayananpublicController;
+use App\Http\Controllers\Public\ProfilController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,8 +58,49 @@ Route::get('/agenda', [PublicController::class, 'agenda'])->name('agenda');
 Route::get('/agenda/{slug}', [PublicController::class, 'agendaDetail'])->name('agenda.detail');
 Route::get('/agenda/kategori/{kategori}', [PublicController::class, 'agendaByKategori'])->name('agenda.kategori');
 
+// Public routes for layanan
+Route::get('/layanan', [App\Http\Controllers\Public\LayananpublicController::class, 'index'])->name('layanan');
+Route::get('/layanan/{slug}', [App\Http\Controllers\Public\LayananpublicController::class, 'show'])->name('layanan.detail');
+Route::get('/layanan/kategori/{kategori}', [App\Http\Controllers\Public\LayananpublicController::class, 'kategori'])->name('layanan.kategori');
+Route::get('/cari-layanan', [App\Http\Controllers\Public\LayananpublicController::class, 'search'])->name('layanan.search');
+
+// Routes untuk halaman profil
+Route::prefix('profil')->name('profil.')->group(function () {
+    Route::get('/sejarah', [ProfilController::class, 'sejarah'])->name('sejarah');
+    Route::get('/visi-misi', [ProfilController::class, 'visiMisi'])->name('visi-misi');
+    Route::get('/perangkat-nagari', [ProfilController::class, 'perangkatNagari'])->name('perangkat-nagari');
+    Route::get('/data-wilayah', [ProfilController::class, 'dataWilayah'])->name('data-wilayah');
+});
+
+// Route alternatif untuk kemudahan akses
+Route::get('/sejarah', [ProfilController::class, 'sejarah'])->name('sejarah');
+Route::get('/visi-misi', [ProfilController::class, 'visiMisi'])->name('visi-misi');
+Route::get('/perangkat-nagari', [ProfilController::class, 'perangkatNagari'])->name('perangkat-nagari');
+Route::get('/data-wilayah', [ProfilController::class, 'dataWilayah'])->name('data-wilayah');
+
+// ====== API ROUTES UNTUK LANDING PAGE DATABASE INTEGRATION ======
+Route::prefix('api')->name('api.')->group(function () {
+    // Profil nagari data
+    Route::get('/profil-nagari', [PublicController::class, 'getProfilNagari'])->name('profil-nagari');
+
+    // Video profil - UPDATED WITH DATABASE SUPPORT
+    Route::get('/profil-video', [PublicController::class, 'getProfilVideo'])->name('profil-video');
+    Route::post('/profil-video/increment-views', [PublicController::class, 'incrementVideoViews'])->name('profil-video.increment-views');
+
+    // Statistics untuk dashboard landing - UPDATED WITH DATABASE
+    Route::get('/statistics', [PublicController::class, 'getPublicStatistics'])->name('statistics');
+
+    // Latest content untuk sections di landing - UPDATED WITH DATABASE
+    Route::get('/latest-content', [PublicController::class, 'getLatestContent'])->name('latest-content');
+
+    // Additional API endpoints untuk frontend interactivity
+    Route::get('/search-suggestions', [PublicController::class, 'getSearchSuggestions'])->name('search-suggestions');
+    Route::get('/popular-content', [PublicController::class, 'getPopularContent'])->name('popular-content');
+});
+
 // Tentang routes - PUBLIC
 Route::get('/tentang', [PublicController::class, 'tentang'])->name('tentang');
+
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->group(function () {

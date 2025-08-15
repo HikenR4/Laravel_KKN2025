@@ -448,8 +448,8 @@
         <div class="filter-section">
             <div class="filter-group">
                 <label class="filter-label">Cari Agenda</label>
-                <input type="text" name="search" class="filter-input" 
-                       placeholder="Cari berdasarkan judul, deskripsi, atau lokasi..." 
+                <input type="text" name="search" class="filter-input"
+                       placeholder="Cari berdasarkan judul, deskripsi, atau lokasi..."
                        value="{{ request('search') }}">
             </div>
             <div class="filter-group">
@@ -657,13 +657,16 @@
                         </a>
                     </li>
                     @foreach($categoriesWithCounts as $key => $category)
-                        <li class="category-item">
-                            <a href="{{ route('agenda.kategori', $key) }}" 
-                               class="category-link {{ request('kategori') == $key ? 'active' : '' }}">
-                                <span>{{ $category['label'] }}</span>
-                                <span class="category-count">{{ $category['count'] }}</span>
-                            </a>
-                        </li>
+
+                        @if($category['count'] > 0)
+                            <li class="category-item">
+                                <a href="{{ route('agenda.kategori', $key) }}"
+                                   class="category-link {{ request('kategori') == $key ? 'active' : '' }}">
+                                    <span>{{ $category['label'] }}</span>
+                                    <span class="category-count">{{ $category['count'] }}</span>
+                                </a>
+                            </li>
+                        @endif
                     @endforeach
                 </ul>
             </div>
@@ -726,6 +729,8 @@
         @endif
     </aside>
 </div>
+<!-- Include Footer -->
+    @include('layouts.footer')
 @endsection
 
 @push('scripts')

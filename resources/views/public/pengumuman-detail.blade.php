@@ -1137,6 +1137,9 @@
         <img class="modal-content" id="modalImage">
     </div>
 
+    <!-- Include Footer -->
+    @include('layouts.footer')
+
     <script>
         // Copy link functionality
         function copyLink() {

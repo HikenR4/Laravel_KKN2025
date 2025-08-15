@@ -189,12 +189,22 @@
             background: #f3f4f6;
             border: 2px solid #e5e7eb;
             border-radius: 0.5rem;
-            padding: 0.5rem;
+            padding: 0.75rem;
             margin-bottom: 1rem;
         }
 
         .video-type-toggle input[type="radio"] {
             margin-right: 0.5rem;
+        }
+
+        .video-type-toggle label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .video-type-toggle .form-check {
+            margin-bottom: 0;
         }
 
         /* Button Styling */
@@ -357,6 +367,20 @@
             transition: width 0.3s ease;
         }
 
+        /* Video URL Preview */
+        .video-url-preview {
+            margin-top: 1rem;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+        }
+
+        .video-url-preview iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .content-card {
@@ -390,6 +414,10 @@
             .page-main-wrapper {
                 padding: 0.5rem;
             }
+
+            .video-url-preview iframe {
+                height: 150px;
+            }
         }
     </style>
 </head>
@@ -401,7 +429,7 @@
             <!-- Page Header -->
             <div class="page-header mb-6 profil-fade-in">
                 <h1 class="page-title text-2xl lg:text-3xl font-bold text-gray-800">Profil Nagari</h1>
-                <p class="text-gray-600 mt-2">Kelola informasi lengkap tentang nagari termasuk logo, banner, dan video profil</p>
+                <p class="text-gray-600 mt-2">Kelola informasi lengkap tentang nagari</p>
             </div>
 
             <!-- Flash Messages -->
@@ -687,7 +715,7 @@
                             <div class="section-icon icon-video">
                                 <i class="fas fa-photo-video"></i>
                             </div>
-                            Media: Logo, Banner & Video Profil
+                            Media: Logo, Peta & Video Profil
                         </div>
                     </div>
                     <div class="row">
@@ -723,7 +751,7 @@
 
                         <!-- Banner Nagari -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label">Banner Nagari</label>
+                            <label class="form-label">Peta Nagari</label>
                             <div class="upload-area {{ ($profil && $profil->hasBannerFile()) ? 'has-image' : '' }}"
                                  id="banner-upload-area" onclick="document.getElementById('banner').click()">
                                 <div class="upload-content" id="banner-content">
@@ -739,7 +767,7 @@
                                     @else
                                         <div id="banner-placeholder">
                                             <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
-                                            <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload banner</p>
+                                            <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload peta</p>
                                             <p class="text-gray-400 text-sm">Format: JPG, PNG, GIF, SVG<br>Maksimal: 5MB</p>
                                         </div>
                                     @endif
@@ -758,9 +786,14 @@
                             <!-- Video Type Toggle -->
                             <div class="video-type-toggle">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="video_type" id="video_url" value="url"
+                                    <input class="form-check-input" type="radio" name="video_type" id="video_upload" value="upload"
+                                           {{ (!$profil || !$profil->hasExternalVideo()) ? 'checked' : '' }} onchange="toggleVideoType()">
+                                    <label class="form-check-label" for="video_upload">Upload Video</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="video_type" id="video_url_type" value="url"
                                            {{ ($profil && $profil->hasExternalVideo()) ? 'checked' : '' }} onchange="toggleVideoType()">
-                                    <label class="form-check-label" for="video_url">Link YouTube/Video</label>
+                                    <label class="form-check-label" for="video_url_type">Link YouTube/Video</label>
                                 </div>
                             </div>
 
@@ -813,17 +846,18 @@
                             <div id="video-url-section" style="{{ ($profil && $profil->hasExternalVideo()) ? '' : 'display: none;' }}">
                                 <input type="url" class="form-control @error('video_url') is-invalid @enderror"
                                        name="video_url" value="{{ old('video_url', $profil->video_url ?? '') }}"
-                                       placeholder="https://www.youtube.com/watch?v=..." id="video_url_input">
+                                       placeholder="https://www.youtube.com/watch?v=..." id="video_url_input"
+                                       onchange="previewVideoUrl()">
                                 @error('video_url')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
 
-                                @if($profil && $profil->hasExternalVideo())
-                                    <div class="mt-3">
-                                        <iframe width="100%" height="200" src="{{ $profil->video_embed_url }}"
-                                                frameborder="0" allowfullscreen class="rounded"></iframe>
-                                    </div>
-                                @endif
+                                <!-- Video URL Preview -->
+                                <div id="video-url-preview" class="video-url-preview" style="{{ ($profil && $profil->hasExternalVideo()) ? '' : 'display: none;' }}">
+                                    @if($profil && $profil->hasExternalVideo())
+                                        <iframe src="{{ $profil->video_embed_url }}" frameborder="0" allowfullscreen></iframe>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- Video Description -->
@@ -880,7 +914,7 @@
             // Initialize drag and drop
             initializeDragAndDrop();
 
-            // Handle custom reset button - RESET LENGKAP
+            // Handle custom reset button
             $('#resetBtn').on('click', function(e) {
                 e.preventDefault();
                 resetCompleteForm();
@@ -894,18 +928,21 @@
             }
         });
 
-        // Toggle video type (upload vs URL)
+        // Toggle video type (upload vs URL) - FIXED
         function toggleVideoType() {
             const uploadSection = document.getElementById('video-upload-section');
             const urlSection = document.getElementById('video-url-section');
             const videoUploadRadio = document.getElementById('video_upload');
+            const videoUrlRadio = document.getElementById('video_url_type');
 
             if (videoUploadRadio.checked) {
                 uploadSection.style.display = 'block';
                 urlSection.style.display = 'none';
-                // Clear URL input
+                // Clear URL input and preview
                 document.getElementById('video_url_input').value = '';
-            } else {
+                document.getElementById('video-url-preview').style.display = 'none';
+                document.getElementById('video-url-preview').innerHTML = '';
+            } else if (videoUrlRadio.checked) {
                 uploadSection.style.display = 'none';
                 urlSection.style.display = 'block';
                 // Clear file input
@@ -914,7 +951,57 @@
             }
         }
 
-        // Fungsi reset form lengkap - FITUR UTAMA
+        // Preview video URL - NEW FUNCTION
+        function previewVideoUrl() {
+            const urlInput = document.getElementById('video_url_input');
+            const preview = document.getElementById('video-url-preview');
+            const url = urlInput.value.trim();
+
+            if (!url) {
+                preview.style.display = 'none';
+                preview.innerHTML = '';
+                return;
+            }
+
+            let embedUrl = '';
+
+            // YouTube
+            if (url.includes('youtube.com/watch?v=') || url.includes('youtu.be/')) {
+                const videoId = url.includes('youtube.com/watch?v=')
+                    ? url.split('v=')[1].split('&')[0]
+                    : url.split('youtu.be/')[1].split('?')[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}`;
+            }
+            // Vimeo
+            else if (url.includes('vimeo.com/')) {
+                const videoId = url.split('vimeo.com/')[1].split('?')[0];
+                embedUrl = `https://player.vimeo.com/video/${videoId}`;
+            }
+            // Direct video URL
+            else if (url.match(/\.(mp4|webm|ogg|avi|mov)(\?.*)?$/i)) {
+                preview.innerHTML = `
+                    <video width="100%" height="200" controls>
+                        <source src="${url}" type="video/mp4">
+                        Browser Anda tidak mendukung tag video.
+                    </video>
+                `;
+                preview.style.display = 'block';
+                showNotification('Preview video URL berhasil ditampilkan', 'success');
+                return;
+            }
+
+            if (embedUrl) {
+                preview.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+                preview.style.display = 'block';
+                showNotification('Preview video URL berhasil ditampilkan', 'success');
+            } else {
+                showNotification('Format URL video tidak didukung. Gunakan YouTube, Vimeo, atau link video langsung.', 'error');
+                preview.style.display = 'none';
+                preview.innerHTML = '';
+            }
+        }
+
+        // Reset form lengkap
         function resetCompleteForm() {
             if (confirm('Apakah Anda yakin ingin mereset semua data? Semua perubahan akan hilang dan kembali ke data asli.')) {
                 // Reset semua input text, email, url, number
@@ -937,6 +1024,10 @@
                 // Reset video type ke upload
                 document.getElementById('video_upload').checked = true;
                 toggleVideoType();
+
+                // Reset video URL preview
+                document.getElementById('video-url-preview').style.display = 'none';
+                document.getElementById('video-url-preview').innerHTML = '';
 
                 // Hapus semua error states
                 $('#profilForm .is-invalid').removeClass('is-invalid');
@@ -1049,7 +1140,7 @@
             }
         }
 
-        // Preview video function - BARU
+        // Preview video function
         function previewVideo(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
@@ -1145,7 +1236,7 @@
             }
         }
 
-        // Remove video function - BARU
+        // Remove video function
         function removeVideo() {
             if (confirm('Apakah Anda yakin ingin menghapus video ini?')) {
                 const input = document.getElementById('video_profil');
@@ -1296,7 +1387,7 @@
                 if (document.getElementById('submitBtn') && document.getElementById('submitBtn').disabled) {
                     submitBtn.html(originalText).prop('disabled', false);
                 }
-            }, 30000); // Increase timeout for video upload
+            }, 30000);
         });
 
         // Handle sidebar toggle and adjust layout

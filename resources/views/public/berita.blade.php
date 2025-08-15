@@ -947,6 +947,9 @@
         </aside>
     </div>
 
+    <!-- Include Footer -->
+    @include('layouts.footer')
+
     <script>
         // Search form enhancement
         document.querySelector('.search-form').addEventListener('submit', function(e) {
