@@ -273,6 +273,146 @@
             background: #059669;
             border-color: #059669;
         }
+
+        .custom-table {
+            table-layout: fixed !important;
+            width: 100% !important;
+            min-width: 100% !important; /* Hapus min-width yang membuat scroll */
+        }
+
+        /* Sesuaikan lebar kolom agar pas tanpa scroll */
+        .custom-table th:nth-child(1), .custom-table td:nth-child(1) { width: 4% !important; } /* Checkbox lebih kecil */
+        .custom-table th:nth-child(2), .custom-table td:nth-child(2) { width: 6% !important; } /* Foto lebih kecil */
+        .custom-table th:nth-child(3), .custom-table td:nth-child(3) { width: 25% !important; } /* Nama & Jabatan */
+        .custom-table th:nth-child(4), .custom-table td:nth-child(4) { width: 15% !important; } /* NIP */
+        .custom-table th:nth-child(5), .custom-table td:nth-child(5) { width: 22% !important; } /* Kontak lebih lebar */
+        .custom-table th:nth-child(6), .custom-table td:nth-child(6) { width: 12% !important; } /* Masa Jabatan lebih kecil */
+        .custom-table th:nth-child(7), .custom-table td:nth-child(7) { width: 8% !important; } /* Status */
+        .custom-table th:nth-child(8), .custom-table td:nth-child(8) { width: 8% !important; } /* Aksi lebih lebar */
+
+        /* Perbaiki action buttons agar muat */
+        .action-buttons {
+            display: flex !important;
+            gap: 0.25rem !important;
+            flex-wrap: nowrap !important; /* Jangan wrap */
+            justify-content: center !important;
+        }
+
+        .action-btn {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+            padding: 0.4rem !important; /* Lebih kecil */
+            border-radius: 0.4rem !important;
+            border: none !important;
+            transition: all 0.3s ease !important;
+            min-width: 32px !important; /* Minimum width */
+            height: 32px !important; /* Fixed height */
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .action-btn i {
+            font-size: 0.75rem !important; /* Icon lebih kecil */
+        }
+
+        /* Foto thumb lebih kecil */
+        .foto-thumb, .no-foto {
+            width: 45px !important;
+            height: 45px !important;
+        }
+
+        /* Text lebih kecil untuk menghemat ruang */
+        .custom-table td, .custom-table th {
+            font-size: 0.8rem !important;
+            padding: 0.6rem 0.4rem !important;
+        }
+
+        .nama-section {
+            font-size: 0.85rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .jabatan-badge {
+            font-size: 0.65rem !important;
+            padding: 0.2rem 0.5rem !important;
+        }
+
+        .contact-info {
+            font-size: 0.75rem !important;
+        }
+
+        .status-badge {
+            font-size: 0.65rem !important;
+            padding: 0.2rem 0.5rem !important;
+        }
+
+        /* Responsive untuk layar kecil */
+        @media (max-width: 1200px) {
+            .custom-table th:nth-child(5), .custom-table td:nth-child(5) {
+                width: 20% !important;
+            }
+            
+            .action-buttons {
+                flex-direction: column !important;
+                gap: 0.15rem !important;
+            }
+            
+            .action-btn {
+                width: 28px !important;
+                height: 28px !important;
+                padding: 0.3rem !important;
+            }
+            
+            .action-btn i {
+                font-size: 0.7rem !important;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .custom-table th:nth-child(3), .custom-table td:nth-child(3) { width: 20% !important; }
+            .custom-table th:nth-child(5), .custom-table td:nth-child(5) { width: 18% !important; }
+            .custom-table th:nth-child(6), .custom-table td:nth-child(6) { width: 10% !important; }
+        }
+
+        /* Hilangkan scroll horizontal sama sekali */
+        .table-container {
+            overflow-x: hidden !important;
+            width: 100% !important;
+        }
+
+        /* Pastikan container tidak overflow */
+        .content-card {
+            overflow-x: hidden !important;
+        }
+
+        .alamat-wrap-fix {
+            word-wrap: break-word !important;
+            word-break: break-word !important;
+            white-space: normal !important;
+            line-height: 1.3 !important;
+            max-width: 100% !important;
+        }
+
+        .nip-wrap-fix {
+            word-wrap: break-word !important;
+            word-break: break-all !important;
+            font-family: monospace !important;
+            font-size: 0.875rem !important;
+        }
+
+        .email-wrap-fix {
+            word-wrap: break-word !important;
+            word-break: break-all !important;
+            font-size: 0.875rem !important;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .custom-table th:nth-child(5), .custom-table td:nth-child(5) {
+                max-width: 150px !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -405,13 +545,17 @@
                                         <div class="nama-section">{{ $perangkat->nama }}</div>
                                         <div class="jabatan-badge">{{ $perangkat->jabatan }}</div>
                                         @if($perangkat->email)
-                                            <div class="contact-info">
+                                            <div class="contact-info email-wrap-fix">
                                                 <i class="fas fa-envelope me-1"></i>{{ $perangkat->email }}
                                             </div>
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="mb-1">{{ $perangkat->nip ?? '-' }}</div>
+                                        @if($perangkat->nip)
+                                            <div class="mb-1 nip-wrap-fix">{{ $perangkat->nip }}</div>
+                                        @else
+                                            <div class="mb-1">-</div>
+                                        @endif
                                         @if($perangkat->pendidikan)
                                             <small class="text-muted">{{ $perangkat->pendidikan }}</small>
                                         @endif
@@ -424,7 +568,7 @@
                                             </div>
                                         @endif
                                         @if($perangkat->alamat)
-                                            <small class="text-muted">{{ Str::limit($perangkat->alamat, 30) }}</small>
+                                            <small class="text-muted alamat-wrap-fix">{{ $perangkat->alamat }}</small>
                                         @endif
                                     </td>
                                     <td>

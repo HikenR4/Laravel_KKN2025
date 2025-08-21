@@ -1161,9 +1161,9 @@
                 `;
 
                 // Validate file size (50MB)
-                const maxSize = 50 * 1024 * 1024;
+                const maxSize = 500 * 1024 * 1024;
                 if (file.size > maxSize) {
-                    showNotification('File video terlalu besar. Maksimal 50MB', 'error');
+                    showNotification('File video terlalu besar. Maksimal 500MB', 'error');
                     resetUploadArea('video');
                     input.value = '';
                     return;
@@ -1225,28 +1225,157 @@
         // Remove image function
         function removeImage(type) {
             if (confirm(`Apakah Anda yakin ingin menghapus ${type === 'logo' ? 'logo' : 'banner'} ini?`)) {
-                const input = document.getElementById(type);
-
-                if (input) {
-                    input.value = '';
-                }
-
-                resetUploadArea(type);
-                showNotification(`${type === 'logo' ? 'Logo' : 'Banner'} dihapus`, 'success');
+                
+                // Show loading state
+                const uploadArea = document.getElementById(`${type}-upload-area`);
+                const content = document.getElementById(`${type}-content`);
+                
+                content.innerHTML = `
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="visually-hidden">Menghapus...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Menghapus ${type === 'logo' ? 'logo' : 'banner'}...</p>
+                    </div>
+                `;
+                
+                // Jika ada file yang sudah tersimpan di database, hapus via AJAX
+                $.ajax({
+                    url: `/admin/profil/delete-${type}`,
+                    method: 'DELETE',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Reset input file
+                            const input = document.getElementById(type);
+                            if (input) {
+                                input.value = '';
+                            }
+                            
+                            // Reset upload area
+                            resetUploadArea(type);
+                            
+                            showNotification(response.message, 'success');
+                        } else {
+                            showNotification(response.message || 'Gagal menghapus file', 'error');
+                            // Restore original content if failed
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        // Jika error 404, artinya file belum tersimpan, langsung reset area
+                        if (xhr.status === 404) {
+                            const input = document.getElementById(type);
+                            if (input) {
+                                input.value = '';
+                            }
+                            resetUploadArea(type);
+                            showNotification(`${type === 'logo' ? 'Logo' : 'Banner'} dihapus`, 'success');
+                        } else {
+                            showNotification('Gagal menghapus file', 'error');
+                            // Restore original content if failed
+                            location.reload();
+                        }
+                    }
+                });
             }
         }
 
-        // Remove video function
+        // Update fungsi removeVideo
         function removeVideo() {
             if (confirm('Apakah Anda yakin ingin menghapus video ini?')) {
-                const input = document.getElementById('video_profil');
+                
+                // Show loading state
+                const uploadArea = document.getElementById('video-upload-area');
+                const content = document.getElementById('video-content');
+                
+                content.innerHTML = `
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="visually-hidden">Menghapus...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Menghapus video...</p>
+                    </div>
+                `;
+                
+                // Jika ada video yang sudah tersimpan di database, hapus via AJAX
+                $.ajax({
+                    url: '/admin/profil/delete-video',
+                    method: 'DELETE',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Reset input file
+                            const input = document.getElementById('video_profil');
+                            if (input) {
+                                input.value = '';
+                            }
+                            
+                            // Reset upload area
+                            resetUploadArea('video');
+                            
+                            showNotification(response.message, 'success');
+                        } else {
+                            showNotification(response.message || 'Gagal menghapus video', 'error');
+                            // Restore original content if failed
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        // Jika error 404, artinya file belum tersimpan, langsung reset area
+                        if (xhr.status === 404) {
+                            const input = document.getElementById('video_profil');
+                            if (input) {
+                                input.value = '';
+                            }
+                            resetUploadArea('video');
+                            showNotification('Video dihapus', 'success');
+                        } else {
+                            showNotification('Gagal menghapus video', 'error');
+                            // Restore original content if failed
+                            location.reload();
+                        }
+                    }
+                });
+            }
+        }
 
-                if (input) {
-                    input.value = '';
+        // Enhanced resetUploadArea function
+        function resetUploadArea(type) {
+            const uploadArea = document.getElementById(`${type}-upload-area`);
+            const content = document.getElementById(`${type}-content`);
+            
+            if (content) {
+                let placeholder = '';
+                if (type === 'video') {
+                    placeholder = `
+                        <div id="video-placeholder">
+                            <i class="fas fa-video text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload video profil</p>
+                            <p class="text-gray-400 text-sm">Format: MP4, AVI, MOV, WMV, FLV, WebM<br>Maksimal: 50MB</p>
+                        </div>
+                    `;
+                } else {
+                    const typeLabel = type === 'logo' ? 'logo' : (type === 'banner' ? 'peta' : 'banner');
+                    const maxSize = type === 'logo' ? '2MB' : '5MB';
+                    placeholder = `
+                        <div id="${type}-placeholder">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload ${typeLabel}</p>
+                            <p class="text-gray-400 text-sm">Format: JPG, PNG, GIF, SVG<br>Maksimal: ${maxSize}</p>
+                        </div>
+                    `;
                 }
-
-                resetUploadArea('video');
-                showNotification('Video dihapus', 'success');
+                
+                content.innerHTML = placeholder;
+            }
+            
+            if (uploadArea) {
+                uploadArea.classList.remove('has-image', 'has-video');
             }
         }
 
