@@ -82,6 +82,7 @@
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
+            table-layout: fixed; /* PENTING: Untuk memastikan kolom memiliki lebar tetap */
         }
 
         .custom-table th,
@@ -89,6 +90,7 @@
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #e5e7eb;
+            vertical-align: top; /* Memastikan konten dimulai dari atas */
         }
 
         .custom-table th {
@@ -97,12 +99,66 @@
             color: #374151;
         }
 
+        /* SOLUSI UTAMA: CSS untuk text wrapping pada judul */
+        .pengumuman-title {
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            white-space: normal; /* Memungkinkan text wrap */
+            line-height: 1.4;
+            max-width: 100%; /* Memastikan tidak melebihi lebar kolom */
+        }
+
+        .pengumuman-info {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Memperbaiki lebar kolom untuk memastikan text wrapping berfungsi */
+        .custom-table th:nth-child(1),
+        .custom-table td:nth-child(1) {
+            width: 35%;
+            min-width: 250px; /* Minimum width untuk readability */
+        }
+
+        .custom-table th:nth-child(2),
+        .custom-table td:nth-child(2) {
+            width: 12%;
+            min-width: 100px;
+        }
+
+        .custom-table th:nth-child(3),
+        .custom-table td:nth-child(3) {
+            width: 18%;
+            min-width: 150px;
+        }
+
+        .custom-table th:nth-child(4),
+        .custom-table td:nth-child(4) {
+            width: 10%;
+            min-width: 80px;
+        }
+
+        .custom-table th:nth-child(5),
+        .custom-table td:nth-child(5) {
+            width: 8%;
+            min-width: 60px;
+        }
+
+        .custom-table th:nth-child(6),
+        .custom-table td:nth-child(6) {
+            width: 17%;
+            min-width: 140px;
+        }
+
         .kategori-badge {
             display: inline-block;
             padding: 0.25rem 0.75rem;
             border-radius: 1rem;
             font-size: 0.875rem;
             font-weight: 500;
+            white-space: nowrap; /* Mencegah kategori terpotong */
         }
 
         .kategori-umum { background: #dbeafe; color: #1e40af; }
@@ -117,6 +173,7 @@
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .status-aktif {
@@ -148,6 +205,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.25rem;
+            white-space: nowrap;
         }
 
         .penting-badge {
@@ -157,11 +215,13 @@
             border-radius: 0.5rem;
             font-size: 0.75rem;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .action-buttons {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap; /* Memungkinkan tombol wrap jika perlu */
         }
 
         .action-btn {
@@ -172,6 +232,7 @@
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
+            min-width: 36px; /* Minimum width untuk tombol */
         }
 
         .action-btn:hover {
@@ -193,6 +254,46 @@
             color: white;
         }
 
+        /* Responsive table improvements */
+        @media (max-width: 768px) {
+            .custom-table {
+                font-size: 0.875rem;
+            }
+            
+            .custom-table th,
+            .custom-table td {
+                padding: 0.5rem;
+            }
+            
+            .pengumuman-title {
+                font-size: 0.875rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
+
+        /* Improved text wrapping for description */
+        .pengumuman-description {
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            line-height: 1.3;
+            max-width: 100%;
+        }
+
+        /* Target audience text wrapping */
+        .target-audience-text {
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            font-size: 0.75rem;
+        }
+
         .card-footer {
             background: #f8fafc;
             padding: 1.25rem;
@@ -210,6 +311,7 @@
             border-color: #8b5cf6;
         }
 
+        /* Modal styling */
         .modal-content {
             border-radius: 1rem;
         }
@@ -271,6 +373,7 @@
             background: #fffbeb;
         }
 
+        /* Custom control styling */
         .custom-control {
             position: relative;
             display: block;
@@ -363,7 +466,7 @@
 <body class="min-h-screen">
     <div class="flex min-h-screen">
         @include('layouts.sidebar')
-
+        
         <div class="page-main-wrapper flex-1 p-4 lg:p-8 transition-all duration-300" id="pageMainContent">
             <!-- Page Header -->
             <div class="page-header mb-6 pengumuman-fade-in">
@@ -374,32 +477,32 @@
             <div class="page-content">
                 <!-- Flash Messages -->
                 @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show pengumuman-fade-in" role="alert" style="animation-delay: 0.1s;">
-                        <i class="fas fa-check-circle me-2"></i>
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
+                <div class="alert alert-success alert-dismissible fade show pengumuman-fade-in" role="alert" style="animation-delay: 0.1s;">
+                    <i class="fas fa-check-circle me-2"></i>
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show pengumuman-fade-in" role="alert" style="animation-delay: 0.1s;">
-                        <i class="fas fa-exclamation-circle me-2"></i>
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
+                <div class="alert alert-danger alert-dismissible fade show pengumuman-fade-in" role="alert" style="animation-delay: 0.1s;">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
                 @endif
 
                 @if($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show pengumuman-fade-in" role="alert">
-                        <i class="fas fa-exclamation-circle me-2"></i>
-                        <strong>Ada kesalahan pada form:</strong>
-                        <ul class="mb-0 mt-2">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
+                <div class="alert alert-danger alert-dismissible fade show pengumuman-fade-in" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <strong>Ada kesalahan pada form:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
                 @endif
 
                 <!-- Main Card -->
@@ -450,134 +553,129 @@
 
                     <!-- Table Section -->
                     <div class="table-container">
-                        <table class="table custom-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 35%">Pengumuman</th>
-                                    <th style="width: 12%">Kategori</th>
-                                    <th style="width: 18%">Tanggal</th>
-                                    <th style="width: 10%">Status</th>
-                                    <th style="width: 8%">Views</th>
-                                    <th style="width: 17%">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($pengumuman ?? [] as $index => $item)
-                                @php
+                        <div class="table-responsive">
+                            <table class="table custom-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35%">Pengumuman</th>
+                                        <th style="width: 12%">Kategori</th>
+                                        <th style="width: 18%">Tanggal</th>
+                                        <th style="width: 10%">Status</th>
+                                        <th style="width: 8%">Views</th>
+                                        <th style="width: 17%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($pengumuman ?? [] as $index => $item)
+                                    @php
                                     $isActive = $item->status === 'aktif' && $item->is_active;
                                     $isInactive = $item->status === 'tidak_aktif' || !$item->is_active;
                                     $rowClass = $item->penting ? 'pengumuman-penting' : ($isActive ? 'pengumuman-active' : 'pengumuman-inactive');
-                                @endphp
-                                <tr class="pengumuman-fade-in {{ $rowClass }}" style="animation-delay: {{ 0.3 + ($index * 0.1) }}s;">
-                                    <td>
-                                        <div class="pengumuman-info">
-                                            <div class="pengumuman-title fw-bold d-flex align-items-center">
-                                                @if($item->penting)
-                                                    <i class="fas fa-exclamation-triangle text-warning me-2" title="Penting"></i>
+                                    @endphp
+                                    <tr class="pengumuman-fade-in {{ $rowClass }}" style="animation-delay: {{ 0.3 + ($index * 0.1) }}s;">
+                                        <td>
+                                            <div class="pengumuman-info">
+                                                <div class="pengumuman-title fw-bold d-flex align-items-start">
+                                                    @if($item->penting)
+                                                    <i class="fas fa-exclamation-triangle text-warning me-2 mt-1 flex-shrink-0" title="Penting"></i>
+                                                    @endif
+                                                    <span>{{ $item->judul ?? 'Pengumuman Kegiatan yang Sangat Panjang Sekali Untuk Testing Text Wrapping Feature Yang Baru Ditambahkan' }}</span>
+                                                </div>
+                                                @if($item->konten)
+                                                <small class="text-muted d-block mt-1 pengumuman-description">{{ Str::limit(strip_tags($item->konten), 100) }}</small>
                                                 @endif
-                                                {{ $item->judul ?? 'Pengumuman Kegiatan' }}
-                                            </div>
-                                            @if($item->konten)
-                                                <small class="text-muted d-block mt-1">{{ Str::limit(strip_tags($item->konten), 100) }}</small>
-                                            @endif
-                                            <div class="mt-1 d-flex align-items-center gap-2">
-                                                @if($item->penting)
+                                                <div class="mt-1 d-flex align-items-center gap-2 flex-wrap">
+                                                    @if($item->penting)
                                                     <span class="penting-badge">
                                                         <i class="fas fa-star"></i> Penting
                                                     </span>
-                                                @endif
-                                                @if($item->gambar && $item->getRawOriginal('gambar'))
+                                                    @endif
+                                                    @if($item->gambar && $item->getRawOriginal('gambar'))
                                                     <small class="text-info">
                                                         <i class="fas fa-image"></i> Ada gambar
                                                     </small>
-                                                @endif
-                                                <small class="text-muted">
-                                                    Target: {{ ucwords(str_replace('_', ' ', $item->target_audience ?? 'Semua')) }}
-                                                </small>
+                                                    @endif
+                                                    <small class="text-muted target-audience-text">
+                                                        Target: {{ ucwords(str_replace('_', ' ', $item->target_audience ?? 'Semua')) }}
+                                                    </small>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="kategori-badge kategori-{{ $item->kategori ?? 'umum' }}">
-                                            {{ ucfirst($item->kategori ?? 'Umum') }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="pengumuman-date">
-                                            {{ $item->tanggal_mulai ? $item->tanggal_mulai->format('d/m/Y') : date('d/m/Y') }}
-                                            @if($item->tanggal_berakhir)
+                                        </td>
+                                        <td>
+                                            <span class="kategori-badge kategori-{{ $item->kategori ?? 'umum' }}">
+                                                {{ ucfirst($item->kategori ?? 'Umum') }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="pengumuman-date">
+                                                {{ $item->tanggal_mulai ? $item->tanggal_mulai->format('d/m/Y') : date('d/m/Y') }}
+                                                @if($item->tanggal_berakhir)
                                                 <br><small class="text-muted">s/d {{ $item->tanggal_berakhir->format('d/m/Y') }}</small>
-                                            @else
+                                                @else
                                                 <br><small class="text-success">Tidak terbatas</small>
-                                            @endif
-                                        </div>
-                                        @if($item->waktu_mulai)
+                                                @endif
+                                            </div>
+                                            @if($item->waktu_mulai)
                                             <div class="pengumuman-time">
                                                 <i class="fas fa-clock me-1"></i>
                                                 {{ \Carbon\Carbon::parse($item->waktu_mulai)->format('H:i') }}
                                                 @if($item->waktu_berakhir)
-                                                    - {{ \Carbon\Carbon::parse($item->waktu_berakhir)->format('H:i') }}
+                                                - {{ \Carbon\Carbon::parse($item->waktu_berakhir)->format('H:i') }}
                                                 @endif
                                                 WIB
                                             </div>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input status-toggle"
-                                                   id="status{{ $item->id ?? ($index + 1) }}"
-                                                   data-id="{{ $item->id ?? ($index + 1) }}"
-                                                   {{ ($item->status ?? 'aktif') == 'aktif' ? 'checked' : '' }}>
-                                            <label class="custom-control-label" for="status{{ $item->id ?? ($index + 1) }}"></label>
-                                        </div>
-                                        <small class="d-block text-center mt-1">
-                                            <span class="status-badge status-{{ $item->status ?? 'aktif' }}">
-                                                {{ ucfirst($item->status ?? 'Aktif') }}
-                                            </span>
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <span class="views-badge">
-                                            <i class="fas fa-eye"></i>
-                                            {{ $item->views ?? 0 }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="action-btn btn-view" onclick="viewItem({{ $item->id ?? ($index + 1) }})"
-                                                    title="Lihat" data-bs-toggle="tooltip">
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input status-toggle" id="status{{ $item->id ?? ($index + 1) }}" data-id="{{ $item->id ?? ($index + 1) }}" {{ ($item->status ?? 'aktif') == 'aktif' ? 'checked' : '' }}>
+                                                <label class="custom-control-label" for="status{{ $item->id ?? ($index + 1) }}"></label>
+                                            </div>
+                                            <small class="d-block text-center mt-1">
+                                                <span class="status-badge status-{{ $item->status ?? 'aktif' }}">
+                                                    {{ ucfirst($item->status ?? 'Aktif') }}
+                                                </span>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span class="views-badge">
                                                 <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="action-btn btn-edit" onclick="editItem({{ $item->id ?? ($index + 1) }})"
-                                                    title="Edit" data-bs-toggle="tooltip">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="action-btn btn-delete" onclick="deleteItem({{ $item->id ?? ($index + 1) }})"
-                                                    title="Hapus" data-bs-toggle="tooltip">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                            @if(($item->status ?? 'aktif') == 'aktif' && ($item->is_active ?? true))
-                                                <a href="{{ route('admin.pengumuman', $item->slug ?? 'sample-slug') }}"
-                                                   target="_blank" class="action-btn" title="Lihat di Website" data-bs-toggle="tooltip">
+                                                {{ $item->views ?? 0 }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="action-btn btn-view" onclick="viewItem({{ $item->id ?? ($index + 1) }})" title="Lihat" data-bs-toggle="tooltip">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="action-btn btn-edit" onclick="editItem({{ $item->id ?? ($index + 1) }})" title="Edit" data-bs-toggle="tooltip">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="action-btn btn-delete" onclick="deleteItem({{ $item->id ?? ($index + 1) }})" title="Hapus" data-bs-toggle="tooltip">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                @if(($item->status ?? 'aktif') == 'aktif' && ($item->is_active ?? true))
+                                                <a href="{{ route('admin.pengumuman', $item->slug ?? 'sample-slug') }}" target="_blank" class="action-btn" title="Lihat di Website" data-bs-toggle="tooltip">
                                                     <i class="fas fa-external-link-alt"></i>
                                                 </a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="6" class="text-center py-4">
-                                        <i class="fas fa-bullhorn fa-3x text-muted mb-3"></i>
-                                        <p class="text-muted">Belum ada pengumuman yang ditambahkan</p>
-                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahPengumumanModal">
-                                            <i class="fas fa-bullhorn me-1"></i>Tambah Pengumuman Pertama
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">
+                                            <i class="fas fa-bullhorn fa-3x text-muted mb-3"></i>
+                                            <p class="text-muted">Belum ada pengumuman yang ditambahkan</p>
+                                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahPengumumanModal">
+                                                <i class="fas fa-bullhorn me-1"></i>Tambah Pengumuman Pertama
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <!-- Pagination Section -->
@@ -612,11 +710,11 @@
                         <form id="formTambahPengumuman" action="{{ route('admin.pengumuman.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">
+                                <!-- Form content here - keeping original structure -->
                                 <div class="row">
                                     <div class="col-md-8 mb-3">
                                         <label for="judul" class="form-label">Judul Pengumuman <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="judul" name="judul" required
-                                               placeholder="Masukkan judul pengumuman" value="{{ old('judul') }}">
+                                        <input type="text" class="form-control" id="judul" name="judul" required placeholder="Masukkan judul pengumuman" value="{{ old('judul') }}">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="kategori" class="form-label">Kategori <span class="text-danger">*</span></label>
@@ -630,39 +728,30 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="konten" class="form-label">Konten Pengumuman <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="konten" name="konten" rows="6" required
-                                              placeholder="Isi konten pengumuman...">{{ old('konten') }}</textarea>
+                                    <textarea class="form-control" id="konten" name="konten" rows="6" required placeholder="Isi konten pengumuman...">{{ old('konten') }}</textarea>
                                 </div>
-
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="tanggal_mulai" class="form-label">Tanggal Mulai <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" required
-                                               value="{{ old('tanggal_mulai', date('Y-m-d')) }}">
+                                        <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" required value="{{ old('tanggal_mulai', date('Y-m-d')) }}">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="tanggal_berakhir" class="form-label">Tanggal Berakhir</label>
-                                        <input type="date" class="form-control" id="tanggal_berakhir" name="tanggal_berakhir"
-                                               value="{{ old('tanggal_berakhir') }}">
+                                        <input type="date" class="form-control" id="tanggal_berakhir" name="tanggal_berakhir" value="{{ old('tanggal_berakhir') }}">
                                     </div>
                                 </div>
-
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
-                                        <input type="time" class="form-control" id="waktu_mulai" name="waktu_mulai"
-                                               value="{{ old('waktu_mulai') }}">
+                                        <input type="time" class="form-control" id="waktu_mulai" name="waktu_mulai" value="{{ old('waktu_mulai') }}">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="waktu_berakhir" class="form-label">Waktu Berakhir</label>
-                                        <input type="time" class="form-control" id="waktu_berakhir" name="waktu_berakhir"
-                                               value="{{ old('waktu_berakhir') }}">
+                                        <input type="time" class="form-control" id="waktu_berakhir" name="waktu_berakhir" value="{{ old('waktu_berakhir') }}">
                                     </div>
                                 </div>
-
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <label for="target_audience" class="form-label">Target Audience <span class="text-danger">*</span></label>
@@ -687,11 +776,9 @@
                                         <small class="text-muted">Format: JPG, PNG, GIF. Maksimal 2MB</small>
                                     </div>
                                 </div>
-
                                 <div class="mb-3">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="penting" name="penting" value="1"
-                                               {{ old('penting') ? 'checked' : '' }}>
+                                        <input type="checkbox" class="form-check-input" id="penting" name="penting" value="1" {{ old('penting') ? 'checked' : '' }}>
                                         <label class="form-check-label fw-bold text-warning" for="penting">
                                             <i class="fas fa-star me-1"></i>Tandai sebagai Pengumuman Penting
                                         </label>
@@ -1020,7 +1107,7 @@
                 error: function(xhr, status, error) {
                     console.error('AJAX Error:', xhr.responseText);
                     let errorMessage = 'Terjadi kesalahan saat memuat form edit.';
-
+                    
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage = xhr.responseJSON.message;
                     } else if (xhr.status === 404) {
@@ -1028,7 +1115,7 @@
                     } else if (xhr.status === 500) {
                         errorMessage = 'Terjadi kesalahan server. Silakan coba lagi.';
                     }
-
+                    
                     showAlert('error', errorMessage);
                 },
                 complete: function() {
@@ -1063,15 +1150,16 @@
             let targetOptions = '';
             targets.forEach(function(target) {
                 const selected = data.target_audience === target ? 'selected' : '';
-                const label = target.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                const label = target.replace('_', ' ').split(' ').map(word =>
+                    word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                 targetOptions += `<option value="${target}" ${selected}>${label}</option>`;
             });
 
             // Build current image preview
             let currentImageHtml = '';
             if (data.gambar) {
-                currentImageHtml =
-                    `<div class="mt-2">
+                currentImageHtml = `
+                    <div class="mt-2">
                         <label class="form-label">Gambar Saat Ini:</label><br>
                         <img src="${data.gambar}" alt="Current" style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 0.25rem;">
                     </div>`;
@@ -1207,6 +1295,7 @@
         function adjustPageLayout() {
             const mainContent = document.getElementById('pageMainContent');
             const sidebar = document.getElementById('sidebar');
+            
             if (mainContent && sidebar) {
                 if (window.innerWidth < 1024) {
                     mainContent.style.marginLeft = '0';

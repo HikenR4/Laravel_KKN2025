@@ -136,6 +136,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('profil/store', [ProfilNagariController::class, 'store'])->name('profil.store');
         Route::get('profil/coordinates', [ProfilNagariController::class, 'getCoordinates'])->name('profil.coordinates');
         Route::delete('profil/video/delete', [ProfilNagariController::class, 'deleteVideo'])->name('profil.video.delete');
+        Route::delete('/profil/delete-logo', [ProfilNagariController::class, 'deleteLogo'])->name('profil.delete.logo');
+        Route::delete('/profil/delete-banner', [ProfilNagariController::class, 'deleteBanner'])->name('profil.delete.banner');
+        Route::delete('/profil/delete-video', [ProfilNagariController::class, 'deleteVideo'])->name('profil.delete.video');
 
         // Perangkat Nagari routes
         Route::get('perangkat', [PerangkatController::class, 'index'])->name('perangkat');

@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $profilNagari->nama_nagari ?? 'Nagari Mungo' }} - Portal Digital Masyarakat</title>
+    @if(isset($profilNagari) && $profilNagari && $profilNagari->hasLogoFile())
+        <link rel="icon" type="image/png" href="{{ $profilNagari->getLogoUrl() }}">
+        <link rel="shortcut icon" type="image/png" href="{{ $profilNagari->getLogoUrl() }}">
+        <link rel="apple-touch-icon" href="{{ $profilNagari->getLogoUrl() }}">
+        <!-- untuk berbagai ukuran device -->
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ $profilNagari->getLogoUrl() }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ $profilNagari->getLogoUrl() }}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ $profilNagari->getLogoUrl() }}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ $profilNagari->getLogoUrl() }}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ $profilNagari->getLogoUrl() }}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ $profilNagari->getLogoUrl() }}">
+    @else
+        <link rel="icon" type="image/png" href="{{ asset('images/default-logo.png') }}">
+        <link rel="shortcut icon" type="image/png" href="{{ asset('images/default-logo.png') }}">
+    @endif
+    
+    <meta name="description" content="{{ isset($profilNagari) && $profilNagari && $profilNagari->sejarah ? Str::limit(strip_tags($profilNagari->sejarah), 160) : 'Portal digital resmi untuk layanan masyarakat' }}">
+    <meta name="keywords" content="nagari, {{ isset($profilNagari) && $profilNagari ? $profilNagari->nama_nagari : 'mungo' }}, layanan digital, pemerintahan">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{{ isset($profilNagari) && $profilNagari ? $profilNagari->nama_nagari : 'Nagari Mungo' }} - Portal Digital">
+    <meta property="og:description" content="{{ isset($profilNagari) && $profilNagari && $profilNagari->sejarah ? Str::limit(strip_tags($profilNagari->sejarah), 160) : 'Portal digital resmi untuk layanan masyarakat' }}">
+    @if(isset($profilNagari) && $profilNagari && $profilNagari->hasLogoFile())
+        <meta property="og:image" content="{{ $profilNagari->getLogoUrl() }}">
+    @endif
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ isset($profilNagari) && $profilNagari ? $profilNagari->nama_nagari : 'Nagari Mungo' }} - Portal Digital">
+    <meta name="twitter:description" content="{{ isset($profilNagari) && $profilNagari && $profilNagari->sejarah ? Str::limit(strip_tags($profilNagari->sejarah), 160) : 'Portal digital resmi untuk layanan masyarakat' }}">
+    @if(isset($profilNagari) && $profilNagari && $profilNagari->hasLogoFile())
+        <meta name="twitter:image" content="{{ $profilNagari->getLogoUrl() }}">
+    @endif
+
     <meta name="description" content="{{ $profilNagari && $profilNagari->sejarah ? Str::limit(strip_tags($profilNagari->sejarah), 160) : 'Portal digital resmi untuk layanan masyarakat' }}">
     <meta name="keywords" content="nagari, {{ $profilNagari->nama_nagari ?? 'mungo' }}, layanan digital, pemerintahan">
 
