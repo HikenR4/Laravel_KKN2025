@@ -684,8 +684,7 @@
                 </div>
                 <h1>
                     Layanan Digital
-                    <span class="hero-highlight">{{ $profilNagari->nama_nagari ?? 'Nagari Mungo' }}</span>
-                    untuk Masa Depan
+                    <span class="hero-highlight">{{  'Nagari Mungo' }}</span>
                 </h1>
                 <p>
                     @if($profilNagari && $profilNagari->sejarah)

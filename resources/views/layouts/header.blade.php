@@ -3,9 +3,7 @@
     <nav class="nav-container">
         <!-- Logo di Kiri -->
         <a href="{{ url('/') }}" class="logo">
-            <div class="logo-icon">
-                <i class="fas fa-mountain"></i>
-            </div>
+            <img src="{{ url('images/kab50kota.png') }}" alt="Logo Nagari Mungo" class="logo-icon">
             <span>Nagari Mungo</span>
         </a>
 
