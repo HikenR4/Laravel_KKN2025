@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -10,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Cache; // TAMBAH INI
 
 class ProfilNagariController extends Controller
 {
@@ -20,7 +20,6 @@ class ProfilNagariController extends Controller
     {
         try {
             $profil = ProfilNagari::first();
-
             // Debug info
             if ($profil) {
                 Log::info('Profil data loaded', [
@@ -32,7 +31,6 @@ class ProfilNagariController extends Controller
                     'video_exists' => $profil->hasVideoFile()
                 ]);
             }
-
             return view('admin.profil', compact('profil'));
         } catch (\Exception $e) {
             Log::error('Error loading profil page: ' . $e->getMessage());
@@ -86,7 +84,6 @@ class ProfilNagariController extends Controller
 
         if ($validator->fails()) {
             Log::error('Validation failed', ['errors' => $validator->errors()->toArray()]);
-
             if ($request->ajax()) {
                 return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
             }
@@ -96,10 +93,10 @@ class ProfilNagariController extends Controller
         try {
             // Ensure directories exist
             $this->ensureDirectoriesExist();
-
+            
             // Get existing profile
             $profil = ProfilNagari::first();
-
+            
             // Prepare data (exclude file fields initially)
             $data = $request->except(['logo', 'banner', 'video_profil']);
 
@@ -170,6 +167,9 @@ class ProfilNagariController extends Controller
                 Log::info('Profil nagari created', ['id' => $profil->id, 'data' => $data]);
             }
 
+            // TAMBAH: Clear semua cache yang berkaitan dengan profil
+            $this->clearProfilCache();
+
             // Verify data was saved
             if ($profil) {
                 $savedData = $profil->fresh();
@@ -207,6 +207,44 @@ class ProfilNagariController extends Controller
     }
 
     /**
+     * TAMBAH: Method untuk clear cache profil
+     */
+    private function clearProfilCache()
+    {
+        try {
+            // Clear cache keys yang mungkin digunakan untuk profil
+            $cacheKeys = [
+                'profil_nagari',
+                'profil_nagari_data',
+                'profil_video',
+                'profil_statistics',
+                'latest_content',
+                'public_statistics',
+                'popular_content'
+            ];
+
+            foreach ($cacheKeys as $key) {
+                Cache::forget($key);
+            }
+
+            // Clear cache dengan pattern jika menggunakan Redis
+            if (Cache::getStore() instanceof \Illuminate\Cache\RedisStore) {
+                Cache::flush();
+            }
+
+            Log::info('Profil cache cleared successfully');
+            
+            // Optional: Clear view cache juga
+            \Artisan::call('view:clear');
+            
+        } catch (\Exception $e) {
+            Log::warning('Failed to clear profil cache: ' . $e->getMessage());
+        }
+    }
+
+    // ... sisa method lainnya tetap sama seperti sebelumnya ...
+
+    /**
      * Handle file upload (logo & banner) - IMPROVED VERSION
      */
     private function handleFileUpload($file, $type, $existingProfile = null)
@@ -220,7 +258,7 @@ class ProfilNagariController extends Controller
             ]);
 
             // Validate file size
-            $maxSize = $type === 'logo' ? 2048 * 1024 : 5120 * 1024; // 2MB untuk logo, 5MB untuk banner
+            $maxSize = $type === 'logo' ? 2048 * 1024 : 5120 * 1024;
             if ($file->getSize() > $maxSize) {
                 return [
                     'success' => false,
@@ -271,7 +309,6 @@ class ProfilNagariController extends Controller
 
             // Move file using Laravel's move method
             $fullPath = $destinationPath . '/' . $filename;
-
             try {
                 $moved = $file->move($destinationPath, $filename);
                 Log::info("File moved successfully", [
@@ -302,7 +339,6 @@ class ProfilNagariController extends Controller
                 Log::info("File permissions set successfully");
             } catch (\Exception $chmodException) {
                 Log::warning("Could not set file permissions: " . $chmodException->getMessage());
-                // Don't fail the upload for this
             }
 
             // Final verification
@@ -331,7 +367,6 @@ class ProfilNagariController extends Controller
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
-
             return [
                 'success' => false,
                 'message' => "Terjadi kesalahan saat upload {$type}: " . $e->getMessage()
@@ -442,7 +477,6 @@ class ProfilNagariController extends Controller
                 'file' => $e->getFile(),
                 'line' => $e->getLine()
             ]);
-
             return [
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat upload video: ' . $e->getMessage()
@@ -474,10 +508,11 @@ class ProfilNagariController extends Controller
     private function handleUploadError($message, $request)
     {
         Log::error('Upload error: ' . $message);
-
+        
         if ($request->ajax()) {
             return response()->json(['success' => false, 'message' => $message], 400);
         }
+        
         return redirect()->back()->with('error', $message)->withInput();
     }
 
@@ -487,6 +522,7 @@ class ProfilNagariController extends Controller
     public function debugFiles()
     {
         $profil = ProfilNagari::first();
+        
         if (!$profil) {
             return response()->json(['message' => 'No profile found']);
         }
@@ -513,7 +549,7 @@ class ProfilNagariController extends Controller
         if (File::exists(public_path('uploads'))) {
             $debug['files_in_uploads'] = File::files(public_path('uploads'));
         }
-
+        
         if (File::exists(public_path('uploads/videos'))) {
             $debug['files_in_videos'] = File::files(public_path('uploads/videos'));
         }
@@ -529,7 +565,7 @@ class ProfilNagariController extends Controller
     {
         try {
             $profil = ProfilNagari::first();
-
+            
             if (!$profil || !$profil->getVideoFilename()) {
                 return response()->json([
                     'success' => false,
@@ -550,6 +586,9 @@ class ProfilNagariController extends Controller
                 'video_size' => null
             ]);
 
+            // TAMBAH: Clear cache setelah delete video
+            $this->clearProfilCache();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Video berhasil dihapus'
@@ -557,10 +596,92 @@ class ProfilNagariController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Error deleting video: ' . $e->getMessage());
-
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menghapus video'
+            ], 500);
+        }
+    }
+
+    public function deleteLogo(Request $request)
+    {
+        try {
+            $profil = ProfilNagari::first();
+            
+            if (!$profil || !$profil->getLogoFilename()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Logo tidak ditemukan'
+                ], 404);
+            }
+
+            // Delete logo file
+            $logoPath = public_path('uploads/' . $profil->getLogoFilename());
+            if (File::exists($logoPath)) {
+                File::delete($logoPath);
+            }
+
+            // Update database - set logo to null
+            $profil->update([
+                'logo' => null
+            ]);
+
+            // Clear cache setelah delete logo
+            $this->clearProfilCache();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Logo berhasil dihapus'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error deleting logo: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus logo'
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete banner AJAX endpoint
+     */
+    public function deleteBanner(Request $request)
+    {
+        try {
+            $profil = ProfilNagari::first();
+            
+            if (!$profil || !$profil->getBannerFilename()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Banner tidak ditemukan'
+                ], 404);
+            }
+
+            // Delete banner file
+            $bannerPath = public_path('uploads/' . $profil->getBannerFilename());
+            if (File::exists($bannerPath)) {
+                File::delete($bannerPath);
+            }
+
+            // Update database - set banner to null
+            $profil->update([
+                'banner' => null
+            ]);
+
+            // Clear cache setelah delete banner
+            $this->clearProfilCache();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Banner berhasil dihapus'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error deleting banner: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus banner'
             ], 500);
         }
     }

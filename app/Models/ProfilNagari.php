@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -56,16 +55,16 @@ class ProfilNagari extends Model
         if (!$filename) {
             return false;
         }
-
+        
         $path = public_path('uploads/' . $filename);
         $exists = File::exists($path);
-
+        
         Log::info('Logo file check', [
             'filename' => $filename,
             'path' => $path,
             'exists' => $exists
         ]);
-
+        
         return $exists;
     }
 
@@ -90,16 +89,16 @@ class ProfilNagari extends Model
         if (!$filename) {
             return false;
         }
-
+        
         $path = public_path('uploads/' . $filename);
         $exists = File::exists($path);
-
+        
         Log::info('Banner file check', [
             'filename' => $filename,
             'path' => $path,
             'exists' => $exists
         ]);
-
+        
         return $exists;
     }
 
@@ -124,16 +123,16 @@ class ProfilNagari extends Model
         if (!$filename) {
             return false;
         }
-
+        
         $path = public_path('uploads/videos/' . $filename);
         $exists = File::exists($path);
-
+        
         Log::info('Video file check', [
             'filename' => $filename,
             'path' => $path,
             'exists' => $exists
         ]);
-
+        
         return $exists;
     }
 
@@ -141,10 +140,10 @@ class ProfilNagari extends Model
     public function getVideoDurasiFormattedAttribute()
     {
         if (!$this->video_durasi) return null;
-
+        
         $minutes = floor($this->video_durasi / 60);
         $seconds = $this->video_durasi % 60;
-
+        
         return sprintf('%02d:%02d', $minutes, $seconds);
     }
 
@@ -152,11 +151,11 @@ class ProfilNagari extends Model
     public function getVideoSizeFormattedAttribute()
     {
         if (!$this->video_size) return null;
-
+        
         if ($this->video_size >= 1024) {
             return number_format($this->video_size / 1024, 2) . ' GB';
         }
-
+        
         return number_format($this->video_size, 2) . ' MB';
     }
 
@@ -193,40 +192,125 @@ class ProfilNagari extends Model
         return $this->video_url;
     }
 
-    // Override save method to add debugging
+    // FIXED: Override save and update methods with better error handling
     public function save(array $options = [])
     {
         Log::info('ProfilNagari save called', [
-            'attributes' => $this->attributes,
-            'dirty' => $this->getDirty(),
-            'exists' => $this->exists
+            'attributes' => $this->getDirty(),
+            'exists' => $this->exists,
+            'id' => $this->id ?? 'new'
         ]);
 
-        $result = parent::save($options);
-
-        Log::info('ProfilNagari save result', [
-            'result' => $result,
-            'final_attributes' => $this->attributes
-        ]);
-
-        return $result;
+        try {
+            $result = parent::save($options);
+            
+            Log::info('ProfilNagari save result', [
+                'result' => $result,
+                'id' => $this->id,
+                'updated_at' => $this->updated_at
+            ]);
+            
+            return $result;
+        } catch (\Exception $e) {
+            Log::error('ProfilNagari save failed', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            throw $e;
+        }
     }
 
-    // Override update method to add debugging
     public function update(array $attributes = [], array $options = [])
     {
         Log::info('ProfilNagari update called', [
-            'input_attributes' => $attributes,
-            'current_attributes' => $this->attributes
+            'input_attributes' => array_keys($attributes),
+            'current_id' => $this->id,
+            'exists' => $this->exists
         ]);
 
-        $result = parent::update($attributes, $options);
+        try {
+            $result = parent::update($attributes, $options);
+            
+            if ($result) {
+                $fresh = $this->fresh();
+                Log::info('ProfilNagari update success', [
+                    'result' => $result,
+                    'id' => $this->id,
+                    'updated_at' => $fresh ? $fresh->updated_at : 'could not refresh'
+                ]);
+            } else {
+                Log::warning('ProfilNagari update returned false', [
+                    'id' => $this->id,
+                    'attributes' => $attributes
+                ]);
+            }
+            
+            return $result;
+        } catch (\Exception $e) {
+            Log::error('ProfilNagari update failed', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'id' => $this->id,
+                'attributes' => $attributes
+            ]);
+            throw $e;
+        }
+    }
 
-        Log::info('ProfilNagari update result', [
-            'result' => $result,
-            'final_attributes' => $this->fresh()->attributes ?? 'could not refresh'
-        ]);
+    // FIXED: Add method to check if model is properly configured
+    public static function checkTableExists()
+    {
+        try {
+            $instance = new static;
+            $exists = \Schema::hasTable($instance->getTable());
+            Log::info('ProfilNagari table check', [
+                'table' => $instance->getTable(),
+                'exists' => $exists
+            ]);
+            return $exists;
+        } catch (\Exception $e) {
+            Log::error('ProfilNagari table check failed: ' . $e->getMessage());
+            return false;
+        }
+    }
 
-        return $result;
+    // FIXED: Add method to validate required columns
+    public static function validateColumns()
+    {
+        try {
+            $instance = new static;
+            $tableName = $instance->getTable();
+            
+            if (!\Schema::hasTable($tableName)) {
+                return ['status' => false, 'message' => 'Table does not exist'];
+            }
+            
+            $requiredColumns = [
+                'id', 'nama_nagari', 'logo', 'banner', 'video_profil', 
+                'video_url', 'created_at', 'updated_at'
+            ];
+            
+            $missingColumns = [];
+            foreach ($requiredColumns as $column) {
+                if (!\Schema::hasColumn($tableName, $column)) {
+                    $missingColumns[] = $column;
+                }
+            }
+            
+            if (empty($missingColumns)) {
+                return ['status' => true, 'message' => 'All columns exist'];
+            } else {
+                return [
+                    'status' => false, 
+                    'message' => 'Missing columns: ' . implode(', ', $missingColumns)
+                ];
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('ProfilNagari column validation failed: ' . $e->getMessage());
+            return ['status' => false, 'message' => $e->getMessage()];
+        }
     }
 }

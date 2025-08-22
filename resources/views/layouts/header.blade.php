@@ -1,11 +1,18 @@
-<!-- Header dengan Navigation -->
 <header class="header">
     <nav class="nav-container">
-        <!-- Logo di Kiri -->
+        <!-- Logo di Kiri - UPDATE DENGAN LOGO NAGARI + SAFETY CHECK -->
         <a href="{{ url('/') }}" class="logo">
-            <img src="{{ url('images/kab50kota.png') }}" alt="Logo Nagari Mungo" class="logo-icon">
-            <span>Nagari Mungo</span>
-        </a>
+          <div class="logo-icon">
+              @if(isset($profilNagari) && $profilNagari && $profilNagari->hasLogoFile())
+                  <img src="{{ $profilNagari->getLogoUrl() }}"
+                       alt="Logo {{ $profilNagari->nama_nagari ?? 'Nagari' }}"
+                       class="logo-img">
+              @else
+                  <i class="fas fa-mountain"></i>
+              @endif
+          </div>
+          <span>{{ $profilNagari->nama_nagari ?? 'Nagari Mungo' }}</span>
+      </a>
 
         <!-- Navigation Menu di Tengah -->
         <div class="nav-links">
@@ -29,7 +36,6 @@
             <a href="{{ route('pengumuman') }}" class="{{ request()->routeIs('pengumuman*') ? 'active' : '' }}">Pengumuman</a>
             <a href="{{ route('layanan') }}" class="{{ request()->routeIs('layanan*') ? 'active' : '' }}">Layanan</a>
             <a href="{{ route('tentang') }}" class="{{ request()->routeIs('tentang*') ? 'active' : '' }}">Tentang</a>
-
         </div>
 
         <!-- Login Button di Kanan -->
@@ -65,12 +71,11 @@
             <a href="{{ route('pengumuman') }}">Pengumuman</a>
             <a href="{{ route('layanan') }}">Layanan</a>
             <a href="{{ route('tentang') }}">Tentang</a>
-
         </div>
     </nav>
 </header>
 
-<!-- CSS untuk Header -->
+<!-- CSS untuk Header - UPDATED DENGAN LOGO SUPPORT -->
 <style>
     /* Header - WHITE & RED GRADIENT THEME */
     .header {
@@ -101,7 +106,7 @@
         gap: 2rem;
     }
 
-    /* Logo - Enhanced with red gradient */
+    /* Logo - Enhanced with red gradient dan support untuk logo upload */
     .logo {
         display: flex;
         align-items: center;
@@ -122,8 +127,8 @@
     }
 
     .logo-icon {
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         background: linear-gradient(135deg, #FF6B6B, #DC143C, #B22222);
         border-radius: 50%;
         display: flex;
@@ -133,6 +138,22 @@
         position: relative;
         overflow: hidden;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 4px;
+    }
+
+    /* Logo image styles */
+    .logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        background: white;
+        padding: 2px;
+    }
+
+    /* Fallback icon when no logo */
+    .logo-icon i {
+        font-size: 1.2rem;
     }
 
     .logo-icon::before {
@@ -453,8 +474,8 @@
         }
 
         .logo-icon {
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
         }
 
         .mobile-toggle {
@@ -499,9 +520,8 @@
         }
 
         .logo-icon {
-            width: 30px;
-            height: 30px;
-            font-size: 0.8rem;
+            width: 35px;
+            height: 35px;
         }
 
         .cta-nav {
