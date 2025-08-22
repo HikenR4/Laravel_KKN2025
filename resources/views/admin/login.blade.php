@@ -134,16 +134,15 @@
     <div class="relative z-10 glass-effect p-6 rounded-2xl shadow-2xl w-full max-w-sm mx-4 slide-in">
 
         <!-- Logo/Title -->
-        <div class="text-center mb-4">
+       <div class="text-center mb-4">
             <div class="w-12 h-12 bg-white rounded-lg mx-auto mb-3 flex items-center justify-center shadow-lg">
-                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                </svg>
+                <img src="{{ url('images/kab50kota.png') }}" alt="Logo Nagari Mungo" class="w-10 h-10">
             </div>
             <h2 class="text-xl font-bold text-white mb-1">Login Admin</h2>
             <p class="text-white/90 text-sm font-medium">Nagari Mungo</p>
             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto mt-2"></div>
         </div>
+
 
         <!-- Error messages -->
         <div id="errorContainer">
