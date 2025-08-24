@@ -67,10 +67,10 @@
     font-size: 0.875rem;
 }
 .filter-input {
-    padding: 0.6rem 0.8rem; /* Kurangi dari 0.75rem 1rem */
+    padding: 0.5rem 0.7rem;
     border: 2px solid #e5e7eb;
     border-radius: 8px;
-    font-size: 0.9rem; /* Kurangi dari 1rem */
+    font-size: 0.85rem;
     transition: all 0.3s ease;
 }
 
@@ -83,13 +83,14 @@
     background: linear-gradient(135deg, #DC143C, #B22222);
     color: white;
     border: none;
-    padding: 0.6rem 1.2rem; /* Kurangi dari 0.75rem 1.5rem */
+    padding: 0.5rem 1rem;
     border-radius: 8px;
     font-weight: 600;
-    font-size: 0.9rem; /* Tambahkan ukuran font lebih kecil */
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.3s ease;
     height: fit-content;
+    white-space: nowrap;
 }
 .search-btn:hover {
     transform: translateY(-2px);
@@ -97,14 +98,16 @@
 }
 .agenda-grid {
     display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: 2rem;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
 }
 .agenda-main {
     min-height: 400px;
+    width: 100%;
+    overflow: hidden;
 }
 .agenda-card {
     background: white;
@@ -114,6 +117,9 @@
     overflow: hidden;
     transition: all 0.3s ease;
     border: 1px solid #e5e7eb;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .agenda-card:hover {
     transform: translateY(-5px);
@@ -121,6 +127,9 @@
 }
 .agenda-card-header {
     padding: 1.5rem 1.5rem 0;
+    overflow: visible;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .agenda-meta {
@@ -181,6 +190,11 @@
     color: #1f2937;
     margin-bottom: 0.75rem;
     line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    width: 100%;
+    max-width: 100%;
 }
 .agenda-title a {
     text-decoration: none;
@@ -243,6 +257,7 @@
     position: sticky;
     top: 100px;
     height: fit-content;
+    width: 100%;
 }
 .sidebar-card {
     background: white;
@@ -404,6 +419,14 @@
     .agenda-meta {
         flex-direction: column;
         gap: 0.5rem;
+    }
+    .agenda-title {
+        font-size: 1.25rem; /* Kurangi dari 1.5rem */
+    }
+}
+@media (max-width: 480px) {
+    .agenda-title {
+        font-size: 1.125rem; /* Lebih kecil lagi untuk mobile kecil */
     }
 }
 

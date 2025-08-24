@@ -213,7 +213,7 @@
                 <li><a href="{{ route('profil.perangkat-nagari') }}">Perangkat Nagari</a></li>
                 <li><a href="{{ route('profil.visi-misi') }}">Visi & Misi</a></li>
                 <li><a href="{{ route('profil.data-wilayah') }}">Data Wilayah</a></li>
-                <li><a href="#tentang">Tentang Portal</a></li>
+                <li><a href="{{ route('tentang') }}">Tentang Portal</a></li>
             </ul>
         </div>
 
@@ -222,15 +222,15 @@
             <div class="footer-info">
                 <div class="footer-info-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>Jl. Nagari Mungo No. 123<br>Padang, Sumatera Barat</span>
+                    <span>Jl. Raya Payakumbuh - Lintau KM.8 Pakan Sabtu, Nagari Mungo, Kecamatan Luak, Kabupaten Lima Puluh Kota, 26261</span>
                 </div>
                 <div class="footer-info-item">
                     <i class="fas fa-phone"></i>
-                    <span>(0751) 123-4567</span>
+                    <span>(0752) 759249</span>
                 </div>
                 <div class="footer-info-item">
                     <i class="fas fa-envelope"></i>
-                    <span>info@nagarimungo.id</span>
+                    <span>nagarimungo05@gmail.com</span>
                 </div>
                 <div class="footer-info-item">
                     <i class="fas fa-clock"></i>
