@@ -38,6 +38,7 @@
     gap: 0.5rem;
     align-items: center;
     font-size: 0.9rem;
+    flex-wrap: wrap; /* Tambahkan ini */
 }
 .breadcrumb a {
     color: rgba(255, 255, 255, 0.8);
@@ -56,6 +57,10 @@
     line-height: 1.2;
     margin-bottom: 1.5rem;
     text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    word-wrap: break-word; /* Tambahkan ini */
+    overflow-wrap: break-word; /* Tambahkan ini */
+    hyphens: auto; /* Tambahkan ini */
+    white-space: normal; /* Pastikan tidak nowrap */
 }
 .agenda-meta-row {
     display: flex;
@@ -383,8 +388,9 @@
 }
 @media (max-width: 768px) {
     .agenda-title {
-        font-size: 2.5rem;
-    }
+        font-size: 2.5rem; /* Kurangi ukuran font */
+        line-height: 1.1; /* Rapihkan line height */
+    }   
     .main-content {
         padding: 2rem 1rem 0;
     }
@@ -405,8 +411,17 @@
     .info-grid {
         grid-template-columns: 1fr;
     }
+    .breadcrumb {
+        font-size: 0.8rem;
+        gap: 0.3rem;
+    }
 }
 @media (max-width: 480px) {
+    .agenda-title {
+        font-size: 1.8rem; /* Lebih kecil untuk mobile kecil */
+        line-height: 1.1;
+        margin-bottom: 1rem;
+    }
     .countdown-timer {
         grid-template-columns: repeat(4, 1fr);
         gap: 0.5rem;
@@ -419,6 +434,10 @@
     }
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+    .meta-badge {
+        width: 100%;
+        justify-content: center;
     }
 }
 
