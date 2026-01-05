@@ -435,7 +435,6 @@
                         <table class="table custom-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 5%">#</th>
                                     <th style="width: 10%">Kode</th>
                                     <th style="width: 30%">Layanan</th>
                                     <th style="width: 15%">Biaya & Waktu</th>
@@ -451,9 +450,6 @@
                                     $rowClass = $isActive ? 'layanan-active' : 'layanan-inactive';
                                 @endphp
                                 <tr class="layanan-fade-in {{ $rowClass }}" style="animation-delay: {{ 0.3 + ($index * 0.1) }}s;">
-                                    <td>
-                                        <span class="urutan-badge">{{ $item->urutan ?: ($index + 1) }}</span>
-                                    </td>
                                     <td>
                                         <span class="kode-layanan">{{ $item->kode_layanan ?: 'LAY-' . str_pad($item->id, 4, '0', STR_PAD_LEFT) }}</span>
                                     </td>

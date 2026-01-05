@@ -82,7 +82,7 @@ body {
             box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3) !important;
             color: white !important;
         }
-        
+
         .breadcrumb-custom .breadcrumb-item a:hover {
             color: #059669;
         }
@@ -717,19 +717,19 @@ body {
             font-size: 1rem;
             line-height: 1.4;
             margin-bottom: 0.25rem;
-            
+
             /* CSS untuk wrapping text yang panjang */
             word-wrap: break-word;
             overflow-wrap: break-word;
             word-break: break-word;
             hyphens: auto;
-            
+
             /* Batasi maksimal 3 baris untuk judul */
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            
+
             /* Fallback untuk browser yang tidak mendukung line-clamp */
             max-height: 4.2em !important; /* 3 baris x 1.4 line-height */
         }
@@ -743,18 +743,18 @@ body {
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
             margin-top: 0.25rem; */
-            
+
             /* CSS untuk wrapping slug yang panjang */
             /* word-wrap: break-word;
             overflow-wrap: break-word;
             word-break: break-all; */ /* break-all untuk URL/slug */
-            
+
             /* Batasi maksimal 2 baris untuk slug */
             /* display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden; */
-            
+
             /* Fallback untuk browser yang tidak mendukung line-clamp */
             /* max-height: 2.4em !important; /* 2 baris x 1.2 line-height */
             /* line-height: 1.2 !important;
@@ -767,52 +767,52 @@ body {
             margin-top: 0.25rem !important;
             margin-bottom: 0.5rem !important;
             line-height: 1.4 !important;
-            
+
             /* CSS untuk deskripsi */
             word-wrap: break-word !important;
             overflow-wrap: break-word !important;
-            
+
             /* Batasi maksimal 2 baris untuk deskripsi */
             display: -webkit-box !important;
             -webkit-line-clamp: 2 !important;
             -webkit-box-orient: vertical !important;
             overflow: hidden !important;
-            
+
             /* Fallback */
             max-height: 2.8em !important; /* 2 baris x 1.4 line-height */
         }
 
         /* Perbaikan untuk tabel agar lebih responsif dengan konten panjang */
         .custom-table {
-            table-layout: auto !important; /* Ubah dari fixed ke auto */
+            table-layout:fixed !important; /* Ubah dari fixed ke auto */
         }
 
         /* Pengaturan lebar kolom yang lebih fleksibel */
-        .custom-table th:nth-child(1), 
+        .custom-table th:nth-child(1),
         .custom-table td:nth-child(1) {
             width: 35% !important; /* Kolom agenda diperbesar */
             min-width: 250px !important;
         }
 
-        .custom-table th:nth-child(2), 
+        .custom-table th:nth-child(2),
         .custom-table td:nth-child(2) {
             width: 12% !important; /* Kolom kategori */
             min-width: 100px !important;
         }
 
-        .custom-table th:nth-child(3), 
+        .custom-table th:nth-child(3),
         .custom-table td:nth-child(3) {
             width: 18% !important; /* Kolom tanggal */
             min-width: 120px !important;
         }
 
-        .custom-table th:nth-child(4), 
+        .custom-table th:nth-child(4),
         .custom-table td:nth-child(4) {
             width: 20% !important; /* Kolom lokasi */
             min-width: 150px !important;
         }
 
-        .custom-table th:nth-child(5), 
+        .custom-table th:nth-child(5),
         .custom-table td:nth-child(5) {
             width: 15% !important; /* Kolom aksi */
             min-width: 120px !important;
@@ -830,7 +830,7 @@ body {
             display: flex;
             align-items: flex-start; /* Ubah ke flex-start */
             gap: 0.25rem;
-            
+
             /* CSS untuk wrapping lokasi yang panjang */
             word-wrap: break-word;
             overflow-wrap: break-word;
@@ -858,23 +858,23 @@ body {
 
         /* Responsive design untuk mobile */
         @media (max-width: 768px) {
-            .custom-table th:nth-child(1), 
+            .custom-table th:nth-child(1),
             .custom-table td:nth-child(1) {
                 min-width: 200px !important;
             }
-            
+
             .agenda-title {
                 font-size: 0.875rem !important;
                 -webkit-line-clamp: 2 !important; /* Kurangi baris di mobile */
                 max-height: 2.45em !important; /* 2 baris x 1.4 line-height */
             }
-            
+
             .agenda-slug {
                 font-size: 0.625rem !important;
                 -webkit-line-clamp: 1 !important; /* Hanya 1 baris di mobile */
                 max-height: 1.2em !important;
             }
-            
+
             .agenda-description-short {
                 -webkit-line-clamp: 1 !important;
                 max-height: 1.4em !important;
@@ -1372,23 +1372,23 @@ body {
                                             <td>
                                                 <div class="agenda-info">
                                                     <!-- Judul Agenda dengan wrapping yang diperbaiki -->
-                                                    <div class="agenda-title text-truncated" 
+                                                    <div class="agenda-title text-truncated"
                                                         data-full-text="{{ $item->judul ?? 'Agenda Kegiatan' }}"
                                                         title="{{ $item->judul ?? 'Agenda Kegiatan' }}">
                                                         {{ $item->judul ?? 'Agenda Kegiatan' }}
                                                     </div>
-                                                    
+
                                                     <!-- SLUG DIHILANGKAN DARI SINI -->
-                                                    
+
                                                     <!-- Deskripsi singkat jika ada -->
                                                     @if($item->deskripsi)
-                                                    <div class="agenda-description-short text-truncated" 
+                                                    <div class="agenda-description-short text-truncated"
                                                         data-full-text="{{ $item->deskripsi }}"
                                                         title="{{ $item->deskripsi }}">
                                                         {{ Str::limit($item->deskripsi, 120) }}
                                                     </div>
                                                     @endif
-                                                    
+
                                                     <!-- Meta information -->
                                                     <div class="meta-info">
                                                         <span class="status-badge status-{{ $item->status ?? 'planned' }}">
@@ -1436,7 +1436,7 @@ body {
                                             </td>
                                             <td>
                                                 @if($item->lokasi)
-                                                <div class="agenda-location text-truncated" 
+                                                <div class="agenda-location text-truncated"
                                                     data-full-text="{{ $item->lokasi }}"
                                                     title="{{ $item->lokasi }}">
                                                     <i class="fas fa-map-marker-alt"></i>

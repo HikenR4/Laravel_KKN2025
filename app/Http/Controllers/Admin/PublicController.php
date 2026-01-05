@@ -10,6 +10,7 @@ use App\Models\Agenda;
 use App\Models\ProfilNagari;
 use App\Models\PerangkatNagari;
 use App\Models\Layanan;
+use App\Models\Komentar;
 use App\Models\StatistikKunjungan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -83,6 +84,14 @@ class PublicController extends Controller
                 return ProfilNagari::first();
             });
 
+            // TAMBAHAN BARU: Ambil perangkat nagari untuk slider (cache selama 30 menit)
+            $perangkatNagari = Cache::remember('perangkat_nagari_slider', 1800, function () {
+                return PerangkatNagari::active()
+                    ->ordered()
+                    ->take(10) // Batasi maksimal 10 untuk slider agar tidak terlalu berat
+                    ->get();
+            });
+
             // Ambil statistik kependudukan (cache selama 30 menit)
             $statistik = Cache::remember('statistik_kependudukan', 1800, function () {
                 return [
@@ -141,6 +150,7 @@ class PublicController extends Controller
 
             return view('public.landing', compact(
                 'profilNagari',
+                'perangkatNagari',
                 'statistik',
                 'videoViews',
                 'latestBerita',
@@ -156,6 +166,7 @@ class PublicController extends Controller
             // Return with minimal data if error occurs
             return view('public.landing', [
                 'profilNagari' => null,
+                'perangkatNagari' => collect(),
                 'statistik' => [
                     'total_penduduk' => 0,
                     'total_kk' => 0,
@@ -169,6 +180,118 @@ class PublicController extends Controller
             ]);
         }
     }
+
+    // TAMBAHAN BARU: Method khusus untuk halaman perangkat nagari lengkap
+/**
+ * Halaman Perangkat Nagari
+ */
+public function perangkatNagari(Request $request)
+{
+    try {
+        // Record kunjungan
+        $this->recordVisit('perangkat-nagari');
+
+        $query = PerangkatNagari::with('admin')->ordered();
+
+        // Search functionality
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama', 'like', '%' . $search . '%')
+                  ->orWhere('jabatan', 'like', '%' . $search . '%')
+                  ->orWhere('nip', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter by status
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        // Get perangkat with pagination
+        $perangkat = $query->paginate(12);
+
+        // Get profil nagari for page info
+        $profilNagari = ProfilNagari::first();
+
+        // Statistik perangkat
+        $statistikPerangkat = [
+            'total' => PerangkatNagari::count(),
+            'aktif' => PerangkatNagari::active()->count(),
+            'non_aktif' => PerangkatNagari::where('status', 'tidak_aktif')->count(),
+        ];
+
+        return view('public.perangkat-nagari', compact(
+            'perangkat',
+            'profilNagari',
+            'statistikPerangkat'
+        ));
+
+    } catch (\Exception $e) {
+        Log::error('Error loading perangkat nagari page: ' . $e->getMessage());
+
+        return view('public.perangkat-nagari', [
+            'perangkat' => collect(),
+            'profilNagari' => null,
+            'statistikPerangkat' => [
+                'total' => 0,
+                'aktif' => 0,
+                'non_aktif' => 0,
+            ]
+        ]);
+    }
+}
+
+// TAMBAHAN BARU: API endpoint untuk mendapatkan perangkat nagari
+/**
+ * API endpoint untuk mendapatkan data perangkat nagari
+ */
+public function getPerangkatNagari(Request $request)
+{
+    try {
+        $limit = $request->input('limit', 10);
+        $activeOnly = $request->input('active_only', true);
+
+        $query = PerangkatNagari::ordered();
+
+        if ($activeOnly) {
+            $query->active();
+        }
+
+        $perangkat = Cache::remember("api_perangkat_nagari_{$limit}_{$activeOnly}", 1800, function () use ($query, $limit) {
+            return $query->take($limit)->get()->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'nama' => $item->nama,
+                    'jabatan' => $item->jabatan,
+                    'nip' => $item->nip,
+                    'foto_url' => $item->foto_url,
+                    'telepon' => $item->telepon,
+                    'email' => $item->email,
+                    'alamat' => $item->alamat,
+                    'pendidikan' => $item->pendidikan,
+                    'masa_jabatan' => $item->masa_jabatan,
+                    'status' => $item->status,
+                    'is_active' => $item->is_active,
+                ];
+            });
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $perangkat,
+            'total' => $perangkat->count()
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('Error getting perangkat nagari: ' . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan saat mengambil data perangkat nagari'
+        ], 500);
+    }
+}
 
     /**
      * API endpoint untuk mendapatkan profil nagari
@@ -569,6 +692,119 @@ class PublicController extends Controller
         }
     }
 
+public function storeKomentar(Request $request, $slug)
+{
+    try {
+        // Log untuk debugging
+        Log::info('Attempting to store comment', [
+            'slug' => $slug,
+            'request_data' => $request->all()
+        ]);
+
+        // Validasi input
+        $validated = $request->validate([
+            'nama' => 'required|string|max:100',
+            'email' => 'required|email|max:100',
+            'telepon' => 'nullable|string|max:20',
+            'komentar' => 'required|string|max:1000',
+            'rating' => 'nullable|integer|between:1,5',
+            'parent_id' => 'nullable|exists:komentar,id'
+        ], [
+            'nama.required' => 'Nama wajib diisi',
+            'nama.max' => 'Nama maksimal 100 karakter',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Format email tidak valid',
+            'email.max' => 'Email maksimal 100 karakter',
+            'telepon.max' => 'Telepon maksimal 20 karakter',
+            'komentar.required' => 'Komentar wajib diisi',
+            'komentar.max' => 'Komentar maksimal 1000 karakter',
+            'rating.between' => 'Rating harus antara 1-5',
+            'parent_id.exists' => 'Komentar parent tidak valid'
+        ]);
+
+        // Cari berita
+        $berita = Berita::published()->where('slug', $slug)->firstOrFail();
+
+        Log::info('Berita found', ['berita_id' => $berita->id]);
+
+        // Buat komentar baru dengan data yang sudah divalidasi
+        $komentar = Komentar::create([
+            'nama' => $validated['nama'],
+            'email' => $validated['email'],
+            'telepon' => $validated['telepon'] ?? null,
+            'komentar' => $validated['komentar'],
+            'berita_id' => $berita->id,
+            'parent_id' => $validated['parent_id'] ?? null,
+            'rating' => $validated['rating'] ?? null,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'status' => 'pending'
+        ]);
+
+        Log::info('Comment saved successfully', ['komentar_id' => $komentar->id]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Komentar berhasil dikirim dan menunggu moderasi admin.',
+            'komentar' => [
+                'id' => $komentar->id,
+                'nama' => $komentar->nama,
+                'komentar' => $komentar->komentar,
+                'rating' => $komentar->rating,
+                'created_at' => $komentar->created_at->format('d M Y H:i'),
+                'is_reply' => !is_null($komentar->parent_id)
+            ]
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        Log::error('Validation error', ['errors' => $e->errors()]);
+        return response()->json([
+            'success' => false,
+            'message' => 'Data tidak valid',
+            'errors' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        Log::error('Error storing comment', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan saat menyimpan komentar: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+    public function getKomentar($slug)
+    {
+        try {
+            $berita = Berita::published()->where('slug', $slug)->firstOrFail();
+
+            $komentar = Komentar::with('replies')
+                ->where('berita_id', $berita->id)
+                ->whereNull('parent_id') // Hanya parent comments
+                ->approved()
+                ->latest()
+                ->paginate(10);
+
+            return response()->json([
+                'success' => true,
+                'data' => $komentar->items(),
+                'pagination' => [
+                    'current_page' => $komentar->currentPage(),
+                    'last_page' => $komentar->lastPage(),
+                    'total' => $komentar->total()
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching comments: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat mengambil komentar'
+            ], 500);
+        }
+    }
     public function beritaByKategori($kategori)
     {
         // Validasi kategori

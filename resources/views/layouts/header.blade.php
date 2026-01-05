@@ -2,17 +2,9 @@
     <nav class="nav-container">
         <!-- Logo di Kiri - UPDATE DENGAN LOGO NAGARI + SAFETY CHECK -->
         <a href="{{ url('/') }}" class="logo">
-          <div class="logo-icon">
-              @if(isset($profilNagari) && $profilNagari && $profilNagari->hasLogoFile())
-                  <img src="{{ $profilNagari->getLogoUrl() }}"
-                       alt="Logo {{ $profilNagari->nama_nagari ?? 'Nagari' }}"
-                       class="logo-img">
-              @else
-                  <i class="fas fa-mountain"></i>
-              @endif
-          </div>
-          <span>{{ $profilNagari->nama_nagari ?? 'Nagari Mungo' }}</span>
-      </a>
+            <img src="{{ url('images/kab50kota.png') }}" alt="Logo Nagari Mungo" class="logo-icon">
+            <span>Nagari Mungo</span>
+        </a>
 
         <!-- Navigation Menu di Tengah -->
         <div class="nav-links">

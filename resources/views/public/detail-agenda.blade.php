@@ -1,11 +1,9 @@
-{{-- resources/views/public/detail-agenda.blade.php --}}
 @extends('layouts.app')
 @section('title', $agenda->judul . ' - Agenda Nagari Mungo')
 @section('meta_description', Str::limit($agenda->deskripsi ?? 'Detail agenda kegiatan ' . $agenda->judul, 160))
 
 @push('styles')
 <style>
-/* Detail Agenda Public Page Styles - RED THEME */
 .agenda-detail-hero {
     background: linear-gradient(135deg, #DC143C 0%, #B22222 100%);
     color: white;
@@ -38,7 +36,7 @@
     gap: 0.5rem;
     align-items: center;
     font-size: 0.9rem;
-    flex-wrap: wrap; /* Tambahkan ini */
+    flex-wrap: wrap;
 }
 .breadcrumb a {
     color: rgba(255, 255, 255, 0.8);
@@ -219,6 +217,92 @@
     margin-bottom: 2rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
+/* ===== PERBAIKAN FOTO AGENDA TIDAK TERPOTONG ===== */
+
+/* GANTI bagian ini (sekitar baris 295-305) */
+.agenda-image {
+    width: 100%;
+    height: auto; /* Ubah dari max-height: 400px */
+    min-height: 250px; /* Tambahkan min-height */
+    max-height: 500px; /* Tambahkan max-height untuk kontrol */
+    object-fit: contain; /* Ubah dari cover ke contain */
+    object-position: center center; /* Pastikan centered */
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    background: #f8f9fa; /* Background untuk area kosong */
+    display: block; /* Pastikan display block */
+}
+
+/* Alternatif jika ingin foto memenuhi area tanpa crop berlebihan */
+.agenda-image-scale {
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+    max-height: 500px;
+    object-fit: scale-down; /* Alternatif scale-down */
+    object-position: center center;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    background: #f8f9fa;
+}
+
+/* Responsive adjustments untuk agenda image */
+@media (max-width: 1024px) {
+    .agenda-image {
+        min-height: 220px;
+        max-height: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    .agenda-image {
+        min-height: 200px;
+        max-height: 400px;
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .agenda-image {
+        min-height: 180px;
+        max-height: 350px;
+        margin-bottom: 1rem;
+        border-radius: 10px;
+    }
+}
+
+/* Error handling untuk gambar */
+.agenda-image[src=""],
+.agenda-image:not([src]) {
+    display: none;
+}
+
+/* Fallback jika gambar tidak dapat dimuat */
+.agenda-image:not([src]):before,
+.agenda-image[src=""]:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(220, 20, 60, 0.1), rgba(178, 34, 34, 0.05));
+    border: 2px dashed rgba(220, 20, 60, 0.3);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style untuk caption gambar jika ada */
+.agenda-image + p {
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-style: italic;
+    text-align: center;
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+}
 .content-text {
     font-size: 1.125rem;
     line-height: 1.8;
@@ -390,7 +474,7 @@
     .agenda-title {
         font-size: 2.5rem; /* Kurangi ukuran font */
         line-height: 1.1; /* Rapihkan line height */
-    }   
+    }
     .main-content {
         padding: 2rem 1rem 0;
     }
@@ -457,6 +541,9 @@
 @endpush
 
 @section('content')
+<!-- CSRF Token Meta Tag - PENTING! -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <!-- Hero Section -->
 <section class="agenda-detail-hero">
     <div class="hero-content fade-in">
@@ -536,6 +623,13 @@
             </div>
         @endif
 
+        @if(session('success'))
+            <div class="alert alert-success fade-in">
+                <i class="fas fa-check-circle me-2"></i>
+                {{ session('success') }}
+            </div>
+        @endif
+
         <!-- Countdown Section (if upcoming) -->
         @if($agenda->tanggal_mulai->isFuture() && $agenda->status !== 'cancelled')
             <div class="countdown-section fade-in" style="animation-delay: 0.2s;">
@@ -546,7 +640,7 @@
                         <span class="countdown-label">Hari</span>
                     </div>
                     <div class="countdown-item">
-                        <span class="countdown-number" id="jam">0</span>
+                        <span class="countdown-number" id="hours">0</span>
                         <span class="countdown-label">Jam</span>
                     </div>
                     <div class="countdown-item">
@@ -601,9 +695,10 @@
         <!-- Image -->
         @if($agenda->gambar)
             <div class="content-section fade-in" style="animation-delay: 0.4s;">
-                <img src="{{ $agenda->gambar }}" 
-                     alt="{{ $agenda->alt_gambar ?? $agenda->judul }}" 
-                     class="agenda-image">
+                <img src="{{ $agenda->gambar }}"
+                     alt="{{ $agenda->alt_gambar ?? $agenda->judul }}"
+                     class="agenda-image"
+                     onerror="this.style.display='none';">
                 @if($agenda->alt_gambar)
                     <p class="text-center text-muted mt-2" style="font-style: italic;">
                         {{ $agenda->alt_gambar }}
@@ -697,12 +792,108 @@
                 </div>
             </div>
         </div>
+
+        <!-- Comments Section -->
+        <div class="content-section comments-section fade-in" style="animation-delay: 0.7s;">
+            <div class="comments-header">
+                <h3 class="info-title">
+                    <i class="fas fa-comments"></i>
+                    Komentar Agenda (<span id="comment-count">{{ $agenda->komentarAktif->count() ?? 0 }}</span>)
+                </h3>
+            </div>
+
+            <!-- Comment Form -->
+            <div class="comment-form-section">
+                <h4 class="form-title">
+                    <i class="fas fa-edit"></i>
+                    Tulis Komentar
+                </h4>
+                <form id="agenda-comment-form" class="comment-form">
+                    @csrf
+                    <input type="hidden" name="agenda_id" value="{{ $agenda->id }}">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nama">Nama Lengkap *</label>
+                            <input type="text" id="nama" name="nama" required maxlength="100"
+                                   placeholder="Masukkan nama lengkap Anda">
+                            <div class="error-message" id="error-nama"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required maxlength="100"
+                                   placeholder="contoh@email.com">
+                            <div class="error-message" id="error-email"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telepon">No. Telepon (Opsional)</label>
+                        <input type="tel" id="telepon" name="telepon" maxlength="20"
+                               placeholder="08xxxxxxxxxx">
+                        <div class="error-message" id="error-telepon"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="komentar">Komentar *</label>
+                        <textarea id="komentar" name="komentar" required maxlength="1000" rows="5"
+                                  placeholder="Tulis komentar Anda tentang agenda ini..."></textarea>
+                        <div class="char-counter">
+                            <span id="char-count">0</span>/1000 karakter
+                        </div>
+                        <div class="error-message" id="error-komentar"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="submit-comment" class="btn-submit">
+                            <i class="fas fa-paper-plane"></i>
+                            <span class="button-text">Kirim Komentar</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Comments List -->
+            <div class="comments-list" id="comments-list">
+                @forelse($agenda->komentarAktif ?? [] as $komentar)
+                    <div class="comment-item" data-comment-id="{{ $komentar->id }}">
+                        <div class="comment-avatar">
+                            <div class="avatar-circle">
+                                {{ strtoupper(substr($komentar->nama, 0, 2)) }}
+                            </div>
+                        </div>
+
+                        <div class="comment-content">
+                            <div class="comment-header">
+                                <h6 class="commenter-name">{{ $komentar->nama }}</h6>
+                                <span class="comment-date">
+                                    <i class="far fa-clock"></i>
+                                    {{ $komentar->created_at->diffForHumans() }}
+                                </span>
+                            </div>
+
+                            <div class="comment-text">
+                                {{ $komentar->komentar }}
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="no-comments" id="no-comments">
+                        <div class="no-comments-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h5>Belum ada komentar</h5>
+                        <p>Jadilah yang pertama memberikan komentar untuk agenda ini!</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
     </main>
 
     <!-- Sidebar -->
     <aside class="sidebar">
         <!-- Quick Actions -->
-        <div class="sidebar-card fade-in" style="animation-delay: 0.7s;">
+        <div class="sidebar-card fade-in" style="animation-delay: 0.8s;">
             <h3 class="sidebar-title">
                 <i class="fas fa-bolt text-orange-500"></i>
                 Quick Actions
@@ -724,7 +915,7 @@
         </div>
 
         <!-- Agenda Information -->
-        <div class="sidebar-card fade-in" style="animation-delay: 0.8s;">
+        <div class="sidebar-card fade-in" style="animation-delay: 0.9s;">
             <h3 class="sidebar-title">
                 <i class="fas fa-info-circle text-blue-600"></i>
                 Informasi Agenda
@@ -749,13 +940,13 @@
         </div>
 
         <!-- Related Agenda -->
-        @if($relatedAgenda ?? false)
-            <div class="sidebar-card fade-in" style="animation-delay: 0.9s;">
+        @if(isset($relatedAgenda) && $relatedAgenda->count() > 0)
+            <div class="sidebar-card fade-in" style="animation-delay: 1.0s;">
                 <h3 class="sidebar-title">
                     <i class="fas fa-calendar text-green-600"></i>
                     Agenda Terkait
                 </h3>
-                @forelse($relatedAgenda as $related)
+                @foreach($relatedAgenda as $related)
                     <div class="related-item">
                         <div class="related-title">
                             <a href="{{ route('agenda.detail', $related->slug) }}">
@@ -775,20 +966,18 @@
                             @endif
                         </div>
                     </div>
-                @empty
-                    <p class="text-muted text-center">Tidak ada agenda terkait</p>
-                @endforelse
+                @endforeach
             </div>
         @endif
 
         <!-- Upcoming Agenda -->
-        @if($upcomingAgenda ?? false)
-            <div class="sidebar-card fade-in" style="animation-delay: 1.0s;">
+        @if(isset($upcomingAgenda) && $upcomingAgenda->count() > 0)
+            <div class="sidebar-card fade-in" style="animation-delay: 1.1s;">
                 <h3 class="sidebar-title">
                     <i class="fas fa-clock text-orange-500"></i>
                     Agenda Mendatang
                 </h3>
-                @forelse($upcomingAgenda as $upcoming)
+                @foreach($upcomingAgenda as $upcoming)
                     <div class="related-item" style="border-left-color: #f59e0b;">
                         <div class="related-title">
                             <a href="{{ route('agenda.detail', $upcoming->slug) }}">
@@ -808,21 +997,22 @@
                             @endif
                         </div>
                     </div>
-                @empty
-                    <p class="text-muted text-center">Tidak ada agenda mendatang</p>
-                @endforelse
+                @endforeach
             </div>
         @endif
     </aside>
 </div>
+
 <!-- Include Footer -->
-    @include('layouts.footer')
+@include('layouts.footer')
 @endsection
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Fade in animations
+    console.log('✅ Agenda detail page loaded');
+
+    // ===== FADE IN ANIMATIONS =====
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -841,34 +1031,292 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(el);
     });
 
-    // Countdown timer (only if agenda is upcoming)
+    // ===== COUNTDOWN TIMER =====
     @if($agenda->tanggal_mulai->isFuture() && $agenda->status !== 'cancelled')
         const targetDate = new Date('{{ $agenda->tanggal_mulai->format('Y-m-d') }}T{{ $agenda->waktu_mulai ?? '00:00' }}').getTime();
-        
+
         const countdown = setInterval(function() {
             const now = new Date().getTime();
             const distance = targetDate - now;
-            
+
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById('days').textContent = days >= 0 ? days : 0;
-            document.getElementById('hours').textContent = hours >= 0 ? hours : 0;
-            document.getElementById('minutes').textContent = minutes >= 0 ? minutes : 0;
-            document.getElementById('seconds').textContent = seconds >= 0 ? seconds : 0;
-            
+
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+
+            if (daysEl) daysEl.textContent = days >= 0 ? days : 0;
+            if (hoursEl) hoursEl.textContent = hours >= 0 ? hours : 0;
+            if (minutesEl) minutesEl.textContent = minutes >= 0 ? minutes : 0;
+            if (secondsEl) secondsEl.textContent = seconds >= 0 ? seconds : 0;
+
             if (distance < 0) {
                 clearInterval(countdown);
-                document.querySelector('.countdown-section').innerHTML =
-                    '<h3 class="countdown-title">Agenda sudah dimulai!</h3>';
+                const countdownSection = document.querySelector('.countdown-section');
+                if (countdownSection) {
+                    countdownSection.innerHTML = '<h3 class="countdown-title">Agenda sudah dimulai!</h3>';
+                }
             }
         }, 1000);
     @endif
+
+    // ===== COMMENT SYSTEM =====
+    const commentForm = document.getElementById('agenda-comment-form');
+    const charCount = document.getElementById('char-count');
+    const komentarTextarea = document.getElementById('komentar');
+    const submitButton = document.getElementById('submit-comment');
+    const buttonText = submitButton.querySelector('.button-text');
+
+    // Character counter
+    if (komentarTextarea && charCount) {
+        komentarTextarea.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            charCount.textContent = currentLength;
+
+            if (currentLength > 900) {
+                charCount.style.color = '#dc3545';
+            } else if (currentLength > 700) {
+                charCount.style.color = '#ffc107';
+            } else {
+                charCount.style.color = '#666';
+            }
+        });
+    }
+
+    // Form submission
+    if (commentForm) {
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            console.log('Submitting agenda comment...');
+
+            // Validate form
+            if (!validateForm()) {
+                console.log('Form validation failed');
+                return;
+            }
+
+            // Show loading state
+            setLoadingState(true);
+
+            // Prepare form data
+            const formData = new FormData(commentForm);
+
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // Debug log
+            console.log('Form data:', {
+                nama: formData.get('nama'),
+                email: formData.get('email'),
+                komentar: formData.get('komentar'),
+                agenda_id: formData.get('agenda_id')
+            });
+
+            // Submit comment
+            fetch(`/agenda/{{ $agenda->slug }}/komentar`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                setLoadingState(false);
+
+                if (data.success) {
+                    showMessage('success', data.message);
+                    resetForm();
+
+                    // Add success message to comments list
+                    const successHtml = `
+                        <div class="comment-pending">
+                            <div class="pending-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h6>Komentar Anda telah dikirim</h6>
+                            <p>Komentar sedang menunggu moderasi admin dan akan ditampilkan setelah disetujui.</p>
+                        </div>
+                    `;
+
+                    const commentsList = document.getElementById('comments-list');
+                    const noComments = document.getElementById('no-comments');
+
+                    if (noComments) {
+                        commentsList.innerHTML = successHtml;
+                    } else {
+                        commentsList.insertAdjacentHTML('afterbegin', successHtml);
+                    }
+
+                    // Reload page after 2 seconds
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    showMessage('error', data.message);
+                    if (data.errors) {
+                        showValidationErrors(data.errors);
+                    }
+                }
+            })
+            .catch(error => {
+                setLoadingState(false);
+                console.error('Error:', error);
+
+                if (error.errors) {
+                    showValidationErrors(error.errors);
+                    showMessage('error', error.message || 'Data tidak valid');
+                } else {
+                    showMessage('error', error.message || 'Terjadi kesalahan saat mengirim komentar. Silakan coba lagi.');
+                }
+            });
+        });
+    }
+
+    // ===== VALIDATION FUNCTIONS =====
+    function validateForm() {
+        clearErrors();
+        let isValid = true;
+
+        const nama = document.getElementById('nama').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const komentar = document.getElementById('komentar').value.trim();
+
+        if (!nama) {
+            showFieldError('nama', 'Nama wajib diisi');
+            isValid = false;
+        } else if (nama.length > 100) {
+            showFieldError('nama', 'Nama maksimal 100 karakter');
+            isValid = false;
+        }
+
+        if (!email) {
+            showFieldError('email', 'Email wajib diisi');
+            isValid = false;
+        } else if (!isValidEmail(email)) {
+            showFieldError('email', 'Format email tidak valid');
+            isValid = false;
+        } else if (email.length > 100) {
+            showFieldError('email', 'Email maksimal 100 karakter');
+            isValid = false;
+        }
+
+        if (!komentar) {
+            showFieldError('komentar', 'Komentar wajib diisi');
+            isValid = false;
+        } else if (komentar.length > 1000) {
+            showFieldError('komentar', 'Komentar maksimal 1000 karakter');
+            isValid = false;
+        }
+
+        const telepon = document.getElementById('telepon').value.trim();
+        if (telepon && telepon.length > 20) {
+            showFieldError('telepon', 'Telepon maksimal 20 karakter');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function showFieldError(fieldName, message) {
+        const errorElement = document.getElementById(`error-${fieldName}`);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        const field = document.getElementById(fieldName);
+        if (field) {
+            field.style.borderColor = '#dc3545';
+        }
+    }
+
+    function showValidationErrors(errors) {
+        Object.keys(errors).forEach(fieldName => {
+            const messages = errors[fieldName];
+            if (messages.length > 0) {
+                showFieldError(fieldName, messages[0]);
+            }
+        });
+    }
+
+    function clearErrors() {
+        document.querySelectorAll('.error-message').forEach(errorElement => {
+            errorElement.style.display = 'none';
+            errorElement.textContent = '';
+        });
+
+        document.querySelectorAll('.form-group input, .form-group textarea').forEach(field => {
+            field.style.borderColor = 'rgba(220, 20, 60, 0.2)';
+        });
+    }
+
+    // ===== UTILITY FUNCTIONS =====
+    function setLoadingState(loading) {
+        if (loading) {
+            submitButton.disabled = true;
+            buttonText.innerHTML = '<span class="loading-spinner"></span> Mengirim...';
+        } else {
+            submitButton.disabled = false;
+            buttonText.textContent = 'Kirim Komentar';
+        }
+    }
+
+    function showMessage(type, message) {
+        // Remove existing messages
+        document.querySelectorAll('.message').forEach(msg => msg.remove());
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
+
+        const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+        messageDiv.innerHTML = `
+            <i class="${icon}"></i>
+            ${message}
+        `;
+
+        commentForm.insertBefore(messageDiv, commentForm.firstChild);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 5000);
+
+        // Scroll to message
+        messageDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function resetForm() {
+        commentForm.reset();
+        charCount.textContent = '0';
+        charCount.style.color = '#666';
+        clearErrors();
+    }
+
+    console.log('✅ Comment system initialized');
 });
 
-// Share function
+// ===== SHARE FUNCTION =====
 function shareAgenda() {
     if (navigator.share) {
         navigator.share({
@@ -893,10 +1341,10 @@ function shareAgenda() {
     }
 }
 
-// Print styles
+// ===== PRINT STYLES =====
 const printStyles = `
 <style media="print">
-.sidebar, .action-buttons, .breadcrumb-nav { display: none !important; }
+.sidebar, .action-buttons, .breadcrumb-nav, .comment-form-section { display: none !important; }
 .main-content { grid-template-columns: 1fr !important; }
 .agenda-detail-hero { background: #DC143C !important; -webkit-print-color-adjust: exact; }
 .countdown-section { background: #f59e0b !important; -webkit-print-color-adjust: exact; }

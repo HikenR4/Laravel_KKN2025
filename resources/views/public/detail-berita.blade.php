@@ -1229,6 +1229,681 @@ body {
         font-size: 0.9rem;
     }
 }
+/* ===== COMMENT SECTION STYLES ===== */
+/* Tambahkan CSS ini ke dalam tag <style> di detail-berita.blade.php */
+
+.comments-section {
+    background: white;
+    border-radius: 25px;
+    padding: 2.5rem;
+    margin-top: 3rem;
+    box-shadow: 0 15px 40px rgba(220, 20, 60, 0.15);
+    border: 1px solid rgba(220, 20, 60, 0.05);
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.comments-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #FF6B6B, #DC143C, #B22222);
+}
+
+.comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(220, 20, 60, 0.1);
+}
+
+.comment-stats {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.stat-item i {
+    color: #DC143C;
+}
+
+/* Comment Form */
+.comment-form-section {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(220, 20, 60, 0.03));
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    border: 1px solid rgba(220, 20, 60, 0.1);
+}
+
+.form-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.form-title i {
+    color: #DC143C;
+}
+
+.comment-form {
+    width: 100%;
+    max-width: 100%;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 0.8rem 1.2rem;
+    border: 2px solid rgba(220, 20, 60, 0.2);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #DC143C;
+    box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.char-counter {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.5rem;
+    text-align: right;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+/* Rating Input */
+.rating-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stars {
+    display: flex;
+    gap: 0.3rem;
+    cursor: pointer;
+}
+
+.stars span {
+    font-size: 1.5rem;
+    color: #ddd;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.stars span:hover,
+.stars span.active {
+    color: #FFD700;
+    transform: scale(1.1);
+}
+
+.stars span i {
+    pointer-events: none;
+}
+
+.rating-text {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.btn-cancel,
+.btn-submit {
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #FF6B6B, #DC143C);
+    color: white;
+    box-shadow: 0 6px 20px rgba(220, 20, 60, 0.3);
+}
+
+.btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(220, 20, 60, 0.4);
+}
+
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Comments List */
+.comments-list {
+    margin-top: 2rem;
+}
+
+.comment-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 245, 245, 0.3);
+    border-radius: 15px;
+    border: 1px solid rgba(220, 20, 60, 0.1);
+    transition: all 0.3s ease;
+}
+
+.comment-item:hover {
+    background: rgba(255, 245, 245, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 20, 60, 0.1);
+}
+
+.comment-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF6B6B, #DC143C);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.reply-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #6c757d, #495057);
+}
+
+.comment-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.commenter-name {
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.comment-rating {
+    display: flex;
+    gap: 0.2rem;
+}
+
+.comment-rating i {
+    color: #ddd;
+    font-size: 0.9rem;
+}
+
+.comment-rating i.active {
+    color: #FFD700;
+}
+
+.comment-date {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.comment-text {
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
+    font-size: 1rem;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-reply {
+    background: none;
+    border: none;
+    color: #DC143C;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-reply:hover {
+    background: rgba(220, 20, 60, 0.1);
+    transform: translateX(3px);
+}
+
+/* Comment Replies */
+.comment-replies {
+    margin-top: 1.5rem;
+    padding-left: 2rem;
+    border-left: 3px solid rgba(220, 20, 60, 0.2);
+}
+
+.comment-reply {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    border: 1px solid rgba(220, 20, 60, 0.05);
+}
+
+.comment-reply:last-child {
+    margin-bottom: 0;
+}
+
+/* No Comments */
+.no-comments {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #666;
+}
+
+.no-comments-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 1rem;
+}
+
+.no-comments h5 {
+    font-size: 1.4rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.no-comments p {
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Load More Button */
+.btn-load-more {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(220, 20, 60, 0.1));
+    color: #DC143C;
+    border: 2px solid rgba(220, 20, 60, 0.2);
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-load-more:hover {
+    background: linear-gradient(135deg, #FF6B6B, #DC143C);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(220, 20, 60, 0.3);
+}
+
+/* Reply Form State */
+.replying .comment-form-section {
+    border: 2px solid #DC143C;
+    box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.1);
+}
+
+.reply-info {
+    background: rgba(220, 20, 60, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.reply-info strong {
+    color: #DC143C;
+}
+
+/* Loading State */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Success/Error Messages */
+.message {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.message.success {
+    background: rgba(40, 167, 69, 0.1);
+    color: #155724;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.message.error {
+    background: rgba(220, 53, 69, 0.1);
+    color: #721c24;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .comments-section {
+        padding: 1.5rem;
+    }
+
+    .comment-form-section {
+        padding: 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .comments-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .comment-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        justify-content: center;
+    }
+
+    .comment-replies {
+        padding-left: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .comment-item {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .comment-reply {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .avatar-circle {
+        width: 60px;
+        height: 60px;
+        align-self: center;
+    }
+
+    .reply-avatar {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* ===== PERBAIKAN UNTUK FOTO TIDAK TERPOTONG ===== */
+
+/* 1. Article Header - Ubah dari fixed height ke auto */
+.article-header {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: auto; /* Ubah dari height: 400px ke auto */
+    min-height: 300px; /* Tambahkan min-height untuk konsistensi */
+    max-height: 500px; /* Tambahkan max-height untuk kontrol */
+    background: #f8f9fa;
+}
+
+/* 2. Article Image - Ubah object-fit untuk menampilkan foto lengkap */
+.article-image {
+    width: 100%;
+    height: auto; /* Ubah dari height: 400px ke auto */
+    min-height: 300px; /* Minimum height untuk konsistensi */
+    max-height: 500px; /* Maximum height untuk kontrol */
+    object-fit: contain; /* Ubah dari cover ke contain agar foto tidak terpotong */
+    object-position: center center;
+    transition: transform 0.5s ease;
+    border-radius: 0;
+    background: #f8f9fa; /* Background jika ada area kosong */
+}
+
+/* 3. Alternatif: Jika ingin foto memenuhi area tapi tidak terpotong drastis */
+.article-image-alt {
+    width: 100%;
+    height: 400px;
+    object-fit: scale-down; /* Alternatif lain: scale down tanpa crop */
+    object-position: center center;
+    transition: transform 0.5s ease;
+    border-radius: 0;
+    background: #f8f9fa;
+}
+
+/* 4. Responsive adjustments */
+@media (max-width: 1024px) {
+    .article-header {
+        min-height: 280px;
+        max-height: 450px;
+    }
+
+    .article-image {
+        min-height: 280px;
+        max-height: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    .article-header {
+        min-height: 250px;
+        max-height: 400px;
+    }
+
+    .article-image {
+        min-height: 250px;
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .article-header {
+        min-height: 220px;
+        max-height: 350px;
+    }
+
+    .article-image {
+        min-height: 220px;
+        max-height: 350px;
+    }
+}
+
+@media (max-width: 360px) {
+    .article-header {
+        min-height: 200px;
+        max-height: 300px;
+    }
+
+    .article-image {
+        min-height: 200px;
+        max-height: 300px;
+    }
+}
+
+/* ===== PERBAIKAN UNTUK RELATED CARD IMAGES ===== */
+.related-card img {
+    width: 100%;
+    height: 180px; /* Sedikit kurangi dari 200px */
+    object-fit: contain; /* Ubah dari cover ke contain */
+    background: #f8f9fa;
+    transition: transform 0.4s ease;
+}
+
+/* ===== PERBAIKAN UNTUK SIDEBAR NEWS IMAGES ===== */
+.news-image {
+    width: 80px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: contain; /* Ubah dari cover ke contain */
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(220, 20, 60, 0.05));
+    flex-shrink: 0;
+}
+
+/* ===== OPSI TAMBAHAN: Jika ingin foto dengan aspect ratio tetap ===== */
+.article-image-ratio {
+    width: 100%;
+    aspect-ratio: 16/9; /* Rasio 16:9 */
+    object-fit: contain;
+    object-position: center center;
+    background: #f8f9fa;
+    transition: transform 0.5s ease;
+}
+
+/* ===== FALLBACK: Jika gambar error atau tidak ada ===== */
+.article-image[src=""],
+.article-image:not([src]) {
+    display: none;
+}
+
+.article-header-no-image {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(220, 20, 60, 0.05));
+    border: 2px dashed rgba(220, 20, 60, 0.3);
+}
+
+/* ===== HOVER EFFECTS YANG DISESUAIKAN ===== */
+.article-container:hover .article-image {
+    transform: scale(1.01); /* Kurangi scale dari 1.02 ke 1.01 */
+}
+
+.related-card:hover img {
+    transform: scale(1.02); /* Kurangi scale dari 1.05 ke 1.02 */
+}
 
 @media (max-width: 360px) {
     .hero-detail h1 {
@@ -1670,6 +2345,196 @@ body {
         </div>
     </aside>
 </div>
+
+<!-- Tambahkan section ini setelah related-section di detail-berita.blade.php -->
+
+<!-- Comments Section -->
+<section class="comments-section container-safe" style="margin-top: 3rem;">
+    <div class="comments-container">
+        <!-- Comments Header -->
+        <div class="comments-header">
+            <h2 class="section-title">
+                <i class="fas fa-comments"></i>
+                Komentar (<span id="comment-count">{{ $berita->komentarAktif->count() }}</span>)
+            </h2>
+            <div class="comment-stats">
+                <div class="stat-item">
+                    <i class="fas fa-star"></i>
+                    <span>Rating:
+                        <strong id="average-rating">
+                            @php
+                                $avgRating = $berita->komentarAktif->where('rating', '!=', null)->avg('rating');
+                                echo $avgRating ? number_format($avgRating, 1) : 'N/A';
+                            @endphp
+                        </strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comment Form -->
+        <div class="comment-form-section">
+            <h4 class="form-title">
+                <i class="fas fa-edit"></i>
+                Tulis Komentar
+            </h4>
+            <form id="comment-form" class="comment-form">
+                @csrf
+                <input type="hidden" id="parent_id" name="parent_id" value="">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap *</label>
+                        <input type="text" id="nama" name="nama" required maxlength="100"
+                               placeholder="Masukkan nama lengkap Anda">
+                        <div class="error-message" id="error-nama"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required maxlength="100"
+                               placeholder="contoh@email.com">
+                        <div class="error-message" id="error-email"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="telepon">No. Telepon (Opsional)</label>
+                    <input type="tel" id="telepon" name="telepon" maxlength="20"
+                           placeholder="08xxxxxxxxxx">
+                    <div class="error-message" id="error-telepon"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="rating">Rating Artikel (Opsional)</label>
+                    <div class="rating-input">
+                        <input type="hidden" id="rating" name="rating" value="">
+                        <div class="stars" id="rating-stars">
+                            <span data-rating="1"><i class="far fa-star"></i></span>
+                            <span data-rating="2"><i class="far fa-star"></i></span>
+                            <span data-rating="3"><i class="far fa-star"></i></span>
+                            <span data-rating="4"><i class="far fa-star"></i></span>
+                            <span data-rating="5"><i class="far fa-star"></i></span>
+                        </div>
+                        <small class="rating-text">Klik bintang untuk memberikan rating</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="komentar">Komentar *</label>
+                    <textarea id="komentar" name="komentar" required maxlength="1000" rows="5"
+                              placeholder="Tulis komentar Anda tentang artikel ini..."></textarea>
+                    <div class="char-counter">
+                        <span id="char-count">0</span>/1000 karakter
+                    </div>
+                    <div class="error-message" id="error-komentar"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="cancel-reply" class="btn-cancel" style="display: none;">
+                        <i class="fas fa-times"></i>
+                        Batal Balas
+                    </button>
+                    <button type="submit" id="submit-comment" class="btn-submit">
+                        <i class="fas fa-paper-plane"></i>
+                        <span class="button-text">Kirim Komentar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comments-list" id="comments-list">
+            @forelse($berita->komentarAktif->whereNull('parent_id')->sortByDesc('created_at') as $komentar)
+                <div class="comment-item" data-comment-id="{{ $komentar->id }}">
+                    <div class="comment-avatar">
+                        <div class="avatar-circle">
+                            {{ strtoupper(substr($komentar->nama, 0, 2)) }}
+                        </div>
+                    </div>
+
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <h6 class="commenter-name">{{ $komentar->nama }}</h6>
+                            <div class="comment-meta">
+                                @if($komentar->rating)
+                                    <div class="comment-rating">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="fas fa-star {{ $i <= $komentar->rating ? 'active' : '' }}"></i>
+                                        @endfor
+                                    </div>
+                                @endif
+                                <span class="comment-date">
+                                    <i class="far fa-clock"></i>
+                                    {{ $komentar->created_at->diffForHumans() }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="comment-text">
+                            {{ $komentar->komentar }}
+                        </div>
+
+                        <div class="comment-actions">
+                            <button type="button" class="btn-reply" data-parent-id="{{ $komentar->id }}"
+                                    data-parent-name="{{ $komentar->nama }}">
+                                <i class="fas fa-reply"></i>
+                                Balas
+                            </button>
+                        </div>
+
+                        <!-- Replies -->
+                        @if($komentar->replies->where('status', 'approved')->count() > 0)
+                            <div class="comment-replies">
+                                @foreach($komentar->replies->where('status', 'approved')->sortBy('created_at') as $reply)
+                                    <div class="comment-reply" data-comment-id="{{ $reply->id }}">
+                                        <div class="comment-avatar">
+                                            <div class="avatar-circle reply-avatar">
+                                                {{ strtoupper(substr($reply->nama, 0, 2)) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="comment-content">
+                                            <div class="comment-header">
+                                                <h6 class="commenter-name">{{ $reply->nama }}</h6>
+                                                <span class="comment-date">
+                                                    <i class="far fa-clock"></i>
+                                                    {{ $reply->created_at->diffForHumans() }}
+                                                </span>
+                                            </div>
+
+                                            <div class="comment-text">
+                                                {{ $reply->komentar }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="no-comments" id="no-comments">
+                    <div class="no-comments-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h5>Belum ada komentar</h5>
+                    <p>Jadilah yang pertama memberikan komentar untuk artikel ini!</p>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Load More Comments -->
+        @if($berita->komentarAktif->whereNull('parent_id')->count() > 10)
+            <div class="load-more-section" style="text-align: center; margin-top: 2rem;">
+                <button type="button" id="load-more-comments" class="btn-load-more">
+                    <i class="fas fa-chevron-down"></i>
+                    Muat Komentar Lainnya
+                </button>
+            </div>
+        @endif
+    </div>
+</section>
+
 <!-- Include Footer -->
     @include('layouts.footer')
 @endsection
@@ -1683,6 +2548,414 @@ document.addEventListener('DOMContentLoaded', function() {
         // 1. Pastikan body tidak overflow horizontal
         document.body.style.overflowX = 'hidden';
         document.documentElement.style.overflowX = 'hidden';
+        const commentForm = document.getElementById('comment-form');
+        const ratingStars = document.querySelectorAll('#rating-stars span');
+        const ratingInput = document.getElementById('rating');
+        const charCount = document.getElementById('char-count');
+        const komentarTextarea = document.getElementById('komentar');
+        const cancelReplyBtn = document.getElementById('cancel-reply');
+        const parentIdInput = document.getElementById('parent_id');
+        const submitButton = document.getElementById('submit-comment');
+        const buttonText = submitButton.querySelector('.button-text');
+
+    let isReplying = false;
+    let currentRating = 0;
+
+    // ===== RATING SYSTEM =====
+    ratingStars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.dataset.rating);
+            setRating(rating);
+        });
+
+        star.addEventListener('mouseenter', function() {
+            const rating = parseInt(this.dataset.rating);
+            highlightStars(rating);
+        });
+    });
+
+    document.getElementById('rating-stars').addEventListener('mouseleave', function() {
+        highlightStars(currentRating);
+    });
+
+    function setRating(rating) {
+        currentRating = rating;
+        ratingInput.value = rating;
+        highlightStars(rating);
+
+        // Update rating text
+        const ratingText = document.querySelector('.rating-text');
+        const ratingLabels = ['', 'Sangat Buruk', 'Buruk', 'Cukup', 'Baik', 'Sangat Baik'];
+        ratingText.textContent = `Rating: ${ratingLabels[rating]} (${rating}/5)`;
+    }
+
+    function highlightStars(rating) {
+        ratingStars.forEach((star, index) => {
+            const starIcon = star.querySelector('i');
+            if (index < rating) {
+                starIcon.className = 'fas fa-star';
+                star.classList.add('active');
+            } else {
+                starIcon.className = 'far fa-star';
+                star.classList.remove('active');
+            }
+        });
+    }
+
+    // ===== CHARACTER COUNTER =====
+    komentarTextarea.addEventListener('input', function() {
+        const currentLength = this.value.length;
+        charCount.textContent = currentLength;
+
+        if (currentLength > 900) {
+            charCount.style.color = '#dc3545';
+        } else if (currentLength > 700) {
+            charCount.style.color = '#ffc107';
+        } else {
+            charCount.style.color = '#666';
+        }
+    });
+
+    // ===== REPLY FUNCTIONALITY =====
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-reply')) {
+            const replyBtn = e.target.closest('.btn-reply');
+            const parentId = replyBtn.dataset.parentId;
+            const parentName = replyBtn.dataset.parentName;
+            startReply(parentId, parentName);
+        }
+    });
+
+    cancelReplyBtn.addEventListener('click', function() {
+        cancelReply();
+    });
+
+    function startReply(parentId, parentName) {
+        isReplying = true;
+        parentIdInput.value = parentId;
+        cancelReplyBtn.style.display = 'inline-flex';
+        buttonText.textContent = 'Kirim Balasan';
+
+        // Add reply info
+        let replyInfo = document.querySelector('.reply-info');
+        if (!replyInfo) {
+            replyInfo = document.createElement('div');
+            replyInfo.className = 'reply-info';
+            commentForm.insertBefore(replyInfo, commentForm.firstChild);
+        }
+
+        replyInfo.innerHTML = `
+            <i class="fas fa-reply"></i>
+            Membalas komentar dari <strong>${parentName}</strong>
+        `;
+
+        document.querySelector('.comment-form-section').classList.add('replying');
+
+        // Scroll to form
+        document.querySelector('.comment-form-section').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+
+        // Focus on comment textarea
+        komentarTextarea.focus();
+    }
+
+    function cancelReply() {
+        isReplying = false;
+        parentIdInput.value = '';
+        cancelReplyBtn.style.display = 'none';
+        buttonText.textContent = 'Kirim Komentar';
+
+        // Remove reply info
+        const replyInfo = document.querySelector('.reply-info');
+        if (replyInfo) {
+            replyInfo.remove();
+        }
+
+        document.querySelector('.comment-form-section').classList.remove('replying');
+    }
+
+    // ===== FORM SUBMISSION =====
+    commentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Validate form
+        if (!validateForm()) {
+            return;
+        }
+
+        // Show loading state
+        setLoadingState(true);
+
+        // Prepare form data
+        const formData = new FormData(commentForm);
+
+        // Submit comment
+        fetch(`/berita/{{ $berita->slug }}/komentar`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            setLoadingState(false);
+
+            if (data.success) {
+                showMessage('success', data.message);
+                resetForm();
+
+                // If it's a reply, we might want to refresh the page or add the comment dynamically
+                if (isReplying) {
+                    setTimeout(() => {
+                        window.location.reload(); 
+                    }, 2000);
+                } else {
+                    // Add success message
+                    const successHtml = `
+                        <div class="comment-pending">
+                            <div class="pending-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h6>Komentar Anda telah dikirim</h6>
+                            <p>Komentar sedang menunggu moderasi admin dan akan ditampilkan setelah disetujui.</p>
+                        </div>
+                    `;
+
+                    const commentsList = document.getElementById('comments-list');
+                    const noComments = document.getElementById('no-comments');
+
+                    if (noComments) {
+                        commentsList.innerHTML = successHtml;
+                    } else {
+                        commentsList.insertAdjacentHTML('afterbegin', successHtml);
+                    }
+                }
+
+            } else {
+                showMessage('error', data.message);
+
+                // Show validation errors
+                if (data.errors) {
+                    showValidationErrors(data.errors);
+                }
+            }
+        })
+        .catch(error => {
+            setLoadingState(false);
+            console.error('Error:', error);
+            showMessage('error', 'Terjadi kesalahan saat mengirim komentar. Silakan coba lagi.');
+        });
+    });
+
+    // ===== VALIDATION =====
+    function validateForm() {
+        clearErrors();
+        let isValid = true;
+
+        const nama = document.getElementById('nama').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const komentar = document.getElementById('komentar').value.trim();
+
+        if (!nama) {
+            showFieldError('nama', 'Nama wajib diisi');
+            isValid = false;
+        } else if (nama.length > 100) {
+            showFieldError('nama', 'Nama maksimal 100 karakter');
+            isValid = false;
+        }
+
+        if (!email) {
+            showFieldError('email', 'Email wajib diisi');
+            isValid = false;
+        } else if (!isValidEmail(email)) {
+            showFieldError('email', 'Format email tidak valid');
+            isValid = false;
+        } else if (email.length > 100) {
+            showFieldError('email', 'Email maksimal 100 karakter');
+            isValid = false;
+        }
+
+        if (!komentar) {
+            showFieldError('komentar', 'Komentar wajib diisi');
+            isValid = false;
+        } else if (komentar.length > 1000) {
+            showFieldError('komentar', 'Komentar maksimal 1000 karakter');
+            isValid = false;
+        }
+
+        const telepon = document.getElementById('telepon').value.trim();
+        if (telepon && telepon.length > 20) {
+            showFieldError('telepon', 'Telepon maksimal 20 karakter');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function showFieldError(fieldName, message) {
+        const errorElement = document.getElementById(`error-${fieldName}`);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        const field = document.getElementById(fieldName);
+        if (field) {
+            field.style.borderColor = '#dc3545';
+        }
+    }
+
+    function showValidationErrors(errors) {
+        Object.keys(errors).forEach(fieldName => {
+            const messages = errors[fieldName];
+            if (messages.length > 0) {
+                showFieldError(fieldName, messages[0]);
+            }
+        });
+    }
+
+    function clearErrors() {
+        document.querySelectorAll('.error-message').forEach(errorElement => {
+            errorElement.style.display = 'none';
+            errorElement.textContent = '';
+        });
+
+        document.querySelectorAll('.form-group input, .form-group textarea').forEach(field => {
+            field.style.borderColor = 'rgba(220, 20, 60, 0.2)';
+        });
+    }
+
+    // ===== UTILITY FUNCTIONS =====
+    function setLoadingState(loading) {
+        if (loading) {
+            submitButton.disabled = true;
+            buttonText.innerHTML = '<span class="loading-spinner"></span> Mengirim...';
+        } else {
+            submitButton.disabled = false;
+            buttonText.textContent = isReplying ? 'Kirim Balasan' : 'Kirim Komentar';
+        }
+    }
+
+    function showMessage(type, message) {
+        // Remove existing messages
+        document.querySelectorAll('.message').forEach(msg => msg.remove());
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
+
+        const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+        messageDiv.innerHTML = `
+            <i class="${icon}"></i>
+            ${message}
+        `;
+
+        commentForm.insertBefore(messageDiv, commentForm.firstChild);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 5000);
+
+        // Scroll to message
+        messageDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function resetForm() {
+        commentForm.reset();
+        currentRating = 0;
+        ratingInput.value = '';
+        charCount.textContent = '0';
+        charCount.style.color = '#666';
+
+        // Reset stars
+        highlightStars(0);
+        document.querySelector('.rating-text').textContent = 'Klik bintang untuk memberikan rating';
+
+        // Reset reply state
+        if (isReplying) {
+            cancelReply();
+        }
+
+        // Clear errors
+        clearErrors();
+    }
+
+    // ===== LOAD MORE COMMENTS (if needed) =====
+    const loadMoreBtn = document.getElementById('load-more-comments');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function() {
+            // Implementation for loading more comments
+            // This would require additional backend endpoint
+            console.log('Load more comments clicked');
+        });
+    }
+
+    // ===== AUTO-SAVE DRAFT (Optional Enhancement) =====
+    let draftTimer;
+    const draftKey = `comment_draft_{{ $berita->id }}`;
+
+    // Load saved draft
+    const savedDraft = localStorage.getItem(draftKey);
+    if (savedDraft) {
+        try {
+            const draft = JSON.parse(savedDraft);
+            if (draft.nama) document.getElementById('nama').value = draft.nama;
+            if (draft.email) document.getElementById('email').value = draft.email;
+            if (draft.telepon) document.getElementById('telepon').value = draft.telepon;
+            if (draft.komentar) {
+                document.getElementById('komentar').value = draft.komentar;
+                charCount.textContent = draft.komentar.length;
+            }
+            if (draft.rating) {
+                setRating(draft.rating);
+            }
+        } catch (e) {
+            console.log('Error loading draft:', e);
+        }
+    }
+
+    // Save draft on input
+    ['nama', 'email', 'telepon', 'komentar'].forEach(fieldName => {
+        document.getElementById(fieldName).addEventListener('input', function() {
+            clearTimeout(draftTimer);
+            draftTimer = setTimeout(saveDraft, 1000);
+        });
+    });
+
+    function saveDraft() {
+        const draft = {
+            nama: document.getElementById('nama').value,
+            email: document.getElementById('email').value,
+            telepon: document.getElementById('telepon').value,
+            komentar: document.getElementById('komentar').value,
+            rating: currentRating
+        };
+
+        localStorage.setItem(draftKey, JSON.stringify(draft));
+    }
+
+    // Clear draft on successful submission
+    function clearDraft() {
+        localStorage.removeItem(draftKey);
+    }
+
+    // Add clearDraft call to successful submission
+    const originalResetForm = resetForm;
+    resetForm = function() {
+        originalResetForm();
+        clearDraft();
+    };
+
+    console.log('✅ Comment system loaded successfully');
+});
 
         // 2. Set max-width untuk semua elemen yang potensial bermasalah
         const problematicElements = [

@@ -509,27 +509,25 @@
                         @else
                             <li class="misi-item">
                                 <div class="misi-number">1</div>
-                                <div class="misi-text">Meningkatkan kualitas pelayanan publik yang prima, transparan, dan akuntabel untuk kesejahteraan masyarakat</div>
+                                <div class="misi-text">Terwujudnya pelayanan yang prima, cepat, professional serta menjunjung tinggi prinsip transparansi, dan akuntabel dalam menjalankan roda pemerintahan. Untuk menjamin tercapainya tata kelola pemerintahan yang baik, bersih, berwibawa, beretika dan bertanggung jawab maka perlu di tunjang oleh kapasitas aparatur. Dalam hal ini unsur pemerintahan akan berperan sebagai agen yang menjaga keseimbangan pembangunan. Aparatur yang berkualitas akan menjadi katalisator bagi pembangunan Nagari. Upaya – upaya yang dapat di lakukan dalam meningkatkan pelayanan publik melalui reformasi birokrasi antara lain melalui peningkatan kapasitas penyelenggaraan pemerintahan nagari dan peningkatan kualitas pelayanan publik.</div>
                             </li>
                             <li class="misi-item">
                                 <div class="misi-number">2</div>
-                                <div class="misi-text">Mengembangkan potensi ekonomi lokal berbasis sumber daya alam dan budaya untuk meningkatkan kesejahteraan masyarakat</div>
+                                <div class="misi-text">Menciptakan pemerintahan yang arif dan bijaksana dengan meningkatkan pengetahuan dan keterampilan serta mengaplikasikan nilai-nilai adat basandi syarak, syarak basandi kitabullah. Upaya yang akan dilaksanakan untuk menciptakan Pemerintahan yang arif dan bijaksana adalah dengan meningkatkan Kapasitas Aparatur Pemerintah itu sendiri, mulai dari Sumber Daya Manusia Aparatur Pemerintah Nagari melalui peningkatan pengetahuan dan keterampilan tanpa meninggalkan Adat dan Budaya Nagari. Sumber daya manusia yang kreatif, inovatif dan kontributif terhadap pembangunan nagari.
+Disamping peningkatan terhadap pendidikan dan kesehatan, kualitas sumber daya manusia juga dapat dilakukan peningkatan terhadap penerapan agama, adat dan budaya di masyarakat berdasarkan falsafah adat basandi syara’, syara’ basandi Kitabullah dengan melakukan Optimalisasi pendidikan dan fungsi Kelembagaan agama, adat dan budaya. Penerapan adat dan budaya pada masyarakat dengan pelestarian budaya, adat istiadat dan tradisi lokal sebagai bentuk kepribadian masyarakat. Seyogya nya Pemerintah Nagari adalah Pelayan masyarakat Nagari, bukan meminta dilayani oleh masyarakat.</div>
                             </li>
                             <li class="misi-item">
                                 <div class="misi-number">3</div>
-                                <div class="misi-text">Membangun infrastruktur yang mendukung peningkatan kualitas hidup dan aksesibilitas masyarakat</div>
+                                <div class="misi-text">Mendorong Lembaga Kemasyarakatan Nagari untuk ikut berperan aktif dalam pembangunan. Inti dari seluruh pembangunan adalah peran serta seluruh stockholder dari elemen masyarakat nagari. Peran serta lembaga nagari sangat diperlukan demi kelangsungan pembangunan nagari. Dengan melibatkan lembaga-lembaga yang ada di nagari berarti secara tidak langsung pembangunan adalah tanggung jawab seluruh masyarakat nagari.</div>
                             </li>
                             <li class="misi-item">
                                 <div class="misi-number">4</div>
-                                <div class="misi-text">Melestarikan dan mengembangkan nilai-nilai budaya Minangkabau serta memperkuat keharmonisan sosial</div>
+                                <div class="misi-text">Menggali dan memanfaatkan potensi Sumber Daya Alam, Sumber Daya Manusia, Sosial Budaya, Ekonomi, Pariwisata, Agama, Ilmu Pengetahuan/Pendidikan, Kesehatan dan Teknologi dalam rangka mensejahterakan masyarakat. Nagari Mungo yang mempunyai budaya dan potensi sumber daya yang berbeda. Pembangunan tidak semata-mata dilakukan melalui pembangunan infrastruktur, lebih dari itu pembangunan perlu mengedepankan pemberdayaan masyarakat sebagai pelaku utama pembangunan khususnya di nagari.
+Melalui pemberdayaan masyarakat di harapkan mampu menciptakan kemandirian nagari dalam mendukung pembangunan yang bersinergi dengan Pemerintah Daerah. Salah satu upaya dalam mendukung pembangunan di Kabupaten Lima Puluh Kota yaitu dengan mendorong potensi nagari di sektor ekonomi, sosial, Ilmu Pengetahuan/Pendidikan, Kesehatan serta Pariwisata. Upaya yang akan dilaksanakan oleh Pemerintah Nagari adalah dengan penguatan Lembaga Badan Usaha Milik Nagari (BUMNagari) supaya dapat meningkatkan perekonomian masyarakat nagari.</div>
                             </li>
                             <li class="misi-item">
                                 <div class="misi-number">5</div>
-                                <div class="misi-text">Meningkatkan kualitas pendidikan dan kesehatan masyarakat sebagai investasi masa depan</div>
-                            </li>
-                            <li class="misi-item">
-                                <div class="misi-number">6</div>
-                                <div class="misi-text">Mewujudkan tata kelola pemerintahan yang bersih, partisipatif, dan berorientasi pada kepentingan masyarakat</div>
+                                <div class="misi-text">Meningkatkan persatuan dan kesatuan masyarakat nagari dan rantau untuk percepatan pembangunan. Upaya yang dilakukan adalah menumbuhkan kembali semangat Gotong Royong yang hampir pudar ditengah masyarakat, serta menghadirkan pemerintah disetiap kegiatan yang dilaksanakan oleh masyarakat nagari. Untuk perantau nagari akan dilaksanakan pendataan jumlah perantau nagari melalui forum perantau yang ada di nagari, serta ekspose nagari untuk perantau agar perantau mengetahui keadaan kampung halamannya.</div>
                             </li>
                         @endif
                     </ul>
