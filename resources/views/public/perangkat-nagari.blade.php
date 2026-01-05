@@ -186,6 +186,7 @@
             position: relative;
             height: 250px;
             overflow: hidden;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
         }
 
         .perangkat-photo img {
@@ -193,6 +194,25 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.4s ease;
+        }
+
+        .perangkat-photo img.error {
+            display: none;
+        }
+
+        .perangkat-photo .placeholder {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #adb5bd;
+            font-size: 3rem;
+            text-align: center;
+        }
+
+        .perangkat-photo img.error + .placeholder {
+            display: block;
         }
 
         .perangkat-card:hover .perangkat-photo img {
@@ -526,7 +546,13 @@
                         @foreach($perangkat as $person)
                             <article class="perangkat-card">
                                 <div class="perangkat-photo">
-                                    <img src="{{ $person->foto }}" alt="Foto {{ $person->nama }}">
+                                    <img src="{{ asset('uploads/perangkat/' . $person->foto) }}"
+                                         alt="Foto {{ $person->nama }}"
+                                         onerror="this.classList.add('error')">
+                                    <div class="placeholder">
+                                        <i class="fas fa-user"></i><br>
+                                        <span style="font-size: 1rem;">Foto tidak tersedia</span>
+                                    </div>
                                     @if($person->is_active)
                                         <span class="perangkat-status">Aktif</span>
                                     @endif
@@ -638,7 +664,7 @@
             </div>
         </aside>
     </div>
-<!-- Include Footer -->
+    <!-- Include Footer -->
     @include('layouts.footer')
 </body>
 </html>

@@ -696,29 +696,12 @@
                 @if($profil && $profil->sejarah)
                     {{ Str::limit($profil->sejarah, 200) }}
                 @else
-                    Mengenal lebih dekat profil, visi, misi, dan layanan yang tersedia di Nagari kami. 
-                    Komitmen kami adalah memberikan pelayanan terbaik untuk masyarakat dengan 
+                    Mengenal lebih dekat profil, visi, misi, dan layanan yang tersedia di Nagari kami.
+                    Komitmen kami adalah memberikan pelayanan terbaik untuk masyarakat dengan
                     transparansi dan akuntabilitas.
                 @endif
             </p>
         </div>
-
-        <!-- Visi & Misi Section -->
-        @if($profil && ($profil->visi || $profil->misi))
-        <div class="vision-mission">
-            <h2><i class="fas fa-eye"></i> Visi & Misi</h2>
-            <div class="vision-mission-grid">
-                <div class="vision">
-                    <h3><i class="fas fa-bullseye"></i> Visi</h3>
-                    <p>{{ $profil->visi ?? 'Visi belum diatur dalam sistem.' }}</p>
-                </div>
-                <div class="mission">
-                    <h3><i class="fas fa-tasks"></i> Misi</h3>
-                    <p>{{ $profil->misi ?? 'Misi belum diatur dalam sistem.' }}</p>
-                </div>
-            </div>
-        </div>
-        @endif
 
         <div class="content-grid">
             <!-- Profil Wilayah Card -->
@@ -953,6 +936,8 @@
         @endif
     </div>
 </div>
+<!-- Include Footer -->
+    @include('layouts.footer')
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

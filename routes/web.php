@@ -41,6 +41,9 @@ Route::get('/', [PublicController::class, 'landing'])->name('landing');
 Route::get('/berita', [PublicController::class, 'berita'])->name('berita');
 Route::get('/berita/{slug}', [PublicController::class, 'beritaDetail'])->name('berita.detail');
 Route::get('/berita/kategori/{kategori}', [PublicController::class, 'beritaByKategori'])->name('berita.kategori');
+// Komentar routes untuk public
+Route::post('/berita/{slug}/komentar', [PublicController::class, 'storeKomentar'])->name('berita.komentar.store');
+Route::get('/berita/{slug}/komentar', [PublicController::class, 'getKomentar'])->name('berita.komentar.get');
 
 // Public routes for pengumuman
 Route::get('/pengumuman', [PengumumanpublicController::class, 'index'])->name('pengumuman');
@@ -59,10 +62,10 @@ Route::get('/agenda/{slug}', [PublicController::class, 'agendaDetail'])->name('a
 Route::get('/agenda/kategori/{kategori}', [PublicController::class, 'agendaByKategori'])->name('agenda.kategori');
 
 // Public routes for layanan
-Route::get('/layanan', [App\Http\Controllers\Public\LayananpublicController::class, 'index'])->name('layanan');
-Route::get('/layanan/{slug}', [App\Http\Controllers\Public\LayananpublicController::class, 'show'])->name('layanan.detail');
-Route::get('/layanan/kategori/{kategori}', [App\Http\Controllers\Public\LayananpublicController::class, 'kategori'])->name('layanan.kategori');
-Route::get('/cari-layanan', [App\Http\Controllers\Public\LayananpublicController::class, 'search'])->name('layanan.search');
+Route::get('/layanan', [LayananpublicController::class, 'index'])->name('layanan');
+Route::get('/layanan/{slug}', [LayananpublicController::class, 'show'])->name('layanan.detail');
+Route::get('/layanan/kategori/{kategori}', [LayananpublicController::class, 'kategori'])->name('layanan.kategori');
+Route::get('/cari-layanan', [LayananpublicController::class, 'search'])->name('layanan.search');
 
 // Routes untuk halaman profil
 Route::prefix('profil')->name('profil.')->group(function () {
@@ -89,6 +92,8 @@ Route::prefix('api')->name('api.')->group(function () {
 
     // Statistics untuk dashboard landing - UPDATED WITH DATABASE
     Route::get('/statistics', [PublicController::class, 'getPublicStatistics'])->name('statistics');
+
+    Route::get('/perangkat-nagari', [PublicController::class, 'getPerangkatNagari'])->name('perangkat-nagari');
 
     // Latest content untuk sections di landing - UPDATED WITH DATABASE
     Route::get('/latest-content', [PublicController::class, 'getLatestContent'])->name('latest-content');
